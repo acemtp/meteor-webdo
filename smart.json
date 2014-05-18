@@ -1,0 +1,8 @@
+{
+  "packages": {
+    "jade": {},
+    "iron-router": {},
+    "autoform": {},
+    "accounts-entry": {}
+  }
+}

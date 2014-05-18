@@ -1,0 +1,147 @@
+head
+  title Webdo - Gestionnaire famillial de cadeaux
+  link(rel="icon", type="image/png", href="/favicon.png")
+  meta(name="viewport", content="width=device-width, initial-scale=1.0")
+  link(href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css", rel="stylesheet")
+  link(href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css", rel="stylesheet")
+  script(src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js")
+
+template(name="masterLayout")
+  +navBar
+  div.container
+    +yield
+
+template(name="navBar")
+  nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
+    div.container
+      div.navbar-header
+        button.navbar-toggle(type="button", data-toggle="collapse", data-target="#bs-example-navbar-collapse-1")
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.navbar-brand(href="/")
+          i.fa.fa-gift
+          span Webdo
+
+      div.collapse.navbar-collapse#bs-example-navbar-collapse-1
+        if currentUser
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href="{{pathFor 'listUser'}}")
+                i.fa.fa-users.fa-2x
+            li
+              +with currentUser
+                a(href="{{pathFor 'listGift'}}")
+                  i.fa.fa-user.fa-2x
+            li
+              a(href="{{pathFor 'createGift'}}")
+                i.fa.fa-plus.fa-2x
+                
+
+template(name="home")
+  h1 Webdo
+  h2 Gestionnaire Famillial de cadeaux
+  +accountButtons
+
+template(name="createGift")
+  +quickForm collection="Gifts" id="insertGiftForm" type="insert" omitFields="userId, createdAt"
+
+template(name="listGift")
+  div.row
+    each this
+      +gift
+     
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th title
+        th action
+    tbody
+      each this
+        tr
+          td
+            a(href="{{pathFor 'displayGift'}}")= title
+          td
+            a(href="{{pathFor 'updateGift'}}") edit
+
+template(name="gift")
+  div.col-xs-12.col-sm-6.col-md-3(class=buyedClass)
+    a.thumbnail(href="{{pathFor 'displayGift'}}")
+      if image
+        img(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
+      else
+        img(src="/favicon.png", alt=title)
+      div.stars
+        each prio
+          span.fa.fa-star
+      div.bottom
+        span= title
+        span.pull-right
+          +giftAction
+           
+template(name="giftAction")
+  if ownerIs currentUser
+    i.archive.fa.fa-trash-o.fa-2x
+  else
+    if buyerId
+      i.archive.fa.fa-trash-o.fa-2x
+    else if lockerId
+      i.buy.fa.fa-money.fa-2x
+    else
+      i.lock.fa.fa-lock.fa-2x
+    
+
+template(name="updateGift")
+  +quickForm collection="Gifts" doc=this id="updateGiftForm" type="update" fields="title, link, image, priority, detail"
+  
+template(name="displayGift")
+  h1= title
+  div.row
+    div.col-xs-6.col-md-4
+      if image
+        img.img-responsive(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
+      else
+        img(src="/favicon.png", alt=title)
+      div.stars
+        each prio
+          span.fa.fa-star
+    div.col-xs-6.col-md-8
+      if lockerId
+        p Réserver par&nbsp;: {{lockerName}}
+      if buyerId
+        p Acheter par&nbsp;: {{buyerName}}
+      p Créé le&nbsp;: {{createdAt}}
+      if link
+        p lien&nbsp;: {{link}}
+      div
+        +markdown
+        | {{detail}}
+      a.btn.btn-default(href="{{pathFor 'updateGift'}}")
+        i.fa.fa-pencil 
+        | &nbsp;Edit
+      | &nbsp;
+      a.lock.btn.btn-primary
+        i.fa.fa-lock 
+        | &nbsp; Réserver
+      | &nbsp;
+      a.buy.btn.btn-primary
+        i.fa.fa-money 
+        | &nbsp; Acheter
+      | &nbsp;
+      a.archive.btn.btn-danger
+        i.fa.fa-trash-o 
+        | &nbsp; Archiver
+        
+  
+template(name="listUser")
+  div.row
+    each users
+      div.col-xs-6.col-md-3
+        a.thumbnail(href="{{pathFor 'listGift'}}")
+          if profile.picture
+            img(src=profile.picture, alt=profile.name)
+          else
+            img(src="/anonymous.jpg", alt=profile.name)
+          span= profile.name
+
