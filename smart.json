@@ -3,6 +3,7 @@
     "jade": {},
     "iron-router": {},
     "autoform": {},
-    "accounts-entry": {}
+    "accounts-entry": {},
+    "houston": {}
   }
 }

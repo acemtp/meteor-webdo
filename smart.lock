@@ -5,7 +5,8 @@
       "jade": {},
       "iron-router": {},
       "autoform": {},
-      "accounts-entry": {}
+      "accounts-entry": {},
+      "houston": {}
     },
     "packages": {
       "jade": {
@@ -27,6 +28,11 @@
         "git": "https://github.com/Differential/accounts-entry.git",
         "tag": "v0.7.3",
         "commit": "7facaa045d3720eeeba3420c28e48d5709188fe3"
+      },
+      "houston": {
+        "git": "https://github.com/gterrono/houston.git",
+        "tag": "v1.0.4",
+        "commit": "e76bda40587ac80ce51ee417047be8272664625c"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
@@ -52,6 +58,16 @@
         "git": "https://github.com/softwarerero/meteor-accounts-t9n.git",
         "tag": "v0.0.5",
         "commit": "ad9539a8818049d5d9fa050d8b2a1f62706483b1"
+      },
+      "paginated-subscription": {
+        "git": "https://github.com/tmeasday/meteor-paginated-subscription.git",
+        "tag": "v0.2.2",
+        "commit": "2133a2163575f569f90253f81314f21b2bf08d20"
+      },
+      "spin": {
+        "git": "https://github.com/SachaG/meteor-spin.git",
+        "tag": "v0.2.2",
+        "commit": "3f655f0016228e4195acc784c45d3e3a247dc39f"
       }
     }
   }
