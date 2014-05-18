@@ -57,12 +57,15 @@ Gifts = new Meteor.Collection("gifts", {
     },
     lockerId: {
       type: String,
+      optional: true
     },
     buyerId: {
       type: String,
+      optional: true
     },
     archiverId: {
       type: String,
+      optional: true
     },
   }
 });
@@ -113,6 +116,11 @@ if (Meteor.isClient) {
   });
 
   AutoForm.hooks({
+    createGiftForm: {
+       onSuccess: function(operation, result, template) {
+        window.history.back();
+      }     
+    },
     updateGiftForm: {
       onSuccess: function(operation, result, template) {
         window.history.back();

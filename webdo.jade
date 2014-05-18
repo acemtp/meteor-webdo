@@ -45,7 +45,7 @@ template(name="home")
   +accountButtons
 
 template(name="createGift")
-  +quickForm collection="Gifts" id="insertGiftForm" type="insert" omitFields="userId, createdAt"
+  +quickForm collection="Gifts" id="insertGiftForm" type="insert" fields="title, link, image, priority, detail"
 
 template(name="listGift")
   div.row
@@ -98,7 +98,7 @@ template(name="updateGift")
 template(name="displayGift")
   h1= title
   div.row
-    div.col-xs-6.col-md-4
+    div.col-xs-12.col-md-4
       if image
         img.img-responsive(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
       else
@@ -106,17 +106,7 @@ template(name="displayGift")
       div.stars
         each prio
           span.fa.fa-star
-    div.col-xs-6.col-md-8
-      if lockerId
-        p Réserver par&nbsp;: {{lockerName}}
-      if buyerId
-        p Acheter par&nbsp;: {{buyerName}}
-      p Créé le&nbsp;: {{createdAt}}
-      if link
-        p lien&nbsp;: {{link}}
-      div
-        +markdown
-        | {{detail}}
+    div.col-xs-12.col-md-8
       a.btn.btn-default(href="{{pathFor 'updateGift'}}")
         i.fa.fa-pencil 
         | &nbsp;Edit
@@ -132,6 +122,17 @@ template(name="displayGift")
       a.archive.btn.btn-danger
         i.fa.fa-trash-o 
         | &nbsp; Archiver
+      if lockerId
+        p Réserver par&nbsp;: {{lockerName}}
+      if buyerId
+        p Acheter par&nbsp;: {{buyerName}}
+      p Créé le&nbsp;: {{createdAt}}
+      if link
+        p lien&nbsp;: {{link}}
+      div
+        +markdown
+        | {{detail}}
+
         
   
 template(name="listUser")
