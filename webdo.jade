@@ -44,8 +44,37 @@ template(name="home")
   h2 Gestionnaire Famillial de cadeaux
   +accountButtons
 
+template(name="giftFieldset")
+    fieldset
+      legend Créer un nouveau cadeau
+
+      +afQuickField name='title' autofocus=''
+
+      div.form-group(class="{{#if afFieldIsInvalid name='link'}}has-error{{/if}}")
+        +afFieldLabel name='link'
+        input.form-control(type="text", data-schema-key="link", name="link", maxlength="1024", value=link)
+        if afFieldIsInvalid name='link'
+          span.help-block {{afFieldMessage name='link'}}
+
+      div.form-group(class="{{#if afFieldIsInvalid name='image'}}has-error{{/if}}")
+        +afFieldLabel name='image'
+        input.form-control(type="text", data-schema-key="image", name="image", maxlength="1024", value=image)
+        if afFieldIsInvalid name='image'
+          span.help-block {{afFieldMessage name='image'}}
+
+      +afQuickField name='priority' options=priorities
+      +afQuickField name='detail' rows=10
+
 template(name="createGift")
-  +quickForm collection="Gifts" id="insertGiftForm" type="insert" fields="title, link, image, priority, detail"
+  +autoForm collection="Gifts" id="insertGiftForm" type="insert"}}
+    +giftFieldset
+    button.btn.btn-primary(type="submit") Créer le cadeau
+
+template(name="updateGift")
+  +autoForm collection="Gifts" doc=this id="updateGiftForm" type="update"}}
+    +giftFieldset
+    button.btn.btn-primary(type="submit") Mettre à jour le cadeau
+
 
 template(name="listGift")
   div.row
@@ -90,11 +119,7 @@ template(name="giftAction")
       i.buy.fa.fa-money.fa-2x
     else
       i.lock.fa.fa-lock.fa-2x
-    
 
-template(name="updateGift")
-  +quickForm collection="Gifts" doc=this id="updateGiftForm" type="update" fields="title, link, image, priority, detail"
-  
 template(name="displayGift")
   h1= title
   div.row
@@ -106,31 +131,33 @@ template(name="displayGift")
       div.stars
         each prio
           span.fa.fa-star
+
     div.col-xs-12.col-md-8.padding
       div.btn-group.btn-group-lg.btn-group-justified.padding
         a.btn.btn-default(href="{{pathFor 'updateGift'}}")
           i.fa.fa-pencil 
-          span.hidden-xs &nbsp;Edit
+          span.hidden-xs  Edit
         a.lock.btn.btn-primary
           i.fa.fa-lock 
-          span.hidden-xs &nbsp; Réserver
+          span.hidden-xs  Réserver
         a.buy.btn.btn-success
           i.fa.fa-money 
-          span.hidden-xs &nbsp; Acheter
+          span.hidden-xs  Acheter
         a.archive.btn.btn-danger
           i.fa.fa-trash-o 
-          span.hidden-xs &nbsp; Archiver
+          span.hidden-xs  Archiver
 
-      if lockerId
-        p Réservé par&nbsp;: {{lockerName}}
-      if buyerId
-        p Acheté par&nbsp;: {{buyerName}}
-      p Créé le&nbsp;: {{createdAt}}
-      if link
-        p lien&nbsp;: {{link}}
-      div
+      div.padding
+        if lockerId
+          p Réservé par : {{lockerName}}
+        if buyerId
+          p Acheté par : {{buyerName}}
+        p Créé le : {{createdAt}}
+        if link
+          p
+            a(href=link, target="_blank") Visiter le site marchand
         +markdown
-        | {{detail}}
+           | {{detail}}
 
         
   

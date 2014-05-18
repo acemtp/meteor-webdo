@@ -8,7 +8,8 @@ Gifts = new Meteor.Collection("gifts", {
     link: {
       type: String,
       label: 'Lien',
-      max: 1024
+      max: 1024,
+      optional: true
     },
     image: {
       type: String,
@@ -105,7 +106,7 @@ if (Meteor.isClient) {
   
   Router.configure({
     layoutTemplate: "masterLayout" 
-  })
+  });
 
   Template.home.events({
     'click input': function () {
@@ -116,7 +117,7 @@ if (Meteor.isClient) {
   });
 
   AutoForm.hooks({
-    createGiftForm: {
+    insertGiftForm: {
        onSuccess: function(operation, result, template) {
         window.history.back();
       }     
@@ -150,7 +151,7 @@ if (Meteor.isClient) {
         console.log('can not find user ', this[field]);
         return 'Utilisateur inconnue';
       }
-    }
+    };
   };
   
   Template.displayGift.lockerName = findUserNameBy('lockerId');
@@ -211,6 +212,16 @@ if (Meteor.isClient) {
       Gifts.update(this._id, {$set: {lockerId: Meteor.userId()}});
     }
   });
+    
+  UI.registerHelper('priorities', function() {
+    return [
+        {label: "5 étoiles - Doit avoir", value: 5},
+        {label: "4 étoiles - Adorerais avoir", value: 4},
+        {label: "3 étoiles - Aimerais avoir", value: 3},
+        {label: "2 étoiles - J'y pense", value: 2}
+    ];
+  });
+    
 }
 
 if (Meteor.isServer) {
