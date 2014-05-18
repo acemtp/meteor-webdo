@@ -23,7 +23,10 @@ a.thumbnail > .bottom {
   margin: 10px;
 }
 
-
+.padding {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .stars {
   position: absolute;
   top: 6px;

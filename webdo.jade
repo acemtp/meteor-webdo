@@ -98,7 +98,7 @@ template(name="updateGift")
 template(name="displayGift")
   h1= title
   div.row
-    div.col-xs-12.col-md-4
+    div.col-xs-12.col-md-4.padding
       if image
         img.img-responsive(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
       else
@@ -106,26 +106,25 @@ template(name="displayGift")
       div.stars
         each prio
           span.fa.fa-star
-    div.col-xs-12.col-md-8
-      a.btn.btn-default(href="{{pathFor 'updateGift'}}")
-        i.fa.fa-pencil 
-        | &nbsp;Edit
-      | &nbsp;
-      a.lock.btn.btn-primary
-        i.fa.fa-lock 
-        | &nbsp; Réserver
-      | &nbsp;
-      a.buy.btn.btn-primary
-        i.fa.fa-money 
-        | &nbsp; Acheter
-      | &nbsp;
-      a.archive.btn.btn-danger
-        i.fa.fa-trash-o 
-        | &nbsp; Archiver
+    div.col-xs-12.col-md-8.padding
+      div.btn-group.btn-group-lg.btn-group-justified.padding
+        a.btn.btn-default(href="{{pathFor 'updateGift'}}")
+          i.fa.fa-pencil 
+          span.hidden-xs &nbsp;Edit
+        a.lock.btn.btn-primary
+          i.fa.fa-lock 
+          span.hidden-xs &nbsp; Réserver
+        a.buy.btn.btn-success
+          i.fa.fa-money 
+          span.hidden-xs &nbsp; Acheter
+        a.archive.btn.btn-danger
+          i.fa.fa-trash-o 
+          span.hidden-xs &nbsp; Archiver
+
       if lockerId
-        p Réserver par&nbsp;: {{lockerName}}
+        p Réservé par&nbsp;: {{lockerName}}
       if buyerId
-        p Acheter par&nbsp;: {{buyerName}}
+        p Acheté par&nbsp;: {{buyerName}}
       p Créé le&nbsp;: {{createdAt}}
       if link
         p lien&nbsp;: {{link}}
