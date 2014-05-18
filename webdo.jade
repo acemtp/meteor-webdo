@@ -21,7 +21,7 @@ template(name="navBar")
           span.icon-bar
           span.icon-bar
         a.navbar-brand(href="/")
-          i.fa.fa-gift
+          i.spinhover.fa.fa-gift
           span Webdo
 
       div.collapse.navbar-collapse#bs-example-navbar-collapse-1
@@ -40,9 +40,11 @@ template(name="navBar")
                 
 
 template(name="home")
-  h1 Webdo
   h2 Gestionnaire Famillial de cadeaux
-  +accountButtons
+  if currentUser
+    a(href="/sign-out") Déconnecter
+  else
+    +entrySignIn
 
 template(name="giftFieldset")
     fieldset

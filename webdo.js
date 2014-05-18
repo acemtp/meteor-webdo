@@ -72,11 +72,15 @@ Gifts = new Meteor.Collection("gifts", {
 });
 
 if (Meteor.isClient) {
-//  T9n.language = "fr";
+  T9n.language = "fr";
 //  T9n.missingPrefix = ">";
 //  T9n.missingPostfix = "<";
 
   Accounts.ui.config({passwordSignupFields: 'USERNAME_ONLY'});
+
+  AccountsEntry.config({
+    homeRoute: '/',
+    passwordSignupFields: 'USERNAME_ONLY'});
   
   Router.map(function() {
     this.route('home', {path: '/'});
