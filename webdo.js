@@ -88,7 +88,11 @@ if (Meteor.isClient) {
     this.route('listGift', {
       path: '/listGift/:_id',
       data: function () {
-        return Gifts.find({ownerId: this.params._id, archiverId: {$exists: false}}, {sort: { buyerId: 1, lockerId: 1, priority: -1 }});
+				var showArchived = this.params.archived === '1'  || false;
+        return {
+          ownerId: this.params._id,
+					gifts: Gifts.find({ownerId: this.params._id, archiverId: {$exists: showArchived}}, {sort: { buyerId: 1, lockerId: 1, priority: -1 }})
+        };
       },
     });
 
@@ -119,6 +123,19 @@ if (Meteor.isClient) {
         console.log("You pressed the button");
     }
   });
+
+	Template.listGift.listGiftArchived = function () {
+		return Router.routes['listGift'].path({_id: this.ownerId}, { query: 'archived=1'})
+	};
+
+	Template.listGift.log = function () {
+		console.log(this, arguments);
+		return 'dbug'
+	};
+
+	Template.giftAction.iconAction = function (action) {
+		return action + ' fa fa-2x fa-' +action;
+	};
 
   AutoForm.hooks({
     insertGiftForm: {
@@ -214,6 +231,10 @@ if (Meteor.isClient) {
     'click .lock': function (e) {
       e.preventDefault();
       Gifts.update(this._id, {$set: {lockerId: Meteor.userId()}});
+    },
+    'click .unarchive': function (e) {
+      e.preventDefault();
+      Gifts.update(this._id, {$unset: {archiverId: "", lockerId: "", byerId: ""}});
     }
   });
     

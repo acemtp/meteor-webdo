@@ -37,7 +37,7 @@ template(name="navBar")
             li
               a(href="{{pathFor 'createGift'}}")
                 i.fa.fa-plus.fa-2x
-                
+
 
 template(name="home")
   h2 Gestionnaire Famillial de cadeaux
@@ -80,16 +80,17 @@ template(name="updateGift")
 
 template(name="listGift")
   div.row
-    each this
+    each gifts
       +gift
-     
+    a(href= listGiftArchived) Voir les cadeaux archiver
+
   table.table.table-striped.table-hover
     thead
       tr
         th title
         th action
     tbody
-      each this
+      each gifts
         tr
           td
             a(href="{{pathFor 'displayGift'}}")= title
@@ -97,7 +98,7 @@ template(name="listGift")
             a(href="{{pathFor 'updateGift'}}") edit
 
 template(name="gift")
-  div.col-xs-12.col-sm-6.col-md-3(class=buyedClass)
+  div.col-xs-12.col-sm-6.col-md-3
     a.thumbnail(href="{{pathFor 'displayGift'}}")
       if image
         img(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
@@ -110,17 +111,22 @@ template(name="gift")
         span= title
         span.pull-right
           +giftAction
-           
+
 template(name="giftAction")
   if ownerIs currentUser
-    i.archive.fa.fa-trash-o.fa-2x
+    if archiverId
+      i.unarchive.fa.fa-undo.fa-2x
+    else
+      i.archive.fa.fa-trash-o.fa-2x
   else
-    if buyerId
+    if archiverId
+      i.unarchive.fa.fa-undo.fa-2x
+    else if buyerId
       i.archive.fa.fa-trash-o.fa-2x
     else if lockerId
       i.buy.fa.fa-money.fa-2x
     else
-      i.lock.fa.fa-lock.fa-2x
+      i(class= iconAction 'lock')
 
 template(name="displayGift")
   h1= title
@@ -137,16 +143,16 @@ template(name="displayGift")
     div.col-xs-12.col-md-8.padding
       div.btn-group.btn-group-lg.btn-group-justified.padding
         a.btn.btn-default(href="{{pathFor 'updateGift'}}")
-          i.fa.fa-pencil 
+          i.fa.fa-pencil
           span.hidden-xs  Edit
         a.lock.btn.btn-primary
-          i.fa.fa-lock 
+          i.fa.fa-lock
           span.hidden-xs  Réserver
         a.buy.btn.btn-success
-          i.fa.fa-money 
+          i.fa.fa-money
           span.hidden-xs  Acheter
         a.archive.btn.btn-danger
-          i.fa.fa-trash-o 
+          i.fa.fa-trash-o
           span.hidden-xs  Archiver
 
       div.padding
@@ -161,8 +167,6 @@ template(name="displayGift")
         +markdown
            | {{detail}}
 
-        
-  
 template(name="listUser")
   div.row
     each users
