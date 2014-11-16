@@ -53,14 +53,14 @@ template(name="giftFieldset")
       +afQuickField name='title' autofocus=''
 
       div.form-group(class="{{#if afFieldIsInvalid name='link'}}has-error{{/if}}")
-        +afFieldLabel name='link'
-        input.form-control(type="text", data-schema-key="link", name="link", maxlength="1024", value=link)
+        label.control-label {{afFieldLabelText name='link'}}
+        +afFieldInput name="link" max=1024
         if afFieldIsInvalid name='link'
           span.help-block {{afFieldMessage name='link'}}
 
       div.form-group(class="{{#if afFieldIsInvalid name='image'}}has-error{{/if}}")
-        +afFieldLabel name='image'
-        input.form-control(type="text", data-schema-key="image", name="image", maxlength="1024", value=image)
+        label.control-label {{afFieldLabelText name='image'}}
+        +afFieldInput name="image" max=1024
         if afFieldIsInvalid name='image'
           span.help-block {{afFieldMessage name='image'}}
 
@@ -82,20 +82,12 @@ template(name="listGift")
   div.row
     each gifts
       +gift
-    a(href= listGiftArchived) Voir les cadeaux archiver
+  div
+    if archived
+      a(href="{{pathFor 'listGift'}}") Voir les cadeaux
+    else
+      a(href="{{pathFor route='listGift' query='archived=1'}}") Voir les cadeaux archiver
 
-  table.table.table-striped.table-hover
-    thead
-      tr
-        th title
-        th action
-    tbody
-      each gifts
-        tr
-          td
-            a(href="{{pathFor 'displayGift'}}")= title
-          td
-            a(href="{{pathFor 'updateGift'}}") edit
 
 template(name="gift")
   div.col-xs-12.col-sm-6.col-md-3
