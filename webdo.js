@@ -27,11 +27,11 @@ Gifts.attachSchema({
   ownerId: {
     type: String,
     label: 'Owner Id',
-    autoValue: function() {
+    autoValue: function () {
       if (this.isInsert) {
         return this.userId;
       } else if (this.isUpsert) {
-        return {$setOnInsert: this.userId};
+        return { $setOnInsert: this.userId };
       } else {
         this.unset();
       }
@@ -43,9 +43,9 @@ Gifts.attachSchema({
     label: 'Date de création',
     autoValue: function() {
       if (this.isInsert) {
-        return new Date;
+        return new Date();
       } else if (this.isUpsert) {
-        return {$setOnInsert: new Date};
+        return { $setOnInsert: new Date() };
       } else {
         this.unset();
       }
@@ -80,8 +80,10 @@ if (Meteor.isClient) {
 
   AccountsEntry.config({
     homeRoute: '/',
-    passwordSignupFields: 'USERNAME_ONLY'});
-  
+    dashboardRoute: '/',
+    passwordSignupFields: 'USERNAME_ONLY'
+  });
+
   Router.map(function() {
     this.route('home', {path: '/'});
     this.route('createGift');
@@ -117,12 +119,12 @@ if (Meteor.isClient) {
         return Gifts.findOne(this.params._id);
       },
     });
-    
+
     this.route('listUser');
   });
-  
+
   Router.configure({
-    layoutTemplate: "masterLayout" 
+    layoutTemplate: "masterLayout"
   });
 
   Template.home.events({
@@ -136,7 +138,7 @@ if (Meteor.isClient) {
 	Template.listGift.helpers({
     listGiftArchived: function () {
       console.log('list gift archive', this);
-      return ('listGift', { _id: this.ownerId }, { query: 'archived=1' })
+      return ('listGift', { _id: this.ownerId }, { query: 'archived=1' });
     }
   });
 
@@ -173,14 +175,14 @@ if (Meteor.isClient) {
     insertGiftForm: {
        onSuccess: function(operation, result, template) {
         window.history.back();
-      }     
+      }
     },
     updateGiftForm: {
       onSuccess: function(operation, result, template) {
         window.history.back();
       }
     }
-  });  
+  });
 
   Template.gift.helpers({
       prio: function() {
@@ -190,7 +192,7 @@ if (Meteor.isClient) {
       return this.buyerId ? 'buyed' : '';
     }
   });
-  
+
   Template.listUser.helpers({
     users: function() {
       return Meteor.users.find();
@@ -200,7 +202,7 @@ if (Meteor.isClient) {
   var findUserNameBy = function (field) {
     return function () {
       try {
-        return Meteor.users.findOne(this[field]).profile.name; 
+        return Meteor.users.findOne(this[field]).profile.name;
       } catch (e) {
         console.log('can not find user ', this[field]);
         return 'Utilisateur inconnue';
@@ -280,6 +282,6 @@ if (Meteor.isServer) {
 
       return user;
     });
- 
+
   });
 }
