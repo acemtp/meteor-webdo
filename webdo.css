@@ -1,5 +1,8 @@
-/* CSS declarations go here */
+body {
+  padding-top: 70px;
+}
 
+/*
 .navbar-brand {
   font-size: 35px !important;
 }
@@ -43,3 +46,4 @@ a:hover .spinhover {
   -o-animation: spin 1s infinite linear;
   animation: spin 1s infinite linear;
 }
+*/

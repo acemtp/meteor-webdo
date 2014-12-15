@@ -14,6 +14,6 @@ mquandalle:jade
 aldeed:collection2
 joshowens:accounts-entry
 aldeed:autoform
-joshowens:simple-form
 iron:router
 aldeed:simple-schema
+mizzao:bootstrap-3

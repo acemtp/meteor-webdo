@@ -167,7 +167,7 @@ if (Meteor.isClient) {
     },
     'click .unarchive': function (e) {
       e.preventDefault();
-      Gifts.update(this._id, {$unset: {archiverId: "", lockerId: "", byerId: ""}});
+      Gifts.update(this._id, {$unset: {archiverId: "", lockerId: "", buyerId: ""}});
     }
   });
 
@@ -185,10 +185,10 @@ if (Meteor.isClient) {
   });
 
   Template.gift.helpers({
-      prio: function() {
+    prio: function () {
       return _.range(this.priority);
     },
-    buyedClass: function() {
+    buyedClass: function () {
       return this.buyerId ? 'buyed' : '';
     }
   });
@@ -204,8 +204,8 @@ if (Meteor.isClient) {
       try {
         return Meteor.users.findOne(this[field]).profile.name;
       } catch (e) {
-        console.log('can not find user ', this[field]);
-        return 'Utilisateur inconnue';
+        console.log('can not find user', this[field]);
+        return 'Utilisateur inconnu';
       }
     };
   };
@@ -256,13 +256,12 @@ if (Meteor.isClient) {
 
   UI.registerHelper('priorities', function() {
     return [
-        {label: "5 étoiles - Doit avoir", value: 5},
-        {label: "4 étoiles - Adorerais avoir", value: 4},
-        {label: "3 étoiles - Aimerais avoir", value: 3},
-        {label: "2 étoiles - J'y pense", value: 2}
+        { label: "5 étoiles - Doit avoir", value: 5 },
+        { label: "4 étoiles - Adorerais avoir", value: 4 },
+        { label: "3 étoiles - Aimerais avoir", value: 3 },
+        { label: "2 étoiles - J'y pense", value: 2 }
     ];
   });
-
 }
 
 if (Meteor.isServer) {
