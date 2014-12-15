@@ -6,7 +6,6 @@
 standard-app-packages
 autopublish
 insecure
-accounts-google
 accounts-ui
 showdown
 accounts-password
@@ -18,4 +17,3 @@ aldeed:autoform
 joshowens:simple-form
 iron:router
 aldeed:simple-schema
-
