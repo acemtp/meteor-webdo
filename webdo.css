@@ -44,24 +44,15 @@ body {
  margin-right: -15px;
 }
 
-/*
-.navbar-brand {
-  font-size: 35px !important;
-}
-.navbar-brand > i.fa.fa-gift {
-  color: black;
+.btn-float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
 }
 
-.buyed {
-  opacity: 0.3;
-}
-
-.buyed:hover {
-  opacity: 1;
-}
-
-body {
-  padding-top: 70px;
+/* double the size of action icon */
+.gift-action i {
+  font-size: 2em;
 }
 
 a.thumbnail > .bottom {
@@ -72,6 +63,7 @@ a.thumbnail > .bottom {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
 .stars {
   position: absolute;
   top: 6px;
@@ -88,4 +80,3 @@ a:hover .spinhover {
   -o-animation: spin 1s infinite linear;
   animation: spin 1s infinite linear;
 }
-*/

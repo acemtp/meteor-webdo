@@ -62,7 +62,7 @@ template(name="giftFieldset")
 template(name="createGift")
   +autoForm collection="Gifts" id="insertGiftForm" type="insert"}}
     +giftFieldset
-    button.btn.btn-primary(type="submit") Créer le cadeau
+    button.btn.btn-success.btn-fab.btn-raised.btn-float.mdi-action-done(type="submit")
 
 template(name="updateGift")
   +autoForm collection="Gifts" doc=this id="updateGiftForm" type="update"}}
@@ -90,52 +90,63 @@ template(name="gift")
         img(src="/favicon.png", alt=title)
       div.stars
         each prio
-          span.fa.fa-star
+          span.mdi-action-grade
       div.bottom
         span= title
-        span.pull-right
+        span.pull-right.gift-action
           +giftAction
 
 template(name="giftAction")
   if ownerIs currentUser
     if archiverId
-      i.unarchive.fa.fa-undo.fa-2x
+      i.unarchive.mdi-content-undo
     else
-      i.archive.fa.fa-trash-o.fa-2x
+      i.archive.mdi-content-archive
   else
     if archiverId
-      i.unarchive.fa.fa-undo.fa-2x
+      i.unarchive.mdi-content-undo
     else if buyerId
-      i.archive.fa.fa-trash-o.fa-2x
+      i.archive.mdi-content-archive
     else if lockerId
-      i.buy.fa.fa-money.fa-2x
+      i.buy.mdi-action-add-shopping-cart
     else
-      i(class= iconAction 'lock')
+      i.lock.mdi-action-lock-open
 
 template(name="displayGift")
 
   div.row
-    if ownerIs currenUser
-      div.col-xs-12.col-md-8.padding
+    if ownerIs currentUser
+      div.col-xs-12.padding
         a.btn
-          i.mdi-content-archive
+          i.mdi-content-archive.archive
           span.hidden-xs  Archiver
     else
-      div.col-xs-12.col-md-8.padding.pull-right
+      div.col-xs-12.padding.pull-right
         a.btn.btn-default.btn-responsive(href="{{pathFor 'updateGift'}}")
           i.mdi-editor-mode-edit
-          span.hidden-xs  Edit
-        a.btn.btn-primary.btn-responsive
-          i.mdi-action-lock
-          span.hidden-xs  Réserver
-        a.btn.btn-success.btn-responsive
+            span.hidden-xs  Edit
+        a.btn.btn-responsive.btn-primary.lock
+          i.mdi-action-lock-open
+            span.hidden-xs
+              if lockerId
+                | par {{lockerName}}
+              else
+                | Réserver
+        a.btn.btn-responsive.btn-success.buy
           i.mdi-action-add-shopping-cart
-          span.hidden-xs  Acheter
-        a.btn.btn-danger.btn-responsive
+            span.hidden-xs
+              if buyerId
+                | par {{buyerName}}
+              else
+                |  Acheter
+        a.btn.btn-responsive.btn-danger.archive
           i.mdi-content-archive
-          span.hidden-xs  Archiver
+            span.hidden-xs  Archiver
 
-    h1= title
+  div.row
+    h1.col-xs-12= title
+
+  div.row
     div.col-xs-12.col-md-4.padding
       if image
         img.img-responsive(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
@@ -144,15 +155,16 @@ template(name="displayGift")
       div.stars
         each prio
           span.fa.fa-star
-      div.padding
+      div.padding.visible-xs
         if lockerId
           p Réservé par : {{lockerName}}
         if buyerId
           p Acheté par : {{buyerName}}
+      div.padding
         p Créé le : {{createdAt}}
         if link
           p
-            a(href=link, target="_blank") Visiter le site marchand
+            a(href=link.visible-xs, target="_blank") Visiter le site marchand
         +markdown
            | {{detail}}
 

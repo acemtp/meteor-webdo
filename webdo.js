@@ -137,15 +137,11 @@ if (Meteor.isClient) {
 
 	Template.listGift.helpers({
     listGiftArchived: function () {
-      console.log('list gift archive', this);
       return ('listGift', { _id: this.ownerId }, { query: 'archived=1' });
     }
   });
 
 	Template.giftAction.helpers({
-    iconAction: function (action) {
-      return action + ' fa fa-2x fa-' + action;
-    },
     ownerIs: function(currentUser) {
       return currentUser && this.ownerId === currentUser._id;
     }
@@ -202,9 +198,9 @@ if (Meteor.isClient) {
   var findUserNameBy = function (field) {
     return function () {
       try {
-        return Meteor.users.findOne(this[field]).profile.name;
+        return Meteor.users.findOne(this[field]).username;
       } catch (e) {
-        console.log('can not find user', this[field]);
+        console.log('can not find user', this[field], 'with field', field);
         return 'Utilisateur inconnu';
       }
     };
