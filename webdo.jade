@@ -17,8 +17,10 @@ template(name="navBar")
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href="/")
-          span Webdo
+        ul.nav.navbar-nav
+          li
+            a.navbar-brand(href="/")
+              span Webdo
 
       div.collapse.navbar-collapse#bs-example-navbar-collapse-1
         if currentUser
@@ -117,8 +119,29 @@ template(name="giftAction")
       i(class= iconAction 'lock')
 
 template(name="displayGift")
-  h1= title
+
   div.row
+    if ownerIs currenUser
+      div.col-xs-12.col-md-8.padding
+        a.btn
+          i.mdi-content-archive
+          span.hidden-xs  Archiver
+    else
+      div.col-xs-12.col-md-8.padding.pull-right
+        a.btn.btn-default.btn-responsive(href="{{pathFor 'updateGift'}}")
+          i.mdi-editor-mode-edit
+          span.hidden-xs  Edit
+        a.btn.btn-primary.btn-responsive
+          i.mdi-action-lock
+          span.hidden-xs  Réserver
+        a.btn.btn-success.btn-responsive
+          i.mdi-action-add-shopping-cart
+          span.hidden-xs  Acheter
+        a.btn.btn-danger.btn-responsive
+          i.mdi-content-archive
+          span.hidden-xs  Archiver
+
+    h1= title
     div.col-xs-12.col-md-4.padding
       if image
         img.img-responsive(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
@@ -127,22 +150,6 @@ template(name="displayGift")
       div.stars
         each prio
           span.fa.fa-star
-
-    div.col-xs-12.col-md-8.padding
-      div.btn-group.btn-group-lg.btn-group-justified.padding
-        a.btn.btn-default(href="{{pathFor 'updateGift'}}")
-          i.fa.fa-pencil
-          span.hidden-xs  Edit
-        a.lock.btn.btn-primary
-          i.fa.fa-lock
-          span.hidden-xs  Réserver
-        a.buy.btn.btn-success
-          i.fa.fa-money
-          span.hidden-xs  Acheter
-        a.archive.btn.btn-danger
-          i.fa.fa-trash-o
-          span.hidden-xs  Archiver
-
       div.padding
         if lockerId
           p Réservé par : {{lockerName}}

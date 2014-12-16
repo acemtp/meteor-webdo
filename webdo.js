@@ -144,7 +144,7 @@ if (Meteor.isClient) {
 
 	Template.giftAction.helpers({
     iconAction: function (action) {
-      return action + ' fa fa-2x fa-' +action;
+      return action + ' fa fa-2x fa-' + action;
     },
     ownerIs: function(currentUser) {
       return currentUser && this.ownerId === currentUser._id;
@@ -215,7 +215,10 @@ if (Meteor.isClient) {
       return _.range(this.priority);
     },
     lockerName: findUserNameBy('lockerId'),
-    buyerName: findUserNameBy('buyerId')
+    buyerName: findUserNameBy('buyerId'),
+    ownerIs: function(currentUser) {
+      return currentUser && this.ownerId === currentUser._id;
+    }
   });
 
   var getUpdateObjet = function (doc, field) {

@@ -1,5 +1,19 @@
 body {
-  padding-top: 70px;
+  padding-top: 90px;
+}
+
+/* header text */
+.navbar-header a,
+/* header icon */
+.navbar i {
+  font-size: 34px;
+}
+/* responsive button to shrink button on mobile */
+@media (max-width: 768px) {
+  .btn-responsive {
+    padding-left: 27px;
+    padding-right: 27px;
+  }
 }
 
 /*
