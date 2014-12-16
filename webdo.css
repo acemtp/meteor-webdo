@@ -8,12 +8,40 @@ body {
 .navbar i {
   font-size: 34px;
 }
+.navbar li {
+  display: inline-block;
+}
+
 /* responsive button to shrink button on mobile */
 @media (max-width: 768px) {
   .btn-responsive {
     padding-left: 27px;
     padding-right: 27px;
   }
+}
+
+/* set back comportement from wide screen for mobile */
+.navbar-nav {
+  float: left;
+  margin: 0;
+}
+
+.navbar-header {
+  float: left;
+}
+
+.navbar-nav > li {
+  float: left;
+}
+
+.navbar-nav > li > a {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.navbar-right {
+ float: right !important;
+ margin-right: -15px;
 }
 
 /*

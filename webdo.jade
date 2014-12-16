@@ -12,29 +12,23 @@ template(name="navBar")
   nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
     div.container
       div.navbar-header
-        button.navbar-toggle(type="button", data-toggle="collapse", data-target="#bs-example-navbar-collapse-1")
-          span.sr-only Toggle navigation
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
         ul.nav.navbar-nav
           li
             a.navbar-brand(href="/")
               span Webdo
+      if currentUser
+        ul.nav.navbar-nav.navbar-right
+          li
+            a(href="{{pathFor 'listUser'}}")
+              i.mdi-social-people
+          li
+            +with currentUser
+              a(href="{{pathFor 'listGift'}}")
+                i.mdi-social-person
+          li
+            a(href="{{pathFor 'createGift'}}")
+              i.mdi-content-add
 
-      div.collapse.navbar-collapse#bs-example-navbar-collapse-1
-        if currentUser
-          ul.nav.navbar-nav.navbar-right
-            li
-              a(href="{{pathFor 'listUser'}}")
-                i.mdi-social-people
-            li
-              +with currentUser
-                a(href="{{pathFor 'listGift'}}")
-                  i.mdi-social-person
-            li
-              a(href="{{pathFor 'createGift'}}")
-                i.mdi-content-add
 
 
 template(name="home")
