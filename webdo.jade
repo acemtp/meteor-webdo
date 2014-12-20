@@ -117,14 +117,14 @@ template(name="displayGift")
   div.row
     if ownerIs currentUser
       div.col-xs-12.padding
-        a.btn
+        a.btn.btn-default.btn-responsive(href="{{pathFor 'updateGift'}}")
+          i.mdi-editor-mode-edit
+            span.hidden-xs  Edit
+        a.btn.btn-responsive.btn-danger.archive
           i.mdi-content-archive.archive
           span.hidden-xs  Archiver
     else
       div.col-xs-12.padding.pull-right
-        a.btn.btn-default.btn-responsive(href="{{pathFor 'updateGift'}}")
-          i.mdi-editor-mode-edit
-            span.hidden-xs  Edit
         a.btn.btn-responsive.btn-primary.lock
           i.mdi-action-lock-open
             span.hidden-xs
@@ -164,7 +164,7 @@ template(name="displayGift")
         p Créé le : {{createdAt}}
         if link
           p
-            a(href=link.visible-xs, target="_blank") Visiter le site marchand
+            a(href=link, target="_blank") Visiter le site marchand
         +markdown
            | {{detail}}
 

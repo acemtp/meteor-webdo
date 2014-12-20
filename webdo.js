@@ -1,5 +1,9 @@
-Gifts = new Meteor.Collection("gifts");
+Gifts = new Mongo.Collection("gifts");
 
+// Hack. simple-form attachSchema seems broken since update of Meteor 1.0.2
+Gifts.attachSchema = Mongo.Collection.prototype.attachSchema;
+Gifts.simpleSchema = Mongo.Collection.prototype.simpleSchema;
+//Mongo.Collection.prototype.attachSchema.call(Gifts, {
 Gifts.attachSchema({
   title: {
     type: String,
