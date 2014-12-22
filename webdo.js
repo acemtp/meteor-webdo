@@ -69,9 +69,9 @@ Gifts.attachSchema({
     type: String,
     optional: true
   },
-  archiverId: {
-    type: String,
-    optional: true
+  archived: {
+    type: Boolean,
+    defaultValue: false
   }
 });
 
@@ -103,7 +103,7 @@ if (Meteor.isClient) {
           ownerId: this.params._id,
 					gifts: Gifts.find({
             ownerId: this.params._id,
-            archiverId: { $exists: showArchived }
+            archived: showArchived
           }, {
             sort: { buyerId: 1, lockerId: 1, priority: -1 }
           })
@@ -155,7 +155,7 @@ if (Meteor.isClient) {
   Template.giftAction.events({
     'click .archive': function (e) {
       e.preventDefault();
-      Gifts.update(this._id, {$set: {archiverId: Meteor.userId()}});
+      Gifts.update(this._id, {$set: {archived: true}});
     },
     'click .buy': function (e) {
       e.preventDefault();
@@ -167,7 +167,7 @@ if (Meteor.isClient) {
     },
     'click .unarchive': function (e) {
       e.preventDefault();
-      Gifts.update(this._id, {$unset: {archiverId: "", lockerId: "", buyerId: ""}});
+      Gifts.update(this._id, {$unset: {archived: false, lockerId: "", buyerId: ""}});
     }
   });
 
@@ -242,6 +242,7 @@ if (Meteor.isClient) {
   Template.displayGift.events({
     'click .archive': function (e) {
       e.preventDefault();
+      // TODO rework archiverId => archived
       var update = getUpdateObjet(this, 'archiverId');
       Gifts.update(this._id, update);
     },
