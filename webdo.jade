@@ -19,14 +19,14 @@ template(name="navBar")
       if currentUser
         ul.nav.navbar-nav.navbar-right
           li
-            a(href="{{pathFor 'listUser'}}")
+            a(href="{{pathFor 'users'}}")
               i.mdi-social-people
           li
             +with currentUser
-              a(href="{{pathFor 'listGift'}}")
+              a(href="{{pathFor 'user.gifts'}}")
                 i.mdi-social-person
           li
-            a(href="{{pathFor 'createGift'}}")
+            a(href="{{pathFor 'gift.create'}}")
               i.mdi-content-add
 
 
@@ -60,30 +60,30 @@ template(name="giftFieldset")
       +afQuickField name='detail' rows=10
 
 template(name="createGift")
-  +autoForm collection="Gifts" id="insertGiftForm" type="insert"}}
+  +autoForm collection="Gifts" id="insertGiftForm" type="insert"
     +giftFieldset
     button.btn.btn-success.btn-fab.btn-raised.btn-float.mdi-action-done(type="submit")
 
 template(name="updateGift")
-  +autoForm collection="Gifts" doc=this id="updateGiftForm" type="update"}}
+  +autoForm collection="Gifts" doc=this id="updateGiftForm" type="update"
     +giftFieldset
     button.btn.btn-primary(type="submit") Mettre à jour le cadeau
 
 
-template(name="listGift")
+template(name="userGifts")
   div.row
     each gifts
       +gift
   div
     if archived
-      a(href="{{pathFor 'listGift'}}") Voir les cadeaux
+      a(href="{{pathFor 'user.gifts'}}") Voir les cadeaux
     else
-      a(href="{{pathFor route='listGift' query='archived=1'}}") Voir les cadeaux archiver
+      a(href="{{pathFor route='user.gifts' query='archived=1'}}") Voir les cadeaux archiver
 
 
 template(name="gift")
   div.col-xs-12.col-sm-6.col-md-3
-    a.thumbnail(href="{{pathFor 'displayGift'}}")
+    a.thumbnail.well(href="{{pathFor 'gift.show'}}")
       if image
         img(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
       else
@@ -112,12 +112,11 @@ template(name="giftAction")
     else
       i.lock.mdi-action-lock-open
 
-template(name="displayGift")
-
+template(name="giftShow")
   div.row
     if ownerIs currentUser
       div.col-xs-12.padding
-        a.btn.btn-default.btn-responsive(href="{{pathFor 'updateGift'}}")
+        a.btn.btn-default.btn-responsive(href="{{pathFor 'gift.update'}}")
           i.mdi-editor-mode-edit
             span.hidden-xs  Edit
         a.btn.btn-responsive.btn-danger.archive
@@ -146,33 +145,68 @@ template(name="displayGift")
   div.row
     h1.col-xs-12= title
 
-  div.row
-    div.col-xs-12.col-md-4.padding
+  .row
+    .col-xs-12.col-md-6.padding
       if image
         img.img-responsive(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
       else
         img(src="/favicon.png", alt=title)
-      div.stars
+      .stars
         each prio
-          span.fa.fa-star
-      div.padding.visible-xs
+          span.mdi-action-grade
+      .padding.visible-xs
         if lockerId
           p Réservé par : {{lockerName}}
         if buyerId
           p Acheté par : {{buyerName}}
-      div.padding
+      .padding
         p Créé le : {{createdAt}}
-        if link
-          p
-            a(href=link, target="_blank") Visiter le site marchand
-        +markdown
-           | {{detail}}
+    .col-xs-12.col-md-6
+      if link
+        p
+          a(href=link, target="_blank") Visiter le site marchand
+      +markdown
+        {{detail}}
+  .rows
+    if ownerIsNot currentUser
+      .col-xs-12.col-md-6
+        each privateComments
+          +giftComment
+        .panel.panel-primary
+          .panel-heading
+            h3.panel-title Commentaire
+          .panel-body
+            +autoForm collection="Comments" id="insertPrivateComment" type="insert"
+              +afFieldInput name="message" autofocus=""
+              +afFieldInput name="visible" value=false
+              +afFieldInput name="giftId" value=../_id
+            br
+            button.btn.btn-success(type="submit") Envoyer
 
-template(name="listUser")
+    .col-xs12.col-md-6
+      each publicComments
+        +giftComment
+      .panel.panel-warning
+        .panel-heading
+          h3.panel-title Ce message sera visible par <b>{{ownerName}}</b>
+        .panel-body
+          +autoForm collection="Comments" id="insertPrivateComment" type="insert"
+              +afFieldInput name="message" autofocus=""
+              +afFieldInput name="visible" value=true
+              +afFieldInput name="giftId" value=../_id
+          br
+          button.btn.btn-success(type="submit") Envoyer
+
+template(name="giftComment")
+  div Par {{author}}
+  div= createdAt
+  pre= message
+
+template(name="users")
   div.row
     each users
       div.col-xs-6.col-md-3
-        a.thumbnail(href="{{pathFor 'listGift'}}")
+        a.thumbnail(href="{{pathFor 'user.gifts'}}")
           if profile.picture
             img(src=profile.picture, alt=profile.name)
           else

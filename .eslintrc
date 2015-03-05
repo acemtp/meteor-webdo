@@ -1,0 +1,28 @@
+---
+  globals:
+    _: true
+    Accounts: true
+    AccountsEntry: true
+    AutoForm: true
+    check: true
+    Comments: true
+    console: true
+    Gifts: true
+    Meteor: true
+    Mongo: true
+    Router: true
+    T9n: true
+    Template: true
+    UI: true
+    window: true
+  rules:
+    curly:
+      - 2
+      - "multi"
+    quotes:
+      - 2
+      - 'single'
+      - 'avoid-escape'
+    no-console: false
+    no-underscore-dangle: false
+    strict: false
