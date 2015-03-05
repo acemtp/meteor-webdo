@@ -7,6 +7,11 @@ Gifts.attachSchema({
     label: 'Titre',
     max: 149
   },
+  detail: {
+    type: String,
+    label: 'Détail',
+    max: 4096
+  },
   link: {
     type: String,
     label: 'Lien',
@@ -50,11 +55,6 @@ Gifts.attachSchema({
       this.unset();
     },
     denyUpdate: true
-  },
-  detail: {
-    type: String,
-    label: 'Détail',
-    max: 4096
   },
   lockerId: {
     type: String,
@@ -151,15 +151,6 @@ if (Meteor.isClient) {
     passwordSignupFields: 'USERNAME_ONLY'
   });
 
-
-  Template.home.events({
-    'click input': function () {
-      // template data, if any, is available in 'this'
-      if (typeof console !== 'undefined')
-        console.log('You pressed the button');
-    }
-  });
-
 	Template.userGifts.helpers({
     userGiftsArchived: function () {
       return Router.go('userGifts', { _id: this.ownerId }, { query: 'archived=1' });
@@ -200,24 +191,6 @@ if (Meteor.isClient) {
     updateGiftForm: {
       onSuccess: function() {
         window.history.back();
-      }
-    },
-    insertPrivateComment: {
-      before: {
-        insert: function (doc) {
-          console.log('before insert', arguments);
-          return doc;
-        }
-      },
-      after: {
-        insert: function (doc) {
-          console.log('After insert', arguments);
-          return doc;
-        }
-      },
-      onSubmit: function() {
-        console.log('on submit', arguments);
-        this.done();
       }
     }
   });
@@ -312,6 +285,23 @@ if (Meteor.isClient) {
       { label: "2 étoiles - J'y pense", value: 2 }
     ];
   });
+
+  Template.giftCreate.events({
+    'change input[name="link"]': function () {
+      if($("input[name='title']").val()) return;
+      if($("textarea[name='detail']").val()) return;
+      if($("input[name='image']").val()) return;
+
+      Meteor.call('curExtractMeta', $("input[name='link']").val(), function (error, result) {
+        console.log('extra', error, result);
+        if(!error) {
+          if(result.name) $("input[name='title']").val(result.name);
+          if(result.description) $("textarea[name='detail']").val(result.description);
+          if(result.image) $("input[name='image']").val(result.image);
+        }
+      });
+    }
+  });
 }
 function onStartup () {
   Meteor.publish('users', Meteor.users.find.bind(Meteor.users));
@@ -354,13 +344,67 @@ function onStartup () {
   });
 
 }
-if (Meteor.isServer)
+
+function extractMeta (url) {
+  try {
+    var result = HTTP.call('GET', url);
+    var m;
+    var meta = {};
+
+    if(result.statusCode !== 200) {
+      console.log('bad status code', result.statusCode);
+      return undefined;
+    }
+
+    var re = /<meta.*?(?:name|property)=['"](.*?)['"].*?content=['"](.*?)['"].*?>/gmi;
+    while ((m = re.exec(result.content)) !== null) {
+      if (m.index === re.lastIndex)
+        re.lastIndex++;
+
+//        console.log('m', m[1], m[2]);
+      if(m[1] === 'description' || m[1] === 'og:description' || m[1] === 'twitter:description') meta.description = m[2];
+      if(m[1] === 'og:image' || m[1] === 'twitter:image') meta.image = m[2];
+      if(m[1] === 'og:title' || m[1] === 'twitter:title') meta.name = m[2];
+    }
+
+    re = /<title>(.*)<\/title>/gmi;
+    while ((m = re.exec(result.content)) !== null) {
+      if (m.index === re.lastIndex)
+        re.lastIndex++;
+//        console.log('tit', m[1], m[2]);
+      meta.name = m[1];
+    }
+
+    console.log('meta', meta);
+    return meta;
+  } catch (e) {
+    // Got a network error, time-out or HTTP error in the 400 or 500 range.
+    console.log('err', e);
+    return undefined;
+  }
+}
+
+if (Meteor.isServer) {
   Meteor.startup(onStartup);
+
+  Meteor.methods({
+    curExtractMeta: function(url) {
+      check(url, String);
+      this.unblock();
+      var meta = extractMeta(url);
+      if(!meta) throw new Meteor.Error('not meta extracted');
+      return meta;
+    }
+  });
+
+}
 
 
 // routes
 Router.route('/', {name: 'home'});
-Router.route('/user/:_id/gift/create', {name: 'gift.create'});
+Router.route('/user/:_id/gift/create', {
+  name: 'gift.create'
+});
 Router.route('/user/:_id/gifts', {
   name: 'user.gifts',
   waitOn: function () {
@@ -400,6 +444,9 @@ Router.route('/gift/:_id', {
 });
 Router.route('/gift/:_id/update', {
   name: 'gift.update',
+  waitOn: function () {
+    return Meteor.subscribe('gift.show', this.params._id);
+  },
   data: function () {
     return Gifts.findOne(this.params._id);
   }

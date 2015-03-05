@@ -1,6 +1,7 @@
 ---
   globals:
     _: true
+    $: true
     Accounts: true
     AccountsEntry: true
     AutoForm: true
@@ -8,6 +9,7 @@
     Comments: true
     console: true
     Gifts: true
+    HTTP: true
     Meteor: true
     Mongo: true
     Router: true

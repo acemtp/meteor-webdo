@@ -26,7 +26,7 @@ template(name="navBar")
               a(href="{{pathFor 'user.gifts'}}")
                 i.mdi-social-person
           li
-            a(href="{{pathFor 'gift.create'}}")
+            a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
               i.mdi-content-add
 
 
@@ -40,7 +40,7 @@ template(name="home")
 
 template(name="giftFieldset")
     fieldset
-      legend Créer un nouveau cadeau
+      legend Information du cadeau
 
       +afQuickField name='title' autofocus=''
 
@@ -59,12 +59,12 @@ template(name="giftFieldset")
       +afQuickField name='priority' options=priorities
       +afQuickField name='detail' rows=10
 
-template(name="createGift")
+template(name="giftCreate")
   +autoForm collection="Gifts" id="insertGiftForm" type="insert"
     +giftFieldset
     button.btn.btn-success.btn-fab.btn-raised.btn-float.mdi-action-done(type="submit")
 
-template(name="updateGift")
+template(name="giftUpdate")
   +autoForm collection="Gifts" doc=this id="updateGiftForm" type="update"
     +giftFieldset
     button.btn.btn-primary(type="submit") Mettre à jour le cadeau
@@ -116,7 +116,7 @@ template(name="giftShow")
   div.row
     if ownerIs currentUser
       div.col-xs-12.padding
-        a.btn.btn-default.btn-responsive(href="{{pathFor 'gift.update'}}")
+        a.btn.btn-primary.btn-responsive(href="{{pathFor 'gift.update'}}")
           i.mdi-editor-mode-edit
             span.hidden-xs  Edit
         a.btn.btn-responsive.btn-danger.archive
