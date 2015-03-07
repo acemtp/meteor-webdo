@@ -59,6 +59,19 @@ a.thumbnail > .bottom {
   margin: 10px;
 }
 
+/* gift title */
+a.thumbnail > .bottom > .pull-left {
+  width: 170px;
+}
+
+a.thumbnail.well {
+  height: 280px
+}
+
+.gift a.thumbnail.well {
+  height: 300px
+}
+
 img.avatar {
   height: 220px;
   overflow-y: hidden;

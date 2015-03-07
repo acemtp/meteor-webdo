@@ -82,18 +82,18 @@ template(name="userGifts")
 
 
 template(name="gift")
-  div.col-xs-12.col-sm-6.col-md-3
+  div.col-xs-12.col-sm-6.col-md-3.gift
     a.thumbnail.well(href="{{pathFor 'gift.show'}}")
       if image
-        img(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
+        img.avatar(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
       else
-        img(src="/favicon.png", alt=title)
+        img.avatar(src="/favicon.png", alt=title)
       div.stars
         each prio
           span.mdi-action-grade
       div.bottom
-        span= title
-        span.pull-right.gift-action
+        .pull-left= title
+        .pull-right.gift-action
           +giftAction
 
 template(name="giftAction")
@@ -206,7 +206,7 @@ template(name="users")
   .row
     each users
       .col-xs-6.col-md-3
-        a.thumbnail(href="{{pathFor 'user.gifts'}}")
+        a.thumbnail.well(href="{{pathFor 'user.gifts'}}")
           if profile.avatar
             img.avatar(src=profile.avatar, alt=profile.name)
           else
