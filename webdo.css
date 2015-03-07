@@ -59,6 +59,12 @@ a.thumbnail > .bottom {
   margin: 10px;
 }
 
+img.avatar {
+  height: 220px;
+  overflow-y: hidden;
+}
+
+
 .padding {
   padding-top: 10px;
   padding-bottom: 10px;

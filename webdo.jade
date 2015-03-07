@@ -203,13 +203,13 @@ template(name="giftComment")
   pre= message
 
 template(name="users")
-  div.row
+  .row
     each users
-      div.col-xs-6.col-md-3
+      .col-xs-6.col-md-3
         a.thumbnail(href="{{pathFor 'user.gifts'}}")
-          if profile.picture
-            img(src=profile.picture, alt=profile.name)
+          if profile.avatar
+            img.avatar(src=profile.avatar, alt=profile.name)
           else
-            img(src="/anonymous.jpg", alt=profile.name)
-          span= profile.name
+            img.avatar(src="/anonymous.jpg", alt=profile.name)
+          div= username
 
