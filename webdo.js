@@ -67,6 +67,10 @@ Gifts.attachSchema({
   archived: {
     type: Boolean,
     defaultValue: false
+  },
+  suggested: {
+    type: Boolean,
+    defaultValue: false
   }
 });
 
@@ -308,7 +312,10 @@ function onStartup () {
 
   Meteor.publish('user.gifts', function (userId) {
     check(userId, String);
-    return Gifts.find({ ownerId: userId });
+    var request = { ownerId: userId };
+    if (this.userId === userId)
+      request.suggested = false;
+    return Gifts.find(request);
   });
   Meteor.publish('gift.show', function (giftId) {
     check(giftId, String);
