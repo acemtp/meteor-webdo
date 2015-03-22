@@ -172,6 +172,10 @@ if (Meteor.isClient) {
       e.preventDefault();
       Gifts.update(this._id, {$set: {archived: true}});
     },
+    'click .unarchive': function (e) {
+      e.preventDefault();
+      Gifts.update(this._id, {$set: {archived: false}});
+    },
     'click .buy': function (e) {
       e.preventDefault();
       Gifts.update(this._id, {$set: {buyerId: Meteor.userId()}});
@@ -179,10 +183,6 @@ if (Meteor.isClient) {
     'click .lock': function (e) {
       e.preventDefault();
       Gifts.update(this._id, {$set: {lockerId: Meteor.userId()}});
-    },
-    'click .unarchive': function (e) {
-      e.preventDefault();
-      Gifts.update(this._id, {$unset: {archived: false, lockerId: '', buyerId: ''}});
     }
   });
 
@@ -265,9 +265,11 @@ if (Meteor.isClient) {
   Template.giftShow.events({
     'click .archive': function (e) {
       e.preventDefault();
-      // TODO rework archiverId => archived
-      var update = getUpdateObjet(this, 'archiverId');
-      Gifts.update(this._id, update);
+      Gifts.update(this._id, { '$set': { archived: true } });
+    },
+    'click .unarchive': function (e) {
+      e.preventDefault();
+      Gifts.update(this._id, { '$set': { archived: false } });
     },
     'click .buy': function (e) {
       e.preventDefault();

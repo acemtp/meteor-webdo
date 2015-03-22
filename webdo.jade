@@ -98,13 +98,13 @@ template(name="gift")
 
 template(name="giftAction")
   if ownerIs currentUser
-    if archiverId
-      i.unarchive.mdi-content-undo
+    if archived
+      i.unarchive.mdi-content-inbox
     else
       i.archive.mdi-content-archive
   else
-    if archiverId
-      i.unarchive.mdi-content-undo
+    if archived
+      i.unarchive.mdi-content-inbox
     else if buyerId
       i.archive.mdi-content-archive
     else if lockerId
@@ -119,9 +119,14 @@ template(name="giftShow")
         a.btn.btn-primary.btn-responsive(href="{{pathFor 'gift.update'}}")
           i.mdi-editor-mode-edit
             span.hidden-xs  Edit
-        a.btn.btn-responsive.btn-danger.archive
-          i.mdi-content-archive.archive
-          span.hidden-xs  Archiver
+        if archived
+          a.btn.btn-responsive.btn-danger.unarchive
+            i.mdi-content-inbox
+            span.hidden-xs  D&eacute;-archiver
+        else
+          a.btn.btn-responsive.btn-danger.archive
+            i.mdi-content-archive
+            span.hidden-xs  Archiver
     else
       div.col-xs-12.padding.pull-right
         a.btn.btn-responsive.btn-primary.lock
@@ -138,9 +143,6 @@ template(name="giftShow")
                 | par {{buyerName}}
               else
                 |  Acheter
-        a.btn.btn-responsive.btn-danger.archive
-          i.mdi-content-archive
-            span.hidden-xs  Archiver
 
   div.row
     h1.col-xs-12= title
