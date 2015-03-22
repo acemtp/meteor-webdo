@@ -155,6 +155,15 @@ if (Meteor.isClient) {
     passwordSignupFields: 'USERNAME_ONLY'
   });
 
+	Template.homeGifts.helpers({
+    noGiftToBuy: function () {
+      return !Gifts.find({ lockerId: Meteor.userId() }).count();
+    },
+    noGiftBuyed: function () {
+      return !Gifts.find({ buyerId: Meteor.userId() }).count();
+    }
+  });
+
 	Template.userGifts.helpers({
     userGiftsArchived: function () {
       return Router.go('userGifts', { _id: this.ownerId }, { query: 'archived=1' });
@@ -198,6 +207,7 @@ if (Meteor.isClient) {
       }
     }
   });
+
 
   Template.gift.helpers({
     prio: function () {
@@ -319,6 +329,17 @@ function onStartup () {
       request.suggested = false;
     return Gifts.find(request);
   });
+
+  Meteor.publish('home.gifts', function () {
+    return Gifts.find({
+      archived: false,
+      $or: [
+        { lockerId: this.userId },
+        { buyerId: this.userId }
+      ]
+    });
+  });
+
   Meteor.publish('gift.show', function (giftId) {
     check(giftId, String);
     var gift = Gifts.findOne(giftId);
@@ -410,10 +431,25 @@ if (Meteor.isServer) {
 
 
 // routes
-Router.route('/', {name: 'home'});
-Router.route('/user/:_id/gift/create', {
-  name: 'gift.create'
+Router.route('/', {
+  name: 'home',
+  waitOn: function () {
+    return Meteor.subscribe('home.gifts');
+  },
+  data: function () {
+    return {
+      toBuyGifts: Gifts.find({ buyerId: null }, {
+        sort: { priority: -1 }
+      }),
+      buyedGifts: Gifts.find({ buyerId: { $not: null }}, {
+        sort: { lockerId: 1, priority: -1 }
+      })
+    };
+  }
 });
+
+Router.route('/user/:_id/gift/create', { name: 'gift.create' });
+
 Router.route('/user/:_id/gifts', {
   name: 'user.gifts',
   waitOn: function () {

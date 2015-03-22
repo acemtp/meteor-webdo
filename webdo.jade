@@ -5,13 +5,13 @@ head
 
 template(name="masterLayout")
   +navBar
-  div.container
+  .container
     +yield
 
 template(name="navBar")
   nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
-    div.container
-      div.navbar-header
+    .container
+      .navbar-header
         ul.nav.navbar-nav
           li
             a.navbar-brand(href="/")
@@ -29,14 +29,29 @@ template(name="navBar")
             a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
               i.mdi-content-add
 
-
-
 template(name="home")
-  h2 Gestionnaire Famillial de cadeaux
+  h1 Gestionnaire Famillial de cadeaux
   if currentUser
+    +homeGifts
     a(href="/sign-out") Déconnecter
   else
     +entrySignIn
+
+template(name="homeGifts")
+  h2 Cadeaux &agrave; acheter
+  if noGiftToBuy
+    .well Aucune cadeau &agrave; acheter
+  else
+    .row
+      each toBuyGifts
+        +gift
+  h2 Cadeaux achet&eacute;s
+  if noGiftBuyed
+    .well Tu n'as toujours pas acheter tes cadeaux!
+  else
+    .row
+      each buyedGifts
+        +gift
 
 template(name="giftFieldset")
     fieldset
@@ -44,13 +59,13 @@ template(name="giftFieldset")
 
       +afQuickField name='title' autofocus=''
 
-      div.form-group(class="{{#if afFieldIsInvalid name='link'}}has-error{{/if}}")
+      .form-group(class="{{#if afFieldIsInvalid name='link'}}has-error{{/if}}")
         label.control-label {{afFieldLabelText name='link'}}
         +afFieldInput name="link" max=1024
         if afFieldIsInvalid name='link'
           span.help-block {{afFieldMessage name='link'}}
 
-      div.form-group(class="{{#if afFieldIsInvalid name='image'}}has-error{{/if}}")
+      .form-group(class="{{#if afFieldIsInvalid name='image'}}has-error{{/if}}")
         label.control-label {{afFieldLabelText name='image'}}
         +afFieldInput name="image" max=1024
         if afFieldIsInvalid name='image'
@@ -71,7 +86,7 @@ template(name="giftUpdate")
 
 
 template(name="userGifts")
-  div.row
+  .row
     each gifts
       +gift
   div
@@ -82,16 +97,16 @@ template(name="userGifts")
 
 
 template(name="gift")
-  div.col-xs-12.col-sm-6.col-md-3.gift
+  .col-xs-12.col-sm-6.col-md-3.gift
     a.thumbnail.well(href="{{pathFor 'gift.show'}}")
       if image
         img.avatar(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
       else
         img.avatar(src="/favicon.png", alt=title)
-      div.stars
+      .stars
         each prio
           span.mdi-action-grade
-      div.bottom
+      .bottom
         .pull-left= title
         .pull-right.gift-action
           +giftAction
@@ -113,9 +128,9 @@ template(name="giftAction")
       i.lock.mdi-action-lock-open
 
 template(name="giftShow")
-  div.row
+  .row
     if ownerIs currentUser
-      div.col-xs-12.padding
+      .col-xs-12.padding
         a.btn.btn-primary.btn-responsive(href="{{pathFor 'gift.update'}}")
           i.mdi-editor-mode-edit
             span.hidden-xs  Edit
@@ -128,7 +143,7 @@ template(name="giftShow")
             i.mdi-content-archive
             span.hidden-xs  Archiver
     else
-      div.col-xs-12.padding.pull-right
+      .col-xs-12.padding.pull-right
         a.btn.btn-responsive.btn-primary.lock
           i.mdi-action-lock-open
             span.hidden-xs
@@ -144,7 +159,7 @@ template(name="giftShow")
               else
                 |  Acheter
 
-  div.row
+  .row
     h1.col-xs-12= title
 
   .row
