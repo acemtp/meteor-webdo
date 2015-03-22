@@ -222,7 +222,7 @@ template(name="giftComment")
 template(name="users")
   .row
     each users
-      .col-xs-6.col-md-3
+      .col-xs-12.col-md-6
         a.thumbnail.well(href="{{pathFor 'user.gifts'}}")
           if profile.avatar
             img.avatar(src=profile.avatar, alt=profile.name)
