@@ -195,19 +195,11 @@ if (Meteor.isClient) {
     }
   });
 
-  AutoForm.hooks({
-    insertGiftForm: {
-      onSuccess: function() {
-        window.history.back();
-      }
-    },
-    updateGiftForm: {
-      onSuccess: function() {
-        window.history.back();
-      }
+  AutoForm.addHooks([ 'insertGiftForm', 'updateGiftForm' ], {
+    onSuccess: function() {
+      Router.go('gift.show', { _id: this.docId });
     }
   });
-
 
   Template.gift.helpers({
     prio: function () {
