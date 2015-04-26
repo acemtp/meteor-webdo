@@ -85,30 +85,39 @@ template(name="giftUpdate")
     button.btn.btn-primary(type="submit") Mettre à jour le cadeau
 
 template(name="userUpdate")
-  +quickForm schema=profile doc=this id="updateGiftForm" type="update"
+  .well
+    +quickForm schema=profile doc=this id="updateUserForm"
 
 template(name="userGifts")
-  if isOnwer
-    a.btn.btn-primary(href="{{pathFor route='user.update'}}") modifier mon profile
   .row
-    .col-xs-12.col-sm-4
+    .col-xs-12.col-sm-3
       .panel.panel-primary
+        .panel-body.thumbnail
+          img.avatar(src=user.profile.avatar, alt=user.username)
+          div= user.username
+          if isOwner
+            a.btn.btn-primary(href="{{pathFor route='user.update'}}") modifier mon profile
+    .col-xs-12.col-sm-3
+      .panel.panel-success
         .panel-heading
           h3.panel-title Description
-        .panel-body= profile.description
-    if profile.liked
-      .col-xs-12.col-sm-4
-        .panel.panel-success
-          .panel-heading
-            h3.panel-title J'aime
-          .panel-body= profile.liked
-    if profile.disliked
-      .col-xs-12.col-sm-4
-        .panel.panel-danger
-          .panel-heading
-            h3.panel-title Je n'aime pas
-          .panel-body= profile.desliked
-
+        .panel-body
+          +markdown
+            {{user.description}}
+    .col-xs-12.col-sm-3
+      .panel.panel-success
+        .panel-heading
+          h3.panel-title J'aime
+        .panel-body
+          +markdown
+            {{user.liked}}
+    .col-xs-12.col-sm-3
+      .panel.panel-danger
+        .panel-heading
+          h3.panel-title Je n'aime pas
+        .panel-body
+          +markdown
+            {{user.disliked}}
   .row
     each gifts
       +gift

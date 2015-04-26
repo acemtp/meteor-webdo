@@ -151,17 +151,26 @@ var profile = new SimpleSchema({
   },
   description: {
     type: String,
-    label: "J'aime",
+    label: 'Votre Description',
+    autoform: {
+      rows: 10
+    },
     max: 1000
   },
   liked: {
     type: String,
     label: "J'aime",
+    autoform: {
+      rows: 10
+    },
     max: 1000
   },
   disliked: {
     type: String,
     label: "J'aime pas",
+    autoform: {
+      rows: 10
+    },
     max: 1000
   }
 });
@@ -228,11 +237,28 @@ if (Meteor.isClient) {
     }
   });
 
+  AutoForm.hooks({
+    updateUserForm: {
+      onSubmit: function (doc, update) {
+        Meteor.users.update(this.docId, update);
+        this.done();
+        return false;
+      },
+      onSuccess: function() {
+        Router.go('user.gifts', { _id: this.docId });
+      },
+      onError: function (formType, error) {
+        console.log('updateUserForm, onError:', formType, error);
+      }
+    }
+  });
+
   AutoForm.addHooks([ 'insertGiftForm', 'updateGiftForm' ], {
     onSuccess: function() {
       Router.go('gift.show', { _id: this.docId });
     }
   });
+
 
   Template.gift.helpers({
     prio: function () {
@@ -405,11 +431,11 @@ function onStartup () {
 
   // migrate user information
   Meteor.users.find({
-    'profile.liked': { '$exists': false },
+    'liked': { '$exists': false },
     'profile.original.aime': { '$exists': true }
   }).forEach(function (user) {
     Meteor.users.update(user._id, {
-      '$set': { 'profile.liked': user.profile.original.aime }
+      '$set': { liked: user.profile.original.aime }
     }, function (err) {
       if (err)
         console.log('like, can not update user ', user.username);
@@ -417,12 +443,13 @@ function onStartup () {
         console.log('like, user ', user.username, ' updated');
     });
   });
+
   Meteor.users.find({
-    'profile.disliked': { '$exists': false },
+    'disliked': { '$exists': false },
     'profile.original.aimepas': { '$exists': true }
   }).forEach(function (user) {
     Meteor.users.update(user._id, {
-      '$set': { 'profile.disliked': user.profile.original.aimepas }
+      '$set': { disliked: user.profile.original.aimepas }
     }, function (err) {
       if (err)
         console.log('disliked, can not update user ', user.username);
@@ -485,6 +512,14 @@ if (Meteor.isServer) {
     }
   });
 
+  Meteor.users.allow({
+    update: function (userId, user, fields, modifier) {
+      return user._id === userId;
+    }
+  });
+
+
+
 }
 
 
@@ -531,7 +566,7 @@ Router.route('/user/:_id/gifts', {
       _id: this.params._id,
       // TODO remove ownerId from tempalte and use _id
       ownerId: this.params._id,
-      profile: Meteor.users.findOne(this.params._id).profile,
+      user: Meteor.users.findOne(this.params._id),
       gifts: Gifts.find({
         ownerId: this.params._id,
         archived: showArchived
