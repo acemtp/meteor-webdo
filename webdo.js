@@ -142,6 +142,30 @@ Comments.attachSchema({
     defaultValue: false
   }
 });
+
+var profile = new SimpleSchema({
+  username: {
+    type: String,
+    label: "Non d'utilisateur",
+    max: 50
+  },
+  description: {
+    type: String,
+    label: "J'aime",
+    max: 1000
+  },
+  liked: {
+    type: String,
+    label: "J'aime",
+    max: 1000
+  },
+  disliked: {
+    type: String,
+    label: "J'aime pas",
+    max: 1000
+  }
+});
+
 if (Meteor.isClient) {
   T9n.language = 'fr';
 //  T9n.missingPrefix = ">";
@@ -164,7 +188,16 @@ if (Meteor.isClient) {
     }
   });
 
+	Template.userUpdate.helpers({
+    profile: function () {
+      return profile;
+    }
+  });
+
 	Template.userGifts.helpers({
+    isOwner: function () {
+      return this._id === Meteor.userId();
+    },
     userGiftsArchived: function () {
       return Router.go('userGifts', { _id: this.ownerId }, { query: 'archived=1' });
     }
@@ -314,12 +347,17 @@ if (Meteor.isClient) {
 function onStartup () {
   Meteor.publish('users', Meteor.users.find.bind(Meteor.users));
 
+  Meteor.publish('user.profile', function () {
+    return Meteor.users.find({ _id: this.userId }, { limit: 1 });
+  });
+
   Meteor.publish('user.gifts', function (userId) {
     check(userId, String);
     var request = { ownerId: userId };
     if (this.userId === userId)
       request.suggested = false;
-    return Gifts.find(request);
+
+    return [ Gifts.find(request), Meteor.users.find({ _id: userId }) ];
   });
 
   Meteor.publish('home.gifts', function () {
@@ -363,6 +401,34 @@ function onStartup () {
       user.profile.picture = '';
 
     return user;
+  });
+
+  // migrate user information
+  Meteor.users.find({
+    'profile.liked': { '$exists': false },
+    'profile.original.aime': { '$exists': true }
+  }).forEach(function (user) {
+    Meteor.users.update(user._id, {
+      '$set': { 'profile.liked': user.profile.original.aime }
+    }, function (err) {
+      if (err)
+        console.log('like, can not update user ', user.username);
+      else
+        console.log('like, user ', user.username, ' updated');
+    });
+  });
+  Meteor.users.find({
+    'profile.disliked': { '$exists': false },
+    'profile.original.aimepas': { '$exists': true }
+  }).forEach(function (user) {
+    Meteor.users.update(user._id, {
+      '$set': { 'profile.disliked': user.profile.original.aimepas }
+    }, function (err) {
+      if (err)
+        console.log('disliked, can not update user ', user.username);
+      else
+        console.log('disliked user ', user.username, ' updated');
+    });
   });
 
 }
@@ -440,6 +506,15 @@ Router.route('/', {
   }
 });
 
+Router.route('/user/update', {
+  name: 'user.update',
+  waitOn: function () {
+    return Meteor.subscribe('user.profile');
+  },
+  data: function () {
+    return Meteor.users.findOne(Meteor.userId());
+  }
+});
 Router.route('/user/:_id/gift/create', { name: 'gift.create' });
 
 Router.route('/user/:_id/gifts', {
@@ -456,6 +531,7 @@ Router.route('/user/:_id/gifts', {
       _id: this.params._id,
       // TODO remove ownerId from tempalte and use _id
       ownerId: this.params._id,
+      profile: Meteor.users.findOne(this.params._id).profile,
       gifts: Gifts.find({
         ownerId: this.params._id,
         archived: showArchived
