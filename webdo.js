@@ -430,33 +430,28 @@ function onStartup () {
   });
 
   // migrate user information
-  Meteor.users.find({
-    'liked': { '$exists': false },
-    'profile.original.aime': { '$exists': true }
-  }).forEach(function (user) {
-    Meteor.users.update(user._id, {
-      '$set': { liked: user.profile.original.aime }
-    }, function (err) {
+  function findAndSetOriginalToNewName(original, newName) {
+    function handleUpdate (user, err) {
       if (err)
-        console.log('like, can not update user ', user.username);
+        console.error(newName, ', can not update user ', user.username);
       else
-        console.log('like, user ', user.username, ' updated');
-    });
-  });
+        console.log(newName, ', user ', user.username, ' updated');
+    }
 
-  Meteor.users.find({
-    'disliked': { '$exists': false },
-    'profile.original.aimepas': { '$exists': true }
-  }).forEach(function (user) {
-    Meteor.users.update(user._id, {
-      '$set': { disliked: user.profile.original.aimepas }
-    }, function (err) {
-      if (err)
-        console.log('disliked, can not update user ', user.username);
-      else
-        console.log('disliked user ', user.username, ' updated');
+    var find = {};
+    find[newName] = { '$exists': false };
+    find['profile.original.' + original] = { '$exists': true };
+
+    Meteor.users.find(find).forEach(function (user) {
+      var set = {};
+      set[newName] = user.profile.original[original];
+      Meteor.users.update(user._id, { '$set': set }, handleUpdate.bind(null, user));
     });
-  });
+
+  }
+  findAndSetOriginalToNewName('aime', 'liked');
+  findAndSetOriginalToNewName('aimepas', 'disliked');
+  findAndSetOriginalToNewName('presentation', 'description');
 
 }
 
