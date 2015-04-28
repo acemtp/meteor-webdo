@@ -164,7 +164,7 @@ template(name="giftAction")
 
 template(name="giftShow")
   .row
-    if ownerIs currentUser
+    if isEditableBy currentUser
       .col-xs-12.padding
         a.btn.btn-primary.btn-responsive(href="{{pathFor 'gift.update'}}")
           i.mdi-editor-mode-edit

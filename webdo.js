@@ -285,7 +285,7 @@ if (Meteor.isClient) {
   });
 
   Template.users.helpers({
-    users: Meteor.users.find.bind(Meteor.users)
+    users: Meteor.users.find.bind(Meteor.users, {}, { sort: { username: 1 } })
   });
 
   var findUserNameBy = function (field) {
@@ -311,6 +311,11 @@ if (Meteor.isClient) {
     },
     ownerIsNot: function(currentUser) {
       return currentUser && this.ownerId !== currentUser._id;
+    },
+    isEditableBy: function(currentUser) {
+      var edit = currentUser && (this.ownerId === currentUser._id || this.suggested);
+      console.log('isEditableBy', edit, this);
+      return edit;
     },
     publicComments: function () {
       return Comments.find({ visible: true }).fetch();
@@ -602,7 +607,7 @@ Router.route('/user/:_id/gifts', {
         ownerId: this.params._id,
         archived: showArchived
       }, {
-        sort: { buyerId: 1, lockerId: 1, priority: -1 }
+        sort: { buyerId: 1, lockerId: 1, priority: -1, title: 1 }
       })
     };
   }
