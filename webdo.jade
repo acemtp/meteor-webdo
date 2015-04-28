@@ -85,39 +85,41 @@ template(name="giftUpdate")
     button.btn.btn-primary(type="submit") Mettre à jour le cadeau
 
 template(name="userUpdate")
-  .well
-    +quickForm schema=profile doc=this id="updateUserForm"
+  +quickForm schema=profile doc=this id="updateUserForm"
 
 template(name="userGifts")
-  .row
-    .col-xs-12.col-sm-3
-      .panel.panel-primary
-        .panel-body.thumbnail
+  .well
+    .row
+      .col-xs-12.col-sm-9
+        h1= user.username
+      if isOwner
+        .col-xs-12.col-sm-3
+          a.btn.btn-primary(href="{{pathFor route='user.update'}}") modifier mon profile
+    .row
+      .col-xs-12.col-sm-3
+        .thumbnail
           img.avatar(src=user.profile.avatar, alt=user.username)
-          div= user.username
-          if isOwner
-            a.btn.btn-primary(href="{{pathFor route='user.update'}}") modifier mon profile
-    .col-xs-12.col-sm-3
-      .panel.panel-success
-        .panel-heading
-          h3.panel-title Description
-        .panel-body
-          +markdown
-            {{user.description}}
-    .col-xs-12.col-sm-3
-      .panel.panel-success
-        .panel-heading
-          h3.panel-title J'aime
-        .panel-body
-          +markdown
-            {{user.liked}}
-    .col-xs-12.col-sm-3
-      .panel.panel-danger
-        .panel-heading
-          h3.panel-title Je n'aime pas
-        .panel-body
-          +markdown
-            {{user.disliked}}
+      .col-xs-12.col-sm-3
+        .panel.panel-success
+          .panel-heading
+            h3.panel-title Description
+          .panel-body
+            +markdown
+              {{user.profile.description}}
+      .col-xs-12.col-sm-3
+        .panel.panel-success
+          .panel-heading
+            h3.panel-title J'aime
+          .panel-body
+            +markdown
+              {{user.profile.like}}
+      .col-xs-12.col-sm-3
+        .panel.panel-danger
+          .panel-heading
+            h3.panel-title Je n'aime pas
+          .panel-body
+            +markdown
+              {{user.profile.dislike}}
   .row
     each gifts
       +gift

@@ -144,12 +144,10 @@ Comments.attachSchema({
 });
 
 var profile = new SimpleSchema({
-  username: {
-    type: String,
-    label: "Non d'utilisateur",
-    max: 50
+  profile: {
+    type: Object
   },
-  description: {
+  'profile.description': {
     type: String,
     label: 'Votre Description',
     autoform: {
@@ -157,7 +155,7 @@ var profile = new SimpleSchema({
     },
     max: 1000
   },
-  liked: {
+  'profile.like': {
     type: String,
     label: "J'aime",
     autoform: {
@@ -165,12 +163,17 @@ var profile = new SimpleSchema({
     },
     max: 1000
   },
-  disliked: {
+  'profile.dislike': {
     type: String,
     label: "J'aime pas",
     autoform: {
       rows: 10
     },
+    max: 1000
+  },
+  'profile.avatar': {
+    type: String,
+    label: 'Le lien vers votre photo',
     max: 1000
   }
 });
@@ -371,7 +374,12 @@ if (Meteor.isClient) {
   });
 }
 function onStartup () {
-  Meteor.publish('users', Meteor.users.find.bind(Meteor.users));
+  Meteor.publish('users', function () {
+    var userProfile = (Meteor.users.findOne(this.userId, {fields: { 'profile.friends': 1 }}) || {}).profile || {};
+    return Meteor.users.find({
+      _id: { '$in': userProfile.friends || [] }
+    });
+  });
 
   Meteor.publish('user.profile', function () {
     return Meteor.users.find({ _id: this.userId }, { limit: 1 });
@@ -403,12 +411,16 @@ function onStartup () {
     var userIds = [ gift.ownerId, gift.buyerId, gift.lockerId, gift.ownerId ];
     var isPersonalGift = gift.ownerId === this.userId;
 
-    var commentSelector = {giftId: giftId, removed: false};
+    var commentSelector = { giftId: giftId, removed: false };
     if (isPersonalGift)
       commentSelector.visible = true;
 
+    console.log('comments find', commentSelector);
+    var commentAuthorIds = Comments.find(commentSelector, { fields: {_id: -1, authorId: 1 } }).fetch();
+    console.log('comments authors', commentAuthorIds);
+
     return [
-      Meteor.users.find({ _id: {$in: userIds}}),
+      Meteor.users.find({ _id: { $in: userIds.concat(commentAuthorIds) } }),
       Gifts.find({ _id: giftId }),
       Comments.find(commentSelector)
     ];
@@ -422,9 +434,9 @@ function onStartup () {
       user.profile = {name: options.username};
 
     if (user.services && user.services.google && user.services.google.picture)
-      user.profile.picture = user.services.google.picture;
+      user.profile.avatar = user.services.google.picture;
     else
-      user.profile.picture = '';
+      user.profile.avatar = '';
 
     return user;
   });
@@ -449,9 +461,9 @@ function onStartup () {
     });
 
   }
-  findAndSetOriginalToNewName('aime', 'liked');
-  findAndSetOriginalToNewName('aimepas', 'disliked');
-  findAndSetOriginalToNewName('presentation', 'description');
+//  findAndSetOriginalToNewName('aime', 'liked');
+//  findAndSetOriginalToNewName('aimepas', 'disliked');
+//  findAndSetOriginalToNewName('presentation', 'description');
 
 }
 
@@ -507,16 +519,7 @@ if (Meteor.isServer) {
     }
   });
 
-  Meteor.users.allow({
-    update: function (userId, user, fields, modifier) {
-      return user._id === userId;
-    }
-  });
-
-
-
 }
-
 
 // routes
 Router.route('/', {
