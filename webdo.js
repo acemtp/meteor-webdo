@@ -28,20 +28,23 @@ Gifts.attachSchema({
     type: Number,
     label: 'Priorité',
     min: 1,
-    max: 5
+    max: 5,
+    autoform: {
+      type: 'select',
+      afFieldInput: {
+        firstOption: 'A quel point souhaite tu ce cadeau?'
+      }
+    }
   },
   ownerId: {
     type: String,
-    label: 'Owner Id',
-    autoValue: function () {
-      if (this.isInsert)
-        return this.userId;
-      if (this.isUpsert)
-        return { $setOnInsert: this.userId };
-
-      this.unset();
-    },
-    denyUpdate: true
+    label: 'Pour',
+    autoform: {
+      type: 'select',
+      afFieldInput: {
+        firstOption: ''
+      }
+    }
   },
   createdAt: {
     type: Date,
@@ -70,7 +73,16 @@ Gifts.attachSchema({
   },
   suggested: {
     type: Boolean,
-    defaultValue: false
+    autoValue: function() {
+      var value = Meteor.userId() !== this.field('ownerId').value;
+      if (this.isInsert)
+        return value;
+      if (this.isUpsert)
+        return { $setOnInsert: value };
+
+      this.unset();
+    },
+    denyUpdate: true
   }
 });
 
@@ -356,6 +368,23 @@ if (Meteor.isClient) {
     ];
   });
 
+  UI.registerHelper('friends', function() {
+    var userId = Meteor.userId();
+    return Meteor.users
+      .find(
+        { _id: { '$in': Meteor.user().profile.friends } },
+        {fields: { username: 1 } })
+      .map(function (user) {
+        var value = {
+          label: user.username,
+          value: user._id
+        };
+
+        if (user._id === userId) value.selected = true;
+        return value;
+      });
+  });
+
   Template.giftCreate.events({
     'change input[name="link"]': function () {
       if($("input[name='title']").val()) return;
@@ -415,9 +444,7 @@ function onStartup () {
     if (isPersonalGift)
       commentSelector.visible = true;
 
-    console.log('comments find', commentSelector);
     var commentAuthorIds = Comments.find(commentSelector, { fields: {_id: -1, authorId: 1 } }).fetch();
-    console.log('comments authors', commentAuthorIds);
 
     return [
       Meteor.users.find({ _id: { $in: userIds.concat(commentAuthorIds) } }),
@@ -548,7 +575,13 @@ Router.route('/user/update', {
     return Meteor.users.findOne(Meteor.userId());
   }
 });
-Router.route('/user/:_id/gift/create', { name: 'gift.create' });
+
+Router.route('/user/:_id/gift/create', {
+  name: 'gift.create',
+  waitOn: function () {
+    return Meteor.subscribe('users');
+  }
+});
 
 Router.route('/user/:_id/gifts', {
   name: 'user.gifts',
@@ -591,7 +624,7 @@ Router.route('/gift/:_id', {
 Router.route('/gift/:_id/update', {
   name: 'gift.update',
   waitOn: function () {
-    return Meteor.subscribe('gift.show', this.params._id);
+    return [ Meteor.subscribe('gift.show', this.params._id), Meteor.subscribe('users') ];
   },
   data: function () {
     return Gifts.findOne(this.params._id);
