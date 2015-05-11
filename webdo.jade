@@ -168,27 +168,27 @@ template(name="giftShow")
       .col-xs-12.padding
         a.btn.btn-primary.btn-responsive(href="{{pathFor 'gift.update'}}")
           i.mdi-editor-mode-edit
-            span.hidden-xs  Edit
+            span  Edit
         if archived
           a.btn.btn-responsive.btn-danger.unarchive
             i.mdi-content-inbox
-            span.hidden-xs  D&eacute;-archiver
+            span  D&eacute;-archiver
         else
           a.btn.btn-responsive.btn-danger.archive
             i.mdi-content-archive
-            span.hidden-xs  Archiver
+            span  Archiver
     else
       .col-xs-12.padding.pull-right
         a.btn.btn-responsive.btn-primary.lock
           i.mdi-action-lock-open
-            span.hidden-xs
+            span
               if lockerId
                 | par {{lockerName}}
               else
                 | Réserver
         a.btn.btn-responsive.btn-success.buy
           i.mdi-action-add-shopping-cart
-            span.hidden-xs
+            span
               if buyerId
                 | par {{buyerName}}
               else
