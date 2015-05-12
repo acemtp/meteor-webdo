@@ -1,6 +1,7 @@
 Gifts = new Mongo.Collection('gifts');
 Comments = new Mongo.Collection('comments');
 
+
 Gifts.attachSchema({
   title: {
     type: String,
@@ -195,6 +196,8 @@ if (Meteor.isClient) {
 //  T9n.missingPrefix = ">";
 //  T9n.missingPostfix = "<";
 
+  toastr.options.positionClass = 'toast-bottom-left';
+
   Accounts.ui.config({passwordSignupFields: 'USERNAME_ONLY'});
 
   AccountsEntry.config({
@@ -233,22 +236,41 @@ if (Meteor.isClient) {
     }
   });
 
+
+  var doAction = function (_id, _do, undo) {
+    var set = {};
+    Gifts.update(_id, _do, function (error) {
+      if (error) return toastr.error(error);
+      var toastrEl = toastr.info('Action réussi. <a href="#">Annuler</a>');
+      toastrEl.on('click', function () {
+        toastrEl.hide();
+        console.log('undo action', _id, undo);
+        Gifts.update(_id, undo, function (undoError) {
+          if (error) return toastr.error(undoError);
+          toastr.success('Action Annulée');
+        });
+      });
+    });
+  };
+
   Template.giftAction.events({
     'click .archive': function (e) {
       e.preventDefault();
-      Gifts.update(this._id, {$set: {archived: true}});
+      doAction(this._id, {$set: {archived: true}}, {$set: {archived: false}});
     },
     'click .unarchive': function (e) {
       e.preventDefault();
-      Gifts.update(this._id, {$set: {archived: false}});
+      doAction(this._id, {$set: {archived: false}}, {$set: {archived: true}});
     },
     'click .buy': function (e) {
       e.preventDefault();
-      Gifts.update(this._id, {$set: {buyerId: Meteor.userId()}});
+      var action = getAction(this, 'buyerId');
+      doAction(this._id, action.go, action.undo);
     },
     'click .lock': function (e) {
       e.preventDefault();
-      Gifts.update(this._id, {$set: {lockerId: Meteor.userId()}});
+      var action = getAction(this, 'lockerId');
+      doAction(this._id, action.go, action.undo);
     }
   });
 
@@ -325,22 +347,28 @@ if (Meteor.isClient) {
     }
   });
 
-  var getUpdateObjet = function (doc, field) {
+  var getAction = function (doc, field) {
     var
-    update = {},
-    userId = Meteor.userId(),
-    value = {},
-    action;
+    action = {
+      go: {
+        $set: {}
+      },
+      undo: {
+        $unset: {}
+      }
+    },
+    userId = Meteor.userId();
 
+    action.go['$set'][field] = userId;
+    action.undo['$unset'][field] = '';
     if (doc[field] === userId) {
-      action = '$unset';
-      value[field] = '';
-    } else {
-      action = '$set';
-      value[field] = userId;
+      // swap go <=> undo
+      action = {
+        go: action.undo,
+        undo: action.go
+      };
     }
-    update[action] = value;
-    return update;
+    return action;
   };
 
   Template.giftShow.events({
@@ -354,13 +382,14 @@ if (Meteor.isClient) {
     },
     'click .buy': function (e) {
       e.preventDefault();
-      var update = getUpdateObjet(this, 'buyerId');
-      Gifts.update(this._id, update);
+      var action = getAction(this, 'buyerId');
+      Gifts.update(this._id, action.go);
     },
     'click .lock': function (e) {
       e.preventDefault();
-      var update = getUpdateObjet(this, 'lockerId');
-      Gifts.update(this._id, update);
+      var action = getAction(this, 'lockerId');
+      Gifts.update(this._id, action.go);
+
     }
   });
 

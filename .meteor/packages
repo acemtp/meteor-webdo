@@ -17,3 +17,4 @@ iron:router
 aldeed:simple-schema
 fezvrasta:bootstrap-material-design
 http
+chrismbeckett:toastr

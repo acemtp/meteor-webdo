@@ -16,6 +16,7 @@
     SimpleSchema: true
     T9n: true
     Template: true
+    toastr: true
     UI: true
     window: true
   rules:
