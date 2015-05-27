@@ -38,20 +38,31 @@ template(name="home")
     +entrySignIn
 
 template(name="homeGifts")
-  h2 Cadeaux &agrave; acheter
-  if noGiftToBuy
-    .well Aucune cadeau &agrave; acheter
-  else
+  .container
     .row
-      each toBuyGifts
-        +gift
-  h2 Cadeaux achet&eacute;s
-  if noGiftBuyed
-    .well Tu n'as toujours pas acheter tes cadeaux!
-  else
-    .row
-      each buyedGifts
-        +gift
+      .col-xs-12.col-sm-6
+        h2 Cadeaux &agrave; acheter
+        if giftToBuy
+          .row
+            each toBuyGifts
+              .col-xs-12.col-sm-6
+                +gift
+        else
+          .well Aucune cadeau &agrave; acheter
+
+        h2 Cadeaux achet&eacute;s
+        if giftBuyed
+          .row
+            each buyedGifts
+              .col-xs-12.col-sm-6
+                +gift
+        else
+          .well Tu n'as toujours pas acheter tes cadeaux!
+      .col-xs-12.col-sm-6
+        h2 Cadeaux &agrave; acheter
+        each latestGifts
+          .col-xs-12.col-sm-6
+              +gift
 
 template(name="giftFieldset")
     fieldset
@@ -123,7 +134,8 @@ template(name="userGifts")
               {{user.profile.dislike}}
   .row
     each gifts
-      +gift
+      .col-xs-12.col-sm-6.col-md-3.gift
+        +gift
   div
     if archived
       a(href="{{pathFor 'user.gifts'}}") Voir les cadeaux
@@ -132,7 +144,6 @@ template(name="userGifts")
 
 
 template(name="gift")
-  .col-xs-12.col-sm-6.col-md-3.gift
     a.thumbnail.well(href="{{pathFor 'gift.show'}}")
       if image
         img.avatar(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
