@@ -196,6 +196,8 @@ if (Meteor.isClient) {
 //  T9n.missingPrefix = ">";
 //  T9n.missingPostfix = "<";
 
+  AutoForm.setDefaultTemplate('materialize');
+
   toastr.options.positionClass = 'toast-bottom-left';
 
   Accounts.ui.config({passwordSignupFields: 'USERNAME_ONLY'});
@@ -296,20 +298,6 @@ if (Meteor.isClient) {
     }
   });
 
-
-  Template.gift.helpers({
-    prio: function () {
-      return _.range(this.priority);
-    },
-    buyedClass: function () {
-      return this.buyerId ? 'buyed' : '';
-    }
-  });
-
-  Template.users.helpers({
-    users: Meteor.users.find.bind(Meteor.users, {}, { sort: { username: 1 } })
-  });
-
   var findUserNameBy = function (field) {
     return function () {
       try {
@@ -320,6 +308,21 @@ if (Meteor.isClient) {
       }
     };
   };
+
+  Template.gift.helpers({
+    prio: function () {
+      return _.range(this.priority);
+    },
+    buyedClass: function () {
+      return this.buyerId ? 'buyed' : '';
+    },
+    userName: findUserNameBy('ownerId')
+  });
+
+  Template.users.helpers({
+    users: Meteor.users.find.bind(Meteor.users, {}, { sort: { username: 1 } })
+  });
+
 
   Template.giftShow.helpers({
     prio: function() {
@@ -459,14 +462,14 @@ function onStartup () {
 
   Meteor.publish('home.gifts', function () {
     if (this.userId)
-      return Gifts.find({
+      return [ Gifts.find({
         archived: false,
         $or: [
           { lockerId: this.userId },
           { buyerId: this.userId },
           { ownerId: { $ne: this.userId } }
         ]
-      });
+      }), Meteor.users.find({ _id: { $in: Meteor.users.findOne(this.userId).profile.friends } }) ]
     else
       this.ready();
   });

@@ -21,8 +21,9 @@ deps@1.0.7
 ejson@1.0.6
 email@1.0.6
 fastclick@1.0.3
-fezvrasta:bootstrap-material-design@0.3.0
+fourseven:scss@3.1.1
 geojson-utils@1.0.3
+gildaspk:autoform-materialize@0.0.18
 handlebars@1.0.3
 houston:admin@2.0.3
 html-tools@1.0.4
@@ -80,9 +81,9 @@ standard-app-packages@1.0.5
 templating@1.1.1
 tmeasday:paginated-subscription@0.2.4
 tracker@1.0.7
-twbs:bootstrap@3.3.4
 ui@1.0.6
 underscore@1.0.3
 url@1.0.4
 webapp@1.2.0
 webapp-hashing@1.0.3
+yang2007chun:materialize-scss@1.0.2

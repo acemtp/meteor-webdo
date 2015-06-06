@@ -1,10 +1,6 @@
-body {
-  padding-top: 90px;
-}
-
-/* header text */
+/* header text * /
 .navbar-header a,
-/* header icon */
+/* header icon * /
 .navbar i {
   font-size: 34px;
 }
@@ -50,6 +46,12 @@ body {
   right: 30px;
 }
 
+
+.gift-action {
+  right: 10px;
+  bottom: 10px;
+  position: absolute;
+}
 /* double the size of action icon */
 .gift-action i {
   font-size: 2em;
@@ -83,10 +85,12 @@ img.avatar {
   padding-bottom: 10px;
 }
 
-.stars {
+.card .stars {
   position: absolute;
   top: 6px;
-  right: 25px;
+  right: 6px;
+  font-size: 16px;
+  z-index: 100;
 }
 .stars > .mdi-action-grade {
   color: #FFD600;
