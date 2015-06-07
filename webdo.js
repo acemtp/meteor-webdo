@@ -461,17 +461,20 @@ function onStartup () {
   });
 
   Meteor.publish('home.gifts', function () {
-    if (this.userId)
+    if (this.userId) {
+      var friends = Meteor.users.findOne(this.userId).profile.friends;
+      friends.splice(friends.indexOf(this.userId, 1));
       return [ Gifts.find({
         archived: false,
         $or: [
           { lockerId: this.userId },
           { buyerId: this.userId },
-          { ownerId: { $ne: this.userId } }
+          { ownerId: { $in: friends } }
         ]
-      }), Meteor.users.find({ _id: { $in: Meteor.users.findOne(this.userId).profile.friends } }) ]
-    else
+      }), Meteor.users.find({ _id: { $in: friends } }) ]
+    } else {
       this.ready();
+    }
   });
 
   Meteor.publish('gift.show', function (giftId) {

@@ -263,11 +263,11 @@ template(name="users")
     each users
       .col.s12.m4
         a(href="{{pathFor 'user.gifts'}}")
-          .card
-            .card-image.waves-effect.waves-block.waves-light
+          .user.card.small
+            .card-image.waves-effect.waves-block.waves-light(sytle="height:300px")
               if profile.avatar
-                img.avatar(src=profile.avatar, alt=profile.name)
+                img(src=profile.avatar, alt=profile.name)
               else
-                img.avatar(src="/anonymous.jpg", alt=profile.name)
+                img(src="/anonymous.jpg", alt=profile.name)
               span.card-title= username
 
