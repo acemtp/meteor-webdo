@@ -15,6 +15,10 @@ joshowens:accounts-entry
 aldeed:autoform
 iron:router
 aldeed:simple-schema
-fezvrasta:bootstrap-material-design
 http
 chrismbeckett:toastr
+fourseven:scss
+yang2007chun:materialize-scss
+gildaspk:autoform-materialize
+support:support
+ddp

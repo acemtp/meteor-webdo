@@ -9,28 +9,25 @@ template(name="masterLayout")
     +yield
 
 template(name="navBar")
-  nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
-    .container
-      .navbar-header
-        ul.nav.navbar-nav
-          li
-            a.navbar-brand(href="/")
-              span Webdo
-      if currentUser
-        ul.nav.navbar-nav.navbar-right
-          li
-            a(href="{{pathFor 'users'}}")
-              i.mdi-social-people
-          li
-            +with currentUser
-              a(href="{{pathFor 'user.gifts'}}")
-                i.mdi-social-person
-          li
-            a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
-              i.mdi-content-add
+  nav(role="navigation")
+    .nav-wrapper
+      .container
+        a.brand-logo(href="/") Webdo
+        if currentUser
+          ul.right
+            li
+              a(href="{{pathFor 'users'}}")
+                i.mdi-social-people
+            li
+              +with currentUser
+                a(href="{{pathFor 'user.gifts'}}")
+                  i.mdi-social-person
+            li
+              a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
+                i.mdi-content-add
 
 template(name="home")
-  h1 Gestionnaire Famillial de cadeaux
+  h3 Gestionnaire Famillial de cadeaux
   if currentUser
     +homeGifts
     a(href="/sign-out") Déconnecter
@@ -38,30 +35,29 @@ template(name="home")
     +entrySignIn
 
 template(name="homeGifts")
-  .container
     .row
-      .col-xs-12.col-sm-6
-        h2 Cadeaux &agrave; acheter
+      .col.s12.m6
+        h4 Cadeaux &agrave; acheter
         if giftToBuy
           .row
             each toBuyGifts
-              .col-xs-12.col-sm-6
+              .col.s12.m6
                 +gift
         else
           .well Aucune cadeau &agrave; acheter
 
-        h2 Cadeaux achet&eacute;s
+        h4 Cadeaux achet&eacute;s
         if giftBuyed
           .row
             each buyedGifts
-              .col-xs-12.col-sm-6
+              .col.s12.m6
                 +gift
         else
           .well Tu n'as toujours pas acheter tes cadeaux!
-      .col-xs-12.col-sm-6
-        h2 Cadeaux &agrave; acheter
+      .col.s12.m6
+        h4 Dernier cadeaux ajoutés
         each latestGifts
-          .col-xs-12.col-sm-6
+          .col.s12.m6
               +gift
 
 template(name="giftFieldset")
@@ -100,41 +96,35 @@ template(name="userUpdate")
   +quickForm schema=profile doc=this id="updateUserForm"
 
 template(name="userGifts")
-  .well
+  .row
+    .col.s12.m6
+      .card
+        .card-image.waves-effect.waves-block.waves-light
+          img(src=user.profile.avatar, alt=user.username)
+          h1.card-title= user.username
+        .card-content
+          +markdown
+            {{user.profile.description}}
+    .col.s12.m6
+      .panel.panel-success
+        .panel-heading
+          h3.panel-title J'aime
+        .panel-body
+          +markdown
+            {{user.profile.like}}
+      .panel.panel-danger
+        .panel-heading
+          h3.panel-title Je n'aime pas
+        .panel-body
+          +markdown
+            {{user.profile.dislike}}
+  if isOwner
     .row
-      .col-xs-12.col-sm-9
-        h1= user.username
-      if isOwner
-        .col-xs-12.col-sm-3
-          a.btn.btn-primary(href="{{pathFor route='user.update'}}") modifier mon profile
-    .row
-      .col-xs-12.col-sm-3
-        .thumbnail
-          img.avatar(src=user.profile.avatar, alt=user.username)
-      .col-xs-12.col-sm-3
-        .panel.panel-success
-          .panel-heading
-            h3.panel-title Description
-          .panel-body
-            +markdown
-              {{user.profile.description}}
-      .col-xs-12.col-sm-3
-        .panel.panel-success
-          .panel-heading
-            h3.panel-title J'aime
-          .panel-body
-            +markdown
-              {{user.profile.like}}
-      .col-xs-12.col-sm-3
-        .panel.panel-danger
-          .panel-heading
-            h3.panel-title Je n'aime pas
-          .panel-body
-            +markdown
-              {{user.profile.dislike}}
+      .col.s12.m3
+        a.btn.btn-primary(href="{{pathFor route='user.update'}}") modifier mon profile
   .row
     each gifts
-      .col-xs-12.col-sm-6.col-md-3.gift
+      .col.s12.m3
         +gift
   div
     if archived
@@ -144,17 +134,20 @@ template(name="userGifts")
 
 
 template(name="gift")
-    a.thumbnail.well(href="{{pathFor 'gift.show'}}")
-      if image
-        img.avatar(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
-      else
-        img.avatar(src="/default-gift.png", alt=title)
-      .stars
-        each prio
-          span.mdi-action-grade
-      .bottom
-        .pull-left= title
-        .pull-right.gift-action
+  a(href="{{pathFor 'gift.show'}}")
+    .card
+      .card-image.waves-effect.waves-block.waves-light
+        if image
+          img.avatar(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
+        else
+          img.avatar(src="/default-gift.png", alt=title)
+        h5.card-title.truncate= title
+      .card-content
+        .stars
+          each prio
+            span.mdi-action-grade
+        span= userName
+        span.gift-action
           +giftAction
 
 template(name="giftAction")
@@ -176,7 +169,7 @@ template(name="giftAction")
 template(name="giftShow")
   .row
     if isEditableBy currentUser
-      .col-xs-12.padding
+      .col.s12.padding
         a.btn.btn-primary.btn-responsive(href="{{pathFor 'gift.update'}}")
           i.mdi-editor-mode-edit
             span  Edit
@@ -189,27 +182,27 @@ template(name="giftShow")
             i.mdi-content-archive
             span  Archiver
     else
-      .col-xs-12.padding.pull-right
+      .col.s12.padding.pull-right
         a.btn.btn-responsive.btn-primary.lock
           i.mdi-action-lock-open
             span
               if lockerId
                 | par {{lockerName}}
               else
-                |  Réserver
+                | Réserver
         a.btn.btn-responsive.btn-success.buy
           i.mdi-action-add-shopping-cart
             span
               if buyerId
                 | par {{buyerName}}
               else
-                |  Acheter
+                | Acheter
 
   .row
-    h1.col-xs-12= title
+    h1.col.s12= title
 
   .row
-    .col-xs-12.col-md-6.padding
+    .col.s12.m6.padding
       if image
         img.img-responsive(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
       else
@@ -224,7 +217,7 @@ template(name="giftShow")
           p Acheté par : {{buyerName}}
       .padding
         p Créé le : {{createdAt}}
-    .col-xs-12.col-md-6.well
+    .col.s12.m6.well
       if link
         p
           a(href=link, target="_blank") Visiter le site marchand
@@ -232,12 +225,12 @@ template(name="giftShow")
         {{detail}}
   .row
     if ownerIsNot currentUser
-      .col-xs-12.col-md-6
+      .col.s12.m6
         each privateComments
           +giftComment
         .panel.panel-primary
           .panel-heading
-            h3.panel-title Commentaire
+            h4.panel-title Commentaire
           .panel-body
             +autoForm collection="Comments" id="insertPrivateComment" type="insert"
               +afFieldInput name="message" autofocus=""
@@ -246,12 +239,12 @@ template(name="giftShow")
             br
             button.btn.btn-success(type="submit") Envoyer
 
-    .col-xs12.col-md-6
+    .col.s12.m6
       each publicComments
         +giftComment
       .panel.panel-warning
         .panel-heading
-          h3.panel-title Ce message sera visible par <b>{{ownerName}}</b>
+          h4.panel-title Ce message sera visible par <b>{{ownerName}}</b>
         .panel-body
           +autoForm collection="Comments" id="insertPrivateComment" type="insert"
               +afFieldInput name="message" autofocus=""
@@ -268,11 +261,13 @@ template(name="giftComment")
 template(name="users")
   .row
     each users
-      .col-xs-12.col-md-6
-        a.thumbnail.well(href="{{pathFor 'user.gifts'}}")
-          if profile.avatar
-            img.avatar(src=profile.avatar, alt=profile.name)
-          else
-            img.avatar(src="/anonymous.jpg", alt=profile.name)
-          div= username
+      .col.s12.m4
+        a(href="{{pathFor 'user.gifts'}}")
+          .user.card.small
+            .card-image.waves-effect.waves-block.waves-light(sytle="height:300px")
+              if profile.avatar
+                img(src=profile.avatar, alt=profile.name)
+              else
+                img(src="/anonymous.jpg", alt=profile.name)
+              span.card-title= username
 
