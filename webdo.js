@@ -238,7 +238,6 @@ if (Meteor.isClient) {
 
 
   var doAction = function (_id, _do, undo) {
-    var set = {};
     Gifts.update(_id, _do, function (error) {
       if (error) return toastr.error(error);
       var toastrEl = toastr.info('Action réussi. <a href="#">Annuler</a>');
@@ -251,6 +250,27 @@ if (Meteor.isClient) {
         });
       });
     });
+  };
+
+  var getAction = function (doc, field) {
+    var
+    action = {
+      go: {
+        $set: {}
+      },
+      undo: {
+        $unset: {}
+      }
+    },
+    userId = Meteor.userId();
+
+    action.go.$set[field] = userId;
+    action.undo.$unset[field] = '';
+    if (doc[field] === userId)
+      // swap go <=> undo
+      action = { go: action.undo, undo: action.go };
+
+    return action;
   };
 
   Template.giftAction.events({
@@ -347,29 +367,6 @@ if (Meteor.isClient) {
     }
   });
 
-  var getAction = function (doc, field) {
-    var
-    action = {
-      go: {
-        $set: {}
-      },
-      undo: {
-        $unset: {}
-      }
-    },
-    userId = Meteor.userId();
-
-    action.go['$set'][field] = userId;
-    action.undo['$unset'][field] = '';
-    if (doc[field] === userId) {
-      // swap go <=> undo
-      action = {
-        go: action.undo,
-        undo: action.go
-      };
-    }
-    return action;
-  };
 
   Template.giftShow.events({
     'click .archive': function (e) {
@@ -458,16 +455,17 @@ function onStartup () {
   });
 
   Meteor.publish('home.gifts', function () {
-    if (this.userId)
+    if (this.userId) {
+      var friends = Meteor.users.findOne(this.userId).profile.friends || [];
       return Gifts.find({
         archived: false,
         $or: [
           { lockerId: this.userId },
           { buyerId: this.userId },
-          { ownerId: { $ne: this.userId } }
+          { ownerId: { $in: friends } }
         ]
       });
-    else
+    } else
       this.ready();
   });
 
