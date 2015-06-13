@@ -1,0 +1,94 @@
+@import "sass/materialize.scss";
+
+body > .container {
+  padding-top: 90px;
+}
+
+nav {
+  background-color: #009688;
+}
+
+.user.card.small .card-image {
+  height: 300px;
+}
+
+/* fix input type=string from accountEntry */
+
+.entry-form button.submit {
+  padding: 0 2em;
+}
+
+input[type=string] {
+
+  // General Styles
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid $input-border-color;
+  border-radius: 0;
+  outline: none;
+  height: 3rem;
+  width: 100%;
+
+  font-size: 1rem;
+  margin: 0 0 15px 0;
+  padding: 0;
+  box-shadow: none;
+  @include box-sizing(content-box);
+  transition: all .3s;
+
+
+  // Disabled input style
+  &:disabled, &[readonly="readonly"] {
+    color: $input-disabled-color;
+    border-bottom: 1px dotted $input-disabled-color;
+  }
+  // Disabled label style
+  &:disabled+label, &[readonly="readonly"]+label {
+    color: $input-disabled-color;
+  }
+  // Focused input style
+  &:focus:not([readonly]) {
+    border-bottom: 1px solid $input-focus-color;
+    box-shadow: 0 1px 0 0 $input-focus-color;
+  }
+  // Focused label style
+  &:focus:not([readonly])+label {
+    color: $input-focus-color;
+  }
+  // Valid Input Style
+  &.valid,
+  &:focus.valid {
+    border-bottom: 1px solid $input-success-color;
+    box-shadow: 0 1px 0 0 $input-success-color;
+  }
+  // Custom Success Message
+  &.valid + label:after,
+  &:focus.valid + label:after {
+    content: attr(data-success);
+    color: $input-success-color;
+    opacity: 1;
+  }
+  // Invalid Input Style
+  &.invalid,
+  &:focus.invalid {
+    border-bottom: 1px solid $input-error-color;
+    box-shadow: 0 1px 0 0 $input-error-color;
+  }
+  // Custom Error message
+  &.invalid + label:after,
+  &:focus.invalid + label:after {
+    content: attr(data-error);
+    color: $input-error-color;
+    opacity: 1;
+  }
+
+  // Form Message Shared Styles
+  & + label:after {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 65px;
+    opacity: 0;
+    transition: .2s opacity ease-out, .2s color ease-out;
+  }
+}
