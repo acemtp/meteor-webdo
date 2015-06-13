@@ -8,6 +8,13 @@ nav {
   background-color: #009688;
 }
 
+@media only screen and (max-width: 600px) {
+  nav .brand-logo {
+    left: 0;
+    transform: translateX(0%);
+  }
+}
+
 .user.card.small .card-image {
   height: 300px;
 }
@@ -92,3 +99,14 @@ input[type=string] {
     transition: .2s opacity ease-out, .2s color ease-out;
   }
 }
+
+.card-title {
+  text-shadow: 1px 1px 1px black;
+}
+
+.gift {
+  .card-title {
+    font-size: 16px;
+  }
+}
+

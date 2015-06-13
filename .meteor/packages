@@ -4,7 +4,6 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-insecure
 accounts-ui
 showdown
 accounts-password
@@ -20,5 +19,4 @@ chrismbeckett:toastr
 fourseven:scss
 yang2007chun:materialize-scss
 gildaspk:autoform-materialize
-support:support
 ddp

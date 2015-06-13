@@ -228,7 +228,7 @@ if (Meteor.isClient) {
       return this._id === Meteor.userId();
     },
     userGiftsArchived: function () {
-      return Router.go('userGifts', { _id: this.ownerId }, { query: 'archived=1' });
+      return Router.go('userGifts', { _id: this._id }, { query: 'archived=1' });
     }
   });
 
@@ -339,6 +339,14 @@ if (Meteor.isClient) {
     userName: findUserNameBy('ownerId')
   });
 
+  Template.gift.events({
+    'error img': function (e) {
+      var fallback = '/photo/gift-default.png';
+      if (e.currentTarget.getAttribute('src') !== fallback)
+        e.currentTarget.src = fallback;
+    }
+  });
+
   Template.users.helpers({
     users: Meteor.users.find.bind(Meteor.users, {}, { sort: { username: 1 } })
   });
@@ -438,7 +446,7 @@ if (Meteor.isClient) {
 }
 function onStartup () {
   Meteor.publish('users', function () {
-    var userProfile = (Meteor.users.findOne(this.userId, {fields: { 'profile.friends': 1 }}) || {}).profile || {};
+    var userProfile = (Meteor.users.findOne(this.userId, { fields: { 'profile.friends': 1 } }) || {}).profile || {};
     return Meteor.users.find({
       _id: { '$in': userProfile.friends || [] }
     });
@@ -457,41 +465,36 @@ function onStartup () {
     return [ Gifts.find(request), Meteor.users.find({ _id: userId }) ];
   });
 
-  Meteor.publish('home.gifts', function () {
-    if (this.userId) {
-      var friends = Meteor.users.findOne(this.userId).profile.friends || [];
-      friends.splice(friends.indexOf(this.userId, 1));
-      return [ Gifts.find({
-        archived: false,
-        $or: [
-          { lockerId: this.userId },
-          { buyerId: this.userId },
-          { ownerId: { $in: friends } }
-        ]
-      }), Meteor.users.find({ _id: { $in: friends } }) ]
-    } else {
-      this.ready();
-    }
+  Meteor.publish('gifts.tobuy', function () {
+    return Gifts.find({ archived: false, lockerId: this.userId, buyerId: null });
+  });
+
+  Meteor.publish('gifts.buyed', function () {
+    return Gifts.find({ archived: false, buyerId: this.userId });
+  });
+
+  Meteor.publish('gifts.latest', function () {
+    if (!this.userId) return this.ready();
+
+    var friends = Meteor.users.findOne(this.userId).profile.friends || [];
+    friends.splice(friends.indexOf(this.userId, 1));
+    return Gifts.find({ archived: false, ownerId: { $in: friends } }, { limit: 10 });
   });
 
   Meteor.publish('gift.show', function (giftId) {
     check(giftId, String);
-    var gift = Gifts.findOne(giftId);
-    // array of user ids needed to show the gift
-    var userIds = [ gift.ownerId, gift.buyerId, gift.lockerId, gift.ownerId ];
-    var isPersonalGift = gift.ownerId === this.userId;
+    return Gifts.find({ _id: giftId }, { limit: 1 });
+  });
+
+  Meteor.publish('gift.comment', function (giftId) {
+    check(giftId, String);
+    var isPersonalGift = !!Gifts.findOne({ _id: giftId, ownerId: this.userId });
 
     var commentSelector = { giftId: giftId, removed: false };
     if (isPersonalGift)
       commentSelector.visible = true;
 
-    var commentAuthorIds = Comments.find(commentSelector, { fields: {_id: -1, authorId: 1 } }).fetch();
-
-    return [
-      Meteor.users.find({ _id: { $in: userIds.concat(commentAuthorIds) } }),
-      Gifts.find({ _id: giftId }),
-      Comments.find(commentSelector)
-    ];
+    return Comments.find(commentSelector);
   });
 
   Accounts.onCreateUser(function(options, user) {
@@ -508,30 +511,6 @@ function onStartup () {
 
     return user;
   });
-
-  // migrate user information
-  function findAndSetOriginalToNewName(original, newName) {
-    function handleUpdate (user, err) {
-      if (err)
-        console.error(newName, ', can not update user ', user.username);
-      else
-        console.log(newName, ', user ', user.username, ' updated');
-    }
-
-    var find = {};
-    find[newName] = { '$exists': false };
-    find['profile.original.' + original] = { '$exists': true };
-
-    Meteor.users.find(find).forEach(function (user) {
-      var set = {};
-      set[newName] = user.profile.original[original];
-      Meteor.users.update(user._id, { '$set': set }, handleUpdate.bind(null, user));
-    });
-
-  }
-//  findAndSetOriginalToNewName('aime', 'liked');
-//  findAndSetOriginalToNewName('aimepas', 'disliked');
-//  findAndSetOriginalToNewName('presentation', 'description');
 
 }
 
@@ -589,11 +568,19 @@ if (Meteor.isServer) {
 
 }
 
+Router.configure({
+   loadingTemplate: 'loading'
+});
 // routes
 Router.route('/', {
   name: 'home',
   waitOn: function () {
-    return Meteor.subscribe('home.gifts');
+    return [
+      Meteor.subscribe('users'),
+      Meteor.subscribe('gifts.tobuy'),
+      Meteor.subscribe('gifts.buyed'),
+      Meteor.subscribe('gifts.latest')
+    ];
   },
   data: function () {
     return {
@@ -642,8 +629,6 @@ Router.route('/user/:_id/gifts', {
       archived: showArchived,
       // to get the right id for pathFor
       _id: this.params._id,
-      // TODO remove ownerId from tempalte and use _id
-      ownerId: this.params._id,
       user: Meteor.users.findOne(this.params._id),
       gifts: Gifts.find({
         ownerId: this.params._id,
@@ -658,7 +643,10 @@ Router.route('/user/:_id/gifts', {
 Router.route('/gift/:_id', {
   name: 'gift.show',
   waitOn: function () {
-    return Meteor.subscribe('gift.show', this.params._id);
+    return [
+      Meteor.subscribe('gift.show', this.params._id),
+      Meteor.subscribe('gift.comment', this.params._id)
+    ];
   },
   data: function () {
     var gift = Gifts.findOne(this.params._id);

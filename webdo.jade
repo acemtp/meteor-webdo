@@ -135,19 +135,16 @@ template(name="userGifts")
 
 template(name="gift")
   a(href="{{pathFor 'gift.show'}}")
-    .card
-      .card-image.waves-effect.waves-block.waves-light
-        if image
-          img.avatar(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
-        else
-          img.avatar(src="/default-gift.png", alt=title)
-        h5.card-title.truncate= title
+    .gift.card.small
+      .card-image.waves-effect.waves-block.waves-light(style="height:230px")
+        img.avatar(src="{{image}}" alt=title)
+        .card-title.truncate= title
       .card-content
         .stars
           each prio
             span.mdi-action-grade
-        span= userName
-        span.gift-action
+        div= userName
+        .gift-action
           +giftAction
 
 template(name="giftAction")
@@ -271,3 +268,36 @@ template(name="users")
                 img(src="/anonymous.jpg", alt=profile.name)
               span.card-title= username
 
+template(name="loading")
+  .row
+    .col.offset-s3.offset-m5.center-align
+      .preloader-wrapper.big.active
+        .spinner-layer.spinner-blue
+          .circle-clipper.left
+            .circle
+          .gap-patch
+            .circle
+          .circle-clipper.right
+            .circle
+        .spinner-layer.spinner-green
+          .circle-clipper.left
+            .circle
+          .gap-patch
+            .circle
+          .circle-clipper.right
+            .circle
+        .spinner-layer.spinner-red
+          .circle-clipper.left
+            .circle
+          .gap-patch
+            .circle
+          .circle-clipper.right
+            .circle
+        .spinner-layer.spinner-yellow
+          .circle-clipper.left
+            .circle
+          .gap-patch
+            .circle
+          .circle-clipper.right
+            .circle
+      div Loading ...
