@@ -477,7 +477,9 @@ function onStartup () {
     if (!this.userId) return this.ready();
 
     var friends = Meteor.users.findOne(this.userId).profile.friends || [];
-    friends.splice(friends.indexOf(this.userId, 1));
+    var userIdx = friends.indexOf(this.userId);
+    if (userIdx >= 0)
+      friends.splice(userIdx, 1);
     return Gifts.find({ archived: false, ownerId: { $in: friends } }, { limit: 10, sort: { createdAt: -1 } });
   });
 
