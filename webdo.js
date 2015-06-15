@@ -86,6 +86,10 @@ Gifts.attachSchema({
     denyUpdate: true
   }
 });
+Gifts.allow({
+  insert: Meteor.userId,
+  update: Meteor.userId
+});
 
 Comments.attachSchema({
   giftId: {
@@ -154,6 +158,11 @@ Comments.attachSchema({
     type: Boolean,
     defaultValue: false
   }
+});
+
+Comments.allow({
+  insert: Meteor.userId,
+  update: Meteor.userId
 });
 
 var profile = new SimpleSchema({
@@ -488,7 +497,7 @@ function onStartup () {
     return Gifts.find({ _id: giftId }, { limit: 1 });
   });
 
-  Meteor.publish('gift.comment', function (giftId) {
+  Meteor.publish('gift.comments', function (giftId) {
     check(giftId, String);
     var isPersonalGift = !!Gifts.findOne({ _id: giftId, ownerId: this.userId });
 
@@ -647,7 +656,7 @@ Router.route('/gift/:_id', {
   waitOn: function () {
     return [
       Meteor.subscribe('gift.show', this.params._id),
-      Meteor.subscribe('gift.comment', this.params._id)
+      Meteor.subscribe('gift.comments', this.params._id)
     ];
   },
   data: function () {

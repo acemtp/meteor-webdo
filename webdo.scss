@@ -1,17 +1,17 @@
 @import "sass/materialize.scss";
 
-body > .container {
-  padding-top: 90px;
+body {
+  //padding-top: 90px;
 }
 
 nav {
   background-color: #009688;
 }
 
-@media only screen and (max-width: 600px) {
+@media #{$medium-and-down} {
   nav .brand-logo {
     left: 0;
-    transform: translateX(0%);
+    @include transform(translateX(0%));
   }
 }
 

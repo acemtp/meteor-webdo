@@ -5,27 +5,25 @@ head
 
 template(name="masterLayout")
   +navBar
-  .container
-    +yield
+  +yield
 
 template(name="navBar")
   nav(role="navigation")
     .nav-wrapper
-      .container
-        a.brand-logo(href="/") Webdo
-          // span(style="color: red") &#0223;
-        if currentUser
-          ul.right
-            li
-              a(href="{{pathFor 'users'}}")
-                i.mdi-social-people
-            li
-              +with currentUser
-                a(href="{{pathFor 'user.gifts'}}")
-                  i.mdi-social-person
-            li
-              a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
-                i.mdi-content-add
+      a.brand-logo(href="/") Webdo
+        // span(style="color: red") &#0223;
+      if currentUser
+        ul.right
+          li
+            a(href="{{pathFor 'users'}}")
+              i.mdi-social-people
+          li
+            +with currentUser
+              a(href="{{pathFor 'user.gifts'}}")
+                i.mdi-social-person
+          li
+            a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
+              i.mdi-content-add
 
 template(name="home")
   h3 Gestionnaire Famillial de cadeaux
@@ -37,12 +35,12 @@ template(name="home")
 
 template(name="homeGifts")
     .row
-      .col.s12.m6
+      .col.s12.m6.l8
         h4 Cadeaux &agrave; acheter
         if giftToBuy
           .row
             each toBuyGifts
-              .col.s12.m6
+              .col.s12.m12.l6
                 +gift
         else
           .well Aucune cadeau &agrave; acheter
@@ -51,14 +49,14 @@ template(name="homeGifts")
         if giftBuyed
           .row
             each buyedGifts
-              .col.s12.m6
+              .col.s12.m12.l6
                 +gift
         else
           .well Tu n'as toujours pas acheter tes cadeaux!
-      .col.s12.m6
+      .col.s12.m6.l4
         h4 Dernier cadeaux ajoutés
         each latestGifts
-          .col.s12.m6
+          .col.s12.m12
               +gift
 
 template(name="giftFieldset")
@@ -101,7 +99,7 @@ template(name="userGifts")
     .col.s12.m6
       .card
         .card-image.waves-effect.waves-block.waves-light
-          img(src=user.profile.avatar, alt=user.username)
+          img.responsive-img(src=user.profile.avatar, alt=user.username)
           h1.card-title= user.username
         .card-content
           +markdown
@@ -138,7 +136,7 @@ template(name="gift")
   a(href="{{pathFor 'gift.show'}}")
     .gift.card.small
       .card-image.waves-effect.waves-block.waves-light(style="height:230px")
-        img.avatar(src="{{image}}" alt=title)
+        img.responsive-img(src="{{image}}" alt=title)
         .card-title.truncate= title
       .card-content
         .stars
@@ -202,9 +200,9 @@ template(name="giftShow")
   .row
     .col.s12.m6.padding
       if image
-        img.img-responsive(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
+        img.responsive-img(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
       else
-        img(src="/favicon.png", alt=title)
+        img.responsive-img(src="/favicon.png", alt=title)
       .stars
         each prio
           span.mdi-action-grade
@@ -244,7 +242,7 @@ template(name="giftShow")
         .panel-heading
           h4.panel-title Ce message sera visible par <b>{{ownerName}}</b>
         .panel-body
-          +autoForm collection="Comments" id="insertPrivateComment" type="insert"
+          +autoForm collection="Comments" id="insertPublicComment" type="insert"
               +afFieldInput name="message" autofocus=""
               +afFieldInput name="visible" value=true
               +afFieldInput name="giftId" value=../_id
@@ -264,9 +262,9 @@ template(name="users")
           .user.card.small
             .card-image.waves-effect.waves-block.waves-light(sytle="height:300px")
               if profile.avatar
-                img(src=profile.avatar, alt=profile.name)
+                img.responsive-img(src=profile.avatar, alt=profile.name)
               else
-                img(src="/anonymous.jpg", alt=profile.name)
+                img.responsive-img(src="/anonymous.jpg", alt=profile.name)
               span.card-title= username
 
 template(name="loading")
