@@ -7,6 +7,12 @@ body {
 nav {
   background-color: #009688;
 }
+$large-and-down: "only screen and (max-width : #{$large-screen})" !default;
+@media #{$large-and-down} {
+  .container {
+    width: 100%
+  }
+}
 
 @media #{$medium-and-down} {
   nav .brand-logo {

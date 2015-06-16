@@ -5,25 +5,27 @@ head
 
 template(name="masterLayout")
   +navBar
-  +yield
+  .container
+    +yield
 
 template(name="navBar")
   nav(role="navigation")
-    .nav-wrapper
-      a.brand-logo(href="/") Webdo
-        // span(style="color: red") &#0223;
-      if currentUser
-        ul.right
-          li
-            a(href="{{pathFor 'users'}}")
-              i.mdi-social-people
-          li
-            +with currentUser
-              a(href="{{pathFor 'user.gifts'}}")
-                i.mdi-social-person
-          li
-            a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
-              i.mdi-content-add
+    .container
+      .nav-wrapper
+        a.brand-logo(href="/") Webdo
+          // span(style="color: red") &#0223;
+        if currentUser
+          ul.right
+            li
+              a(href="{{pathFor 'users'}}")
+                i.mdi-social-people
+            li
+              +with currentUser
+                a(href="{{pathFor 'user.gifts'}}")
+                  i.mdi-social-person
+            li
+              a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
+                i.mdi-content-add
 
 template(name="home")
   h3 Gestionnaire Famillial de cadeaux
@@ -229,11 +231,11 @@ template(name="giftShow")
             h4.panel-title Commentaire
           .panel-body
             +autoForm collection="Comments" id="insertPrivateComment" type="insert"
-              +afFieldInput name="message" autofocus=""
-              +afFieldInput name="visible" value=false
+              +afFieldInput name="message"
+              +afFieldInput name="visible" value="false"
               +afFieldInput name="giftId" value=../_id
-            br
-            button.btn.btn-success(type="submit") Envoyer
+              br
+              button.btn.btn-success(type="submit") Envoyer
 
     .col.s12.m6
       each publicComments
@@ -243,11 +245,11 @@ template(name="giftShow")
           h4.panel-title Ce message sera visible par <b>{{ownerName}}</b>
         .panel-body
           +autoForm collection="Comments" id="insertPublicComment" type="insert"
-              +afFieldInput name="message" autofocus=""
-              +afFieldInput name="visible" value=true
-              +afFieldInput name="giftId" value=../_id
-          br
-          button.btn.btn-success(type="submit") Envoyer
+            +afFieldInput name="message"
+            +afFieldInput name="visible" value="true"
+            +afFieldInput name="giftId" value=../_id
+            br
+            button.btn.btn-success(type="submit") Envoyer
 
 template(name="giftComment")
   div Par {{author}}

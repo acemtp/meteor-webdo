@@ -207,8 +207,6 @@ if (Meteor.isClient) {
 
   AutoForm.setDefaultTemplate('materialize');
 
-  toastr.options.positionClass = 'toast-bottom-left';
-
   Accounts.ui.config({passwordSignupFields: 'USERNAME_ONLY'});
 
   AccountsEntry.config({
@@ -305,6 +303,16 @@ if (Meteor.isClient) {
     }
   });
 
+  AutoForm.addHooks([ 'insertPublicComment', 'insertPrivateComment' ], {
+    onSuccess: function() {
+      toastr.success('commentaire ajoute');
+    },
+    onError: function (formType, error) {
+      toastr.error(error);
+      console.log('updateUserForm, onError:', formType, error);
+    }
+  });
+
   AutoForm.hooks({
     updateUserForm: {
       onSubmit: function (doc, update) {
@@ -323,6 +331,7 @@ if (Meteor.isClient) {
 
   AutoForm.addHooks([ 'insertGiftForm', 'updateGiftForm' ], {
     onSuccess: function() {
+      toastr.success('Sauvegarde reussi');
       Router.go('gift.show', { _id: this.docId });
     }
   });
