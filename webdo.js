@@ -644,6 +644,7 @@ Router.route('/user/:_id/gifts', {
   },
   data: function () {
     var showArchived = this.params.query.archived === '1';
+    var sort = this.params._id === Meteor.userId() ? { priority: -1 } : { buyerId: 1, lockerId: 1, priority: -1, title: 1 };
     return {
       // used to show link to archived or not archived gifts
       archived: showArchived,
@@ -653,9 +654,7 @@ Router.route('/user/:_id/gifts', {
       gifts: Gifts.find({
         ownerId: this.params._id,
         archived: showArchived
-      }, {
-        sort: { buyerId: 1, lockerId: 1, priority: -1, title: 1 }
-      })
+      }, { sort: sort })
     };
   }
 });
@@ -665,7 +664,8 @@ Router.route('/gift/:_id', {
   waitOn: function () {
     return [
       Meteor.subscribe('gift.show', this.params._id),
-      Meteor.subscribe('gift.comments', this.params._id)
+      Meteor.subscribe('gift.comments', this.params._id),
+      Meteor.subscribe('users')
     ];
   },
   data: function () {

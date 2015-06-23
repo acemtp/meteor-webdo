@@ -86,7 +86,7 @@ template(name="giftFieldset")
 template(name="giftCreate")
   +autoForm collection="Gifts" id="insertGiftForm" type="insert"
     +giftFieldset
-    button.btn.btn-success.btn-fab.btn-raised.btn-float.mdi-action-done(type="submit")
+    button.btn.btn-float.mdi-action-done(type="submit")
 
 template(name="giftUpdate")
   +autoForm collection="Gifts" doc=this id="updateGiftForm" type="update"
