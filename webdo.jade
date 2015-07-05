@@ -79,7 +79,7 @@ template(name="giftFieldset")
         if afFieldIsInvalid name='image'
           span.help-block {{afFieldMessage name='image'}}
 
-      +afQuickField name='ownerId' options=friends
+      +afQuickField name='ownerId' options=friends value=giftOwnerId
       +afQuickField name='priority' options=priorities
       +afQuickField name='detail' rows=10
 

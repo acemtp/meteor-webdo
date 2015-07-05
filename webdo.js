@@ -11,7 +11,6 @@ Gifts.attachSchema({
   detail: {
     type: String,
     label: 'Détail',
-    max: 4096
   },
   link: {
     type: String,
@@ -245,6 +244,11 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.giftFieldset.helpers({
+    giftOwnerId: function () {
+      return Meteor.userId();
+    },
+  });
 
   var doAction = function (_id, _do, undo) {
     Gifts.update(_id, _do, function (error) {
@@ -429,7 +433,6 @@ if (Meteor.isClient) {
   });
 
   UI.registerHelper('friends', function() {
-    var userId = Meteor.userId();
     return Meteor.users
       .find(
         { _id: { '$in': Meteor.user().profile.friends } },
@@ -440,7 +443,6 @@ if (Meteor.isClient) {
           value: user._id
         };
 
-        if (user._id === userId) value.selected = true;
         return value;
       });
   });
@@ -477,10 +479,13 @@ function onStartup () {
   Meteor.publish('user.gifts', function (userId) {
     check(userId, String);
     var request = { ownerId: userId };
-    if (this.userId === userId)
+    var options = {};
+    if (this.userId === userId) {
       request.suggested = false;
+      options.fields = { 'lockerId': 0, 'buyerId': 0 };
+    }
 
-    return [ Gifts.find(request), Meteor.users.find({ _id: userId }) ];
+    return [ Gifts.find(request, options), Meteor.users.find({ _id: userId }) ];
   });
 
   Meteor.publish('gifts.tobuy', function () {
@@ -503,7 +508,14 @@ function onStartup () {
 
   Meteor.publish('gift.show', function (giftId) {
     check(giftId, String);
-    return Gifts.find({ _id: giftId }, { limit: 1 });
+    var gift = Gifts.findOne({ _id: giftId });
+    var options = { limit: 1 };
+    if (gift.suggested) return;
+
+    if (gift.ownerId === this.userId) {
+      options.fields = { 'lockerId': 0, 'buyerId': 0 };
+    }
+    return Gifts.find({ _id: giftId }, options);
   });
 
   Meteor.publish('gift.comments', function (giftId) {
