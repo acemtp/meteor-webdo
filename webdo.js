@@ -1,6 +1,6 @@
 Gifts = new Mongo.Collection('gifts');
 Comments = new Mongo.Collection('comments');
-
+moment.locale("fr");
 
 Gifts.attachSchema({
   title: {
@@ -373,6 +373,11 @@ if (Meteor.isClient) {
     users: Meteor.users.find.bind(Meteor.users, {}, { sort: { username: 1 } })
   });
 
+  Template.giftComment.helpers({
+    createdAt: function() {
+      return moment(this.createdAt).fromNow();
+    },
+  });
 
   Template.giftShow.helpers({
     prio: function() {
@@ -397,7 +402,10 @@ if (Meteor.isClient) {
     },
     privateComments: function () {
       return Comments.find({ visible: false }).fetch();
-    }
+    },
+    createdAt: function() {
+      return moment(this.createdAt).format("LLLL");
+    },
   });
 
 
