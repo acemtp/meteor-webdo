@@ -518,9 +518,9 @@ function onStartup () {
     check(giftId, String);
     var gift = Gifts.findOne({ _id: giftId });
     var options = { limit: 1 };
-    if (gift.suggested) return;
 
     if (gift.ownerId === this.userId) {
+      if (gift.suggested) return this.ready();
       options.fields = { 'lockerId': 0, 'buyerId': 0 };
     }
     return Gifts.find({ _id: giftId }, options);
