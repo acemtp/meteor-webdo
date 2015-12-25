@@ -1,6 +1,6 @@
 Gifts = new Mongo.Collection('gifts');
 Comments = new Mongo.Collection('comments');
-
+moment.locale("fr");
 
 Gifts.attachSchema({
   title: {
@@ -373,6 +373,11 @@ if (Meteor.isClient) {
     users: Meteor.users.find.bind(Meteor.users, {}, { sort: { username: 1 } })
   });
 
+  Template.giftComment.helpers({
+    createdAt: function() {
+      return moment(this.createdAt).fromNow();
+    },
+  });
 
   Template.giftShow.helpers({
     prio: function() {
@@ -397,7 +402,10 @@ if (Meteor.isClient) {
     },
     privateComments: function () {
       return Comments.find({ visible: false }).fetch();
-    }
+    },
+    createdAt: function() {
+      return moment(this.createdAt).format("LLLL");
+    },
   });
 
 
@@ -510,9 +518,9 @@ function onStartup () {
     check(giftId, String);
     var gift = Gifts.findOne({ _id: giftId });
     var options = { limit: 1 };
-    if (gift.suggested) return;
 
     if (gift.ownerId === this.userId) {
+      if (gift.suggested) return this.ready();
       options.fields = { 'lockerId': 0, 'buyerId': 0 };
     }
     return Gifts.find({ _id: giftId }, options);
