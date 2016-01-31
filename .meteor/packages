@@ -16,9 +16,11 @@ aldeed:simple-schema
 http
 chrismbeckett:toastr
 fourseven:scss
-yang2007chun:materialize-scss
 gildaspk:autoform-materialize
 ddp
 momentjs:moment
 rzymek:moment-locale-fr
 useraccounts:materialize
+seba:minifiers-autoprefixer
+poetic:materialize-scss
+wolves:bourbon
