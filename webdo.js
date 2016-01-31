@@ -1,6 +1,6 @@
 Gifts = new Mongo.Collection('gifts');
 Comments = new Mongo.Collection('comments');
-moment.locale("fr");
+moment.locale('fr');
 
 Gifts.attachSchema({
   title: {
@@ -208,10 +208,31 @@ if (Meteor.isClient) {
 
   Accounts.ui.config({passwordSignupFields: 'USERNAME_ONLY'});
 
-  AccountsEntry.config({
-    homeRoute: '/',
-    dashboardRoute: '/',
-    passwordSignupFields: 'USERNAME_ONLY'
+  AccountsTemplates.configure({
+    sendVerificationEmail: false,
+    focusFirstInput: true,
+    homeRoutePath: 'home',
+    onLogoutHook: function () { Router.go('/'); },
+  });
+
+  // remove email fields
+  var pwd = AccountsTemplates.removeField('password');
+  AccountsTemplates.removeField('email');
+  AccountsTemplates.addFields([
+    {
+        _id: 'username',
+        type: 'text',
+        displayName: 'username',
+        required: true,
+        minLength: 5,
+    },
+    pwd
+  ]);
+
+  Template.home.events({
+    'click a.logout': function () {
+      AccountsTemplates.logout();
+    },
   });
 
 	Template.homeGifts.helpers({
@@ -404,7 +425,7 @@ if (Meteor.isClient) {
       return Comments.find({ visible: false }).fetch();
     },
     createdAt: function() {
-      return moment(this.createdAt).format("LLLL");
+      return moment(this.createdAt).format('LLLL');
     },
   });
 
@@ -611,6 +632,7 @@ if (Meteor.isServer) {
 Router.configure({
    loadingTemplate: 'loading'
 });
+
 // routes
 Router.route('/', {
   name: 'home',

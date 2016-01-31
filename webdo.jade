@@ -31,9 +31,9 @@ template(name="home")
   h3 Gestionnaire Famillial de cadeaux
   if currentUser
     +homeGifts
-    a(href="/sign-out") Déconnecter
+    a.logout(href="/") Déconnecter
   else
-    +entrySignIn
+    +atForm
 
 template(name="homeGifts")
     .row

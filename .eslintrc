@@ -27,6 +27,6 @@
       - 2
       - 'single'
       - 'avoid-escape'
-    no-console: false
-    no-underscore-dangle: false
-    strict: false
+    no-console: 0
+    no-underscore-dangle: 0
+    strict: 0

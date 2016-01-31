@@ -10,7 +10,6 @@ accounts-password
 houston:admin
 mquandalle:jade
 aldeed:collection2
-joshowens:accounts-entry
 aldeed:autoform
 iron:router
 aldeed:simple-schema
@@ -22,3 +21,4 @@ gildaspk:autoform-materialize
 ddp
 momentjs:moment
 rzymek:moment-locale-fr
+useraccounts:materialize
