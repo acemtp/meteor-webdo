@@ -1,32 +1,32 @@
-AutoForm.addHooks([ 'insertPublicComment', 'insertPrivateComment' ], {
-  onSuccess: function() {
+AutoForm.addHooks(['insertPublicComment', 'insertPrivateComment'], {
+  onSuccess() {
     toastr.success('commentaire ajoute');
   },
-  onError: function (formType, error) {
+  onError(formType, error) {
     toastr.error(error);
     console.log('updateUserForm, onError:', formType, error);
-  }
+  },
 });
 
 AutoForm.hooks({
   updateUserForm: {
-    onSubmit: function (doc, update) {
+    onSubmit(doc, update) {
       Meteor.users.update(this.docId, update);
       this.done();
       return false;
     },
-    onSuccess: function() {
+    onSuccess() {
       Router.go('user.gifts', { _id: this.docId });
     },
-    onError: function (formType, error) {
+    onError(formType, error) {
       console.log('updateUserForm, onError:', formType, error);
-    }
-  }
+    },
+  },
 });
 
-AutoForm.addHooks([ 'insertGiftForm', 'updateGiftForm' ], {
-  onSuccess: function() {
+AutoForm.addHooks(['insertGiftForm', 'updateGiftForm'], {
+  onSuccess() {
     toastr.success('Sauvegarde reussi');
     Router.go('gift.show', { _id: this.docId });
-  }
+  },
 });
