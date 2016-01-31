@@ -10,19 +10,19 @@ AccountsTemplates.configure({
   sendVerificationEmail: false,
   focusFirstInput: true,
   homeRoutePath: 'home',
-  onLogoutHook: function () { Router.go('/'); },
+  onLogoutHook() { Router.go('/'); },
 });
 
 // remove email fields
-var pwd = AccountsTemplates.removeField('password');
+const pwd = AccountsTemplates.removeField('password');
 AccountsTemplates.removeField('email');
 AccountsTemplates.addFields([
   {
-      _id: 'username',
-      type: 'text',
-      displayName: 'username',
-      required: true,
-      minLength: 5,
+    _id: 'username',
+    type: 'text',
+    displayName: 'username',
+    required: true,
+    minLength: 5,
   },
-  pwd
+  pwd,
 ]);

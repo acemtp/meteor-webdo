@@ -8,6 +8,7 @@
   globals:
     Accounts: true
     UserAccounts: true
+    AccountsTemplates: false
     AutoForm: true
     check: true
     Comments: true
