@@ -3,7 +3,7 @@
   env:
     meteor: true
     node: true
-    browser: tru
+    browser: true
     es6: true
   globals:
     Accounts: false
@@ -35,4 +35,3 @@
     key-spacing: 0
     prefer-arrow-callback: 0
     no-nested-ternary: 0
-    no-eval: 0
