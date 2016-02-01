@@ -6,24 +6,21 @@
     browser: tru
     es6: true
   globals:
-    Accounts: true
-    UserAccounts: true
+    Accounts: false
+    UserAccounts: false
     AccountsTemplates: false
-    AutoForm: true
-    check: true
+    moment: false
+    AutoForm: false
+    check: false
+    console: false
+    Router: false
+    SimpleSchema: false
+    T9n: false
+    toastr: false
     Comments: true
-    console: true
     Gifts: true
-    HTTP: true
-    Meteor: true
-    Mongo: true
-    Router: true
-    SimpleSchema: true
-    T9n: true
-    Template: true
-    toastr: true
     UI: true
-    window: true
+    profile: true
   rules:
     curly:
       - 2

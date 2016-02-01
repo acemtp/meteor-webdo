@@ -11,12 +11,10 @@ $input-disabled-color: black;
 $input-focus-color: blue;
 
 @import "{wolves:bourbon}/bourbon";
-body {
-  //padding-top: 90px;
-}
 
 nav {
   background-color: #009688;
+  margin-bottom: 30px;
 }
 
 @media #{$large-and-down} {

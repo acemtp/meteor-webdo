@@ -1,53 +1,53 @@
 Template.home.events({
-  'click a.logout': function () {
+  'click a.logout'() {
     AccountsTemplates.logout();
   },
 });
 
 Template.homeGifts.helpers({
-  giftToBuy: function () {
+  giftToBuy() {
     return !!Gifts.findOne({ lockerId: Meteor.userId(), buyerId: null });
   },
-  giftBuyed: function () {
+  giftBuyed() {
     return !!Gifts.findOne({ buyerId: Meteor.userId() });
-  }
+  },
 });
 
 Template.userUpdate.helpers({
-  profile: function () {
+  profile() {
     return profile;
-  }
+  },
 });
 
 Template.userGifts.helpers({
-  isOwner: function () {
+  isOwner() {
     return this._id === Meteor.userId();
   },
-  userGiftsArchived: function () {
+  userGiftsArchived() {
     return Router.go('userGifts', { _id: this._id }, { query: 'archived=1' });
-  }
+  },
 });
 
 Template.giftAction.helpers({
-  ownerIs: function(currentUser) {
+  ownerIs(currentUser) {
     return currentUser && this.ownerId === currentUser._id;
-  }
+  },
 });
 
 Template.giftFieldset.helpers({
-  giftOwnerId: function () {
+  giftOwnerId() {
     return Meteor.userId();
   },
 });
 
-var doAction = function (_id, _do, undo) {
-  Gifts.update(_id, _do, function (error) {
+const doAction = (_id, _do, undo) => {
+  Gifts.update(_id, _do, error => {
     if (error) return toastr.error(error);
-    var toastrEl = toastr.info('Action réussi. <a href="#">Annuler</a>');
-    toastrEl.on('click', function () {
+    const toastrEl = toastr.info('Action réussi. <a href="#">Annuler</a>');
+    toastrEl.on('click', () => {
       toastrEl.hide();
       console.log('undo action', _id, undo);
-      Gifts.update(_id, undo, function (undoError) {
+      Gifts.update(_id, undo, undoError => {
         if (error) return toastr.error(undoError);
         toastr.success('Action Annulée');
       });
@@ -55,50 +55,49 @@ var doAction = function (_id, _do, undo) {
   });
 };
 
-var getAction = function (doc, field) {
-  var
-  action = {
+const getAction = (doc, field) => {
+  const action = {
     go: {
-      $set: {}
+      $set: {},
     },
     undo: {
-      $unset: {}
-    }
-  },
-  userId = Meteor.userId();
+      $unset: {},
+    },
+  };
+  const userId = Meteor.userId();
 
   action.go.$set[field] = userId;
   action.undo.$unset[field] = '';
   if (doc[field] === userId)
     // swap go <=> undo
-    action = { go: action.undo, undo: action.go };
+    return { go: action.undo, undo: action.go };
 
   return action;
 };
 
 Template.giftAction.events({
-  'click .archive': function (e) {
+  'click .archive'(e) {
     e.preventDefault();
     doAction(this._id, {$set: {archived: true}}, {$set: {archived: false}});
   },
-  'click .unarchive': function (e) {
+  'click .unarchive'(e) {
     e.preventDefault();
     doAction(this._id, {$set: {archived: false}}, {$set: {archived: true}});
   },
-  'click .buy': function (e) {
+  'click .buy'(e) {
     e.preventDefault();
-    var action = getAction(this, 'buyerId');
+    const action = getAction(this, 'buyerId');
     doAction(this._id, action.go, action.undo);
   },
-  'click .lock': function (e) {
+  'click .lock'(e) {
     e.preventDefault();
-    var action = getAction(this, 'lockerId');
+    const action = getAction(this, 'lockerId');
     doAction(this._id, action.go, action.undo);
-  }
+  },
 });
 
-var findUserNameBy = function (field) {
-  return function () {
+const findUserNameBy = (field) =>
+  function findUserNameByField() {
     try {
       return Meteor.users.findOne(this[field]).username;
     } catch (e) {
@@ -106,125 +105,119 @@ var findUserNameBy = function (field) {
       return 'Utilisateur inconnu';
     }
   };
-};
+
 
 Template.gift.helpers({
-  prio: function () {
+  prio() {
     return _.range(this.priority);
   },
-  buyedClass: function () {
+  buyedClass() {
     return this.buyerId ? 'buyed' : '';
   },
-  userName: findUserNameBy('ownerId')
+  userName: findUserNameBy('ownerId'),
 });
 
 Template.gift.events({
-  'error img': function (e) {
-    var fallback = '/photo/gift-default.png';
-    if (e.currentTarget.getAttribute('src') !== fallback)
-      e.currentTarget.src = fallback;
-  }
+  'error img'(e) {
+    const { currentTarget } = e;
+    const fallback = '/photo/gift-default.png';
+    if (currentTarget.getAttribute('src') !== fallback)
+      currentTarget.src = fallback;
+  },
 });
 
 Template.users.helpers({
-  users: Meteor.users.find.bind(Meteor.users, {}, { sort: { username: 1 } })
+  users: Meteor.users.find.bind(Meteor.users, {}, { sort: { username: 1 } }),
 });
 
 Template.giftComment.helpers({
-  createdAt: function() {
+  createdAt() {
     return moment(this.createdAt).fromNow();
   },
 });
 
 Template.giftShow.helpers({
-  prio: function() {
+  prio() {
     return _.range(this.priority);
   },
   lockerName: findUserNameBy('lockerId'),
   buyerName: findUserNameBy('buyerId'),
   ownerName: findUserNameBy('ownerId'),
-  ownerIs: function(currentUser) {
+  ownerIs(currentUser) {
     return currentUser && this.ownerId === currentUser._id;
   },
-  ownerIsNot: function(currentUser) {
+  ownerIsNot(currentUser) {
     return currentUser && this.ownerId !== currentUser._id;
   },
-  isEditableBy: function(currentUser) {
-    var edit = currentUser && (this.ownerId === currentUser._id || this.suggested);
+  isEditableBy(currentUser) {
+    const edit = currentUser && (this.ownerId === currentUser._id || this.suggested);
     console.log('isEditableBy', edit, this);
     return edit;
   },
-  publicComments: function () {
+  publicComments() {
     return Comments.find({ visible: true }).fetch();
   },
-  privateComments: function () {
+  privateComments() {
     return Comments.find({ visible: false }).fetch();
   },
-  createdAt: function() {
+  createdAt() {
     return moment(this.createdAt).format('LLLL');
   },
 });
 
 
 Template.giftShow.events({
-  'click .archive': function (e) {
+  'click .archive'(e) {
     e.preventDefault();
-    Gifts.update(this._id, { '$set': { archived: true } });
+    Gifts.update(this._id, { $set: { archived: true } });
   },
-  'click .unarchive': function (e) {
+  'click .unarchive'(e) {
     e.preventDefault();
-    Gifts.update(this._id, { '$set': { archived: false } });
+    Gifts.update(this._id, { $set: { archived: false } });
   },
-  'click .buy': function (e) {
+  'click .buy'(e) {
     e.preventDefault();
-    var action = getAction(this, 'buyerId');
+    const action = getAction(this, 'buyerId');
     Gifts.update(this._id, action.go);
   },
-  'click .lock': function (e) {
+  'click .lock'(e) {
     e.preventDefault();
-    var action = getAction(this, 'lockerId');
+    const action = getAction(this, 'lockerId');
     Gifts.update(this._id, action.go);
-
-  }
+  },
 });
 
-UI.registerHelper('priorities', function() {
-  return [
-    { label: '5 étoiles - Doit avoir', value: 5 },
-    { label: '4 étoiles - Adorerais avoir', value: 4 },
-    { label: '3 étoiles - Aimerais avoir', value: 3 },
-    { label: "2 étoiles - J'y pense", value: 2 }
-  ];
-});
+UI.registerHelper('priorities', () => [
+  { label: '5 étoiles - Doit avoir', value: 5 },
+  { label: '4 étoiles - Adorerais avoir', value: 4 },
+  { label: '3 étoiles - Aimerais avoir', value: 3 },
+  { label: "2 étoiles - J'y pense", value: 2 },
+]);
 
-UI.registerHelper('friends', function() {
-  return Meteor.users
-    .find(
-      { _id: { '$in': Meteor.user().profile.friends } },
-      {fields: { username: 1 } })
-    .map(function (user) {
-      var value = {
-        label: user.username,
-        value: user._id
-      };
-
-      return value;
-    });
-});
+UI.registerHelper('friends', () => Meteor
+  .users
+  .find(
+    { _id: { $in: Meteor.user().profile.friends } },
+    {fields: { username: 1 } })
+  .map(user => ({
+    label: user.username,
+    value: user._id,
+  })
+));
 
 Template.giftCreate.events({
-  'change input[name="link"]': function () {
-    if($("input[name='title']").val()) return;
-    if($("textarea[name='detail']").val()) return;
-    if($("input[name='image']").val()) return;
+  'change input[name="link"]'() {
+    if ($("input[name='title']").val()) return;
+    if ($("textarea[name='detail']").val()) return;
+    if ($("input[name='image']").val()) return;
 
-    Meteor.call('curExtractMeta', $("input[name='link']").val(), function (error, result) {
+    Meteor.call('curExtractMeta', $("input[name='link']").val(), (error, result) => {
       console.log('extra', error, result);
-      if(!error) {
-        if(result.name) $("input[name='title']").val(result.name);
-        if(result.description) $("textarea[name='detail']").val(result.description);
-        if(result.image) $("input[name='image']").val(result.image);
+      if (!error) {
+        if (result.name) $("input[name='title']").val(result.name);
+        if (result.description) $("textarea[name='detail']").val(result.description);
+        if (result.image) $("input[name='image']").val(result.image);
       }
     });
-  }
+  },
 });

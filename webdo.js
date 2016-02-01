@@ -165,7 +165,7 @@ Comments.allow({
   update: Meteor.userId
 });
 
-var profile = new SimpleSchema({
+profile = new SimpleSchema({
   profile: {
     type: Object
   },
