@@ -6,7 +6,7 @@ Gifts.attachSchema({
   title: {
     type: String,
     label: 'Titre',
-    max: 149
+    max: 149,
   },
   detail: {
     type: String,
@@ -16,13 +16,13 @@ Gifts.attachSchema({
     type: String,
     label: 'Lien',
     max: 1024,
-    optional: true
+    optional: true,
   },
   image: {
     type: String,
     label: 'Image',
     max: 1024,
-    optional: true
+    optional: true,
   },
   priority: {
     type: Number,
@@ -32,9 +32,9 @@ Gifts.attachSchema({
     autoform: {
       type: 'select',
       afFieldInput: {
-        firstOption: 'A quel point souhaite tu ce cadeau?'
-      }
-    }
+        firstOption: 'A quel point souhaite tu ce cadeau?',
+      },
+    },
   },
   ownerId: {
     type: String,
@@ -42,53 +42,47 @@ Gifts.attachSchema({
     autoform: {
       type: 'select',
       afFieldInput: {
-        firstOption: ''
-      }
-    }
+        firstOption: '',
+      },
+    },
   },
   createdAt: {
     type: Date,
     label: 'Date de création',
-    autoValue: function() {
-      if (this.isInsert)
-        return new Date();
-      if (this.isUpsert)
-        return { $setOnInsert: new Date() };
-
+    autoValue() {
+      if (this.isInsert) return new Date();
+      if (this.isUpsert) return { $setOnInsert: new Date() };
       this.unset();
     },
-    denyUpdate: true
+    denyUpdate: true,
   },
   lockerId: {
     type: String,
-    optional: true
+    optional: true,
   },
   buyerId: {
     type: String,
-    optional: true
+    optional: true,
   },
   archived: {
     type: Boolean,
-    defaultValue: false
+    defaultValue: false,
   },
   suggested: {
     type: Boolean,
-    autoValue: function() {
-      var value = Meteor.userId() !== this.field('ownerId').value;
-      if (this.isInsert)
-        return value;
-      if (this.isUpsert)
-        return { $setOnInsert: value };
-
+    autoValue() {
+      const value = Meteor.userId() !== this.field('ownerId').value;
+      if (this.isInsert) return value;
+      if (this.isUpsert) return { $setOnInsert: value };
       this.unset();
     },
-    denyUpdate: true
-  }
+    denyUpdate: true,
+  },
 });
 
 Gifts.allow({
   insert: Meteor.userId,
-  update: Meteor.userId
+  update: Meteor.userId,
 });
 
 Comments.attachSchema({
@@ -96,126 +90,117 @@ Comments.attachSchema({
     type: String,
     autoform: {
       afFieldInput: {
-        type: 'hidden'
-      }
-    }
+        type: 'hidden',
+      },
+    },
   },
   message: {
     type: String,
     max: 1024,
     autoform: {
       afFieldInput: {
-        rows: 4
-      }
-    }
+        rows: 4,
+      },
+    },
   },
   createdAt: {
     type: Date,
-    autoValue: function() {
-      if (this.isInsert)
-        return new Date();
-      if (this.isUpsert)
-        return { $setOnInsert: new Date() };
-
+    autoValue() {
+      if (this.isInsert) return new Date();
+      if (this.isUpsert) return { $setOnInsert: new Date() };
       this.unset();
     },
-    denyUpdate: true
+    denyUpdate: true,
   },
   author: {
     type: String,
-    autoValue: function () {
-      var username = Meteor.users.findOne(this.userId).username;
-      if (this.isInsert)
-        return username;
-      if (this.isUpsert)
-        return { $setOnInsert: username };
-
+    autoValue() {
+      const username = Meteor.users.findOne(this.userId).username;
+      if (this.isInsert) return username;
+      if (this.isUpsert) return { $setOnInsert: username };
       this.unset();
     },
-    denyUpdate: true
+    denyUpdate: true,
   },
   authorId: {
     type: String,
-    autoValue: function () {
-      if (this.isInsert)
-        return this.userId;
-      if (this.isUpsert)
-        return { $setOnInsert: this.userId };
-
+    autoValue() {
+      if (this.isInsert) return this.userId;
+      if (this.isUpsert) return { $setOnInsert: this.userId };
       this.unset();
     },
-    denyUpdate: true
+    denyUpdate: true,
   },
   visible: {
     type: Boolean,
     autoform: {
       afFieldInput: {
-        type: 'hidden'
-      }
-    }
+        type: 'hidden',
+      },
+    },
   },
   removed: {
     type: Boolean,
-    defaultValue: false
-  }
+    defaultValue: false,
+  },
 });
 
 Comments.allow({
   insert: Meteor.userId,
-  update: Meteor.userId
+  update: Meteor.userId,
 });
 
 profile = new SimpleSchema({
   profile: {
-    type: Object
+    type: Object,
   },
   'profile.description': {
     type: String,
     label: 'Votre Description',
     autoform: {
-      rows: 10
+      rows: 10,
     },
-    max: 1000
+    max: 1000,
   },
   'profile.like': {
     type: String,
     label: "J'aime",
     autoform: {
-      rows: 10
+      rows: 10,
     },
-    max: 1000
+    max: 1000,
   },
   'profile.dislike': {
     type: String,
     label: "J'aime pas",
     autoform: {
-      rows: 10
+      rows: 10,
     },
-    max: 1000
+    max: 1000,
   },
   'profile.avatar': {
     type: String,
     label: 'Le lien vers votre photo',
-    max: 1000
-  }
+    max: 1000,
+  },
 });
 
 Router.configure({
-  loadingTemplate: 'loading'
+  loadingTemplate: 'loading',
 });
 
 // routes
 Router.route('/', {
   name: 'home',
-  waitOn: function () {
+  waitOn() {
     return [
       Meteor.subscribe('users'),
       Meteor.subscribe('gifts.tobuy'),
       Meteor.subscribe('gifts.buyed'),
-      Meteor.subscribe('gifts.latest')
+      Meteor.subscribe('gifts.latest'),
     ];
   },
-  data: function () {
+  data() {
     return {
       toBuyGifts: Gifts.find(
         { lockerId: Meteor.userId(), buyerId: null },
@@ -228,85 +213,84 @@ Router.route('/', {
       latestGifts: Gifts.find(
         { ownerId: { $ne: Meteor.userId() } },
         { sort: { createdAt: -1 }, limit: 10 }
-      )
+      ),
     };
-  }
+  },
 });
 
 Router.route('/user/update', {
   name: 'user.update',
-  waitOn: function () {
+  waitOn() {
     return Meteor.subscribe('user.profile');
   },
-  data: function () {
+  data() {
     return Meteor.users.findOne(Meteor.userId());
-  }
+  },
 });
 
 Router.route('/user/:_id/gift/create', {
   name: 'gift.create',
-  waitOn: function () {
+  waitOn() {
     return Meteor.subscribe('users');
-  }
+  },
 });
 
 Router.route('/user/:_id/gifts', {
   name: 'user.gifts',
-  waitOn: function () {
+  waitOn() {
     return Meteor.subscribe('user.gifts', this.params._id);
   },
-  data: function () {
-    var showArchived = this.params.query.archived === '1';
-    var sort = this.params._id === Meteor.userId() ? { priority: -1 } : { buyerId: 1, lockerId: 1, priority: -1, title: 1 };
+  data() {
+    const archived = this.params.query.archived === '1';
+    const ownerId = this.params._id;
+    const sort = ownerId === Meteor.userId()
+      ? { priority: -1 }
+      : { buyerId: 1, lockerId: 1, priority: -1, title: 1 };
+
     return {
       // used to show link to archived or not archived gifts
-      archived: showArchived,
+      archived,
       // to get the right id for pathFor
-      _id: this.params._id,
-      user: Meteor.users.findOne(this.params._id),
-      gifts: Gifts.find({
-        ownerId: this.params._id,
-        archived: showArchived
-      }, { sort: sort })
+      _id: ownerId,
+      user: Meteor.users.findOne(ownerId),
+      gifts: Gifts.find({ archived, ownerId }, { sort }),
     };
-  }
+  },
 });
 
 Router.route('/gift/:_id', {
   name: 'gift.show',
-  waitOn: function () {
+  waitOn() {
     return [
       Meteor.subscribe('gift.show', this.params._id),
       Meteor.subscribe('gift.comments', this.params._id),
-      Meteor.subscribe('users')
+      Meteor.subscribe('users'),
     ];
   },
-  data: function () {
-    var gift = Gifts.findOne(this.params._id);
-    if (gift)
-      gift.comments = Comments.find({giftId: this.params._id});
-
+  data() {
+    const gift = Gifts.findOne(this.params._id);
+    if (gift) gift.comments = Comments.find({giftId: this.params._id});
     return gift;
-  }
+  },
 });
 
 Router.route('/gift/:_id/update', {
   name: 'gift.update',
-  waitOn: function () {
-    return [ Meteor.subscribe('gift.show', this.params._id), Meteor.subscribe('users') ];
+  waitOn() {
+    return [Meteor.subscribe('gift.show', this.params._id), Meteor.subscribe('users')];
   },
-  data: function () {
+  data() {
     return Gifts.findOne(this.params._id);
-  }
+  },
 });
 
 Router.route('/users', {
   name: 'users',
-  waitOn: function () {
+  waitOn() {
     return Meteor.subscribe('users');
-  }
+  },
 });
 
 Router.configure({
-  layoutTemplate: 'masterLayout'
+  layoutTemplate: 'masterLayout',
 });
