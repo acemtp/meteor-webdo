@@ -1,132 +1,67 @@
-$large-screen: '1280px';
-$large-and-down: "only screen and (max-width: #{$large-screen})";
-
-$medium-screen: '992px';
-$medium-and-down: "only screen and (max-width: #{$medium-screen})";
-
-$input-error-color: red;
-$input-success-color: green;
-$input-border-color: gray;
-$input-disabled-color: black;
-$input-focus-color: blue;
-
 @import "{wolves:bourbon}/bourbon";
+// @import "{wolves:bitters}/base";
+@import "{wolves:bitters}/bitters/variables";
+@import "grid-settings";
+@import "{wolves:bitters}/bitters/buttons";
+@import "{wolves:bitters}/bitters/forms";
+@import "{wolves:bitters}/bitters/lists";
+@import "{wolves:bitters}/bitters/tables";
+@import "{wolves:bitters}/bitters/typography";
+//
+@import "{wolves:neat}/neat";
 
-nav {
-  background-color: #009688;
-  margin-bottom: 30px;
-}
+$base-border-radius: 3px !default;
+$base-line-height: 1.5em !default;
+$base-spacing: 1.5em !default;
+$action-color: #477DCA !default;
+$dark-gray: #333 !default;
+$light-gray: #DDD !default;
+$medium-screen: em(640);
+$base-font-color: $dark-gray !default;
+$sans-serif: 'PT Sans', sans-serif;
+$sans-serif-2: 'Titillium Web', sans-serif;
 
-@media #{$large-and-down} {
-  .container {
-    width: 100%
+@import "client/navbar/navbar"
+
+div.body {
+
+
+  @include clearfix;
+  font-family: $sans-serif;
+  text-align: left;
+
+  h1, h2, h3, p {
+    margin: 0;
   }
-}
+  h1 {
+    font-family: $sans-serif-2;
+    font-size: 2em;
+    font-weight: 600;
+    margin-bottom: 0.6em;
 
-@media #{$medium-and-down} {
-  nav .brand-logo {
-    left: 0;
-    @include transform(translateX(0%));
-  }
-}
-
-.user.card.small .card-image {
-  height: 300px;
-}
-
-/* fix input type=string from accountEntry */
-
-.entry-form button.submit {
-  padding: 0 2em;
-}
-
-input[type=string] {
-
-  // General Styles
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid $input-border-color;
-  border-radius: 0;
-  outline: none;
-  height: 3rem;
-  width: 100%;
-
-  font-size: 1rem;
-  margin: 0 0 15px 0;
-  padding: 0;
-  box-shadow: none;
-  box-sizing: content-box;
-  transition: all .3s;
-
-
-  // Disabled input style
-  &:disabled, &[readonly="readonly"] {
-    color: $input-disabled-color;
-    border-bottom: 1px dotted $input-disabled-color;
-  }
-  // Disabled label style
-  &:disabled+label, &[readonly="readonly"]+label {
-    color: $input-disabled-color;
-  }
-  // Focused input style
-  &:focus:not([readonly]) {
-    border-bottom: 1px solid $input-focus-color;
-    box-shadow: 0 1px 0 0 $input-focus-color;
-  }
-  // Focused label style
-  &:focus:not([readonly])+label {
-    color: $input-focus-color;
-  }
-  // Valid Input Style
-  &.valid,
-  &:focus.valid {
-    border-bottom: 1px solid $input-success-color;
-    box-shadow: 0 1px 0 0 $input-success-color;
-  }
-  // Custom Success Message
-  &.valid + label:after,
-  &:focus.valid + label:after {
-    content: attr(data-success);
-    color: $input-success-color;
-    opacity: 1;
-  }
-  // Invalid Input Style
-  &.invalid,
-  &:focus.invalid {
-    border-bottom: 1px solid $input-error-color;
-    box-shadow: 0 1px 0 0 $input-error-color;
-  }
-  // Custom Error message
-  &.invalid + label:after,
-  &:focus.invalid + label:after {
-    content: attr(data-error);
-    color: $input-error-color;
-    opacity: 1;
+    @include media($tablet) {
+      font-size: 2.4em;
+    }
   }
 
-  // Form Message Shared Styles
-  & + label:after {
-    display: block;
-    content: "";
-    position: absolute;
-    top: 65px;
-    opacity: 0;
-    transition: .2s opacity ease-out, .2s color ease-out;
+  h2 {
+    font-family: $sans-serif;
+    font-size: 1.2em;
+    font-weight: 400;
+    line-height: 1.4em;
+    margin-bottom: 1.2em;
+
+    @include media($tablet) {
+      font-size: 1.4em;
+    }
   }
-}
 
-.card-title {
-  text-shadow: 1px 1px 1px black;
-}
-
-.gift {
-  .card-title {
-    font-size: 16px;
+  h3 {
+   font-family: $sans-serif-2;
+   font-size: 1em;
+   font-weight: 700;
+   line-height: 1.4em;
+   margin-bottom: 0.5em;
+   text-transform: uppercase;
   }
-}
-
-button.btn.btn-float.mdi-action-done {
-  border-radius: 50%;
-  padding: .5rem 1rem 3rem 1rem;
-  font-size: 32px;
 }

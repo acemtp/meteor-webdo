@@ -66,6 +66,7 @@ meteor@1.1.11-modules.4
 meteor-env-dev@0.0.1-modules.4
 meteor-env-prod@0.0.1-modules.4
 meteor-platform@1.2.3
+meyerweb-reset@1.0.4
 minifiers@1.1.7
 minifiers-js@1.1.8-modules.4
 minimongo@1.0.11-modules.4
@@ -80,7 +81,6 @@ npm-bcrypt@0.7.8_2
 npm-mongo@1.4.40-modules.4
 observe-sequence@1.0.8-modules.4
 ordered-dict@1.0.4
-poetic:materialize-scss@1.97.5_1
 promise@0.5.2-modules.4
 raix:eventemitter@0.1.3
 random@1.0.6-modules.4
@@ -112,4 +112,6 @@ useraccounts:core@1.13.1
 useraccounts:materialize@1.13.1
 webapp@1.2.4-modules.4
 webapp-hashing@1.0.6-modules.4
+wolves:bitters@3.1.0
 wolves:bourbon@3.1.0
+wolves:neat@3.1.0

@@ -1,0 +1,17 @@
+template(name="navbar")
+  header.navigation(role='banner')
+    .navigation-wrapper
+      a.logo(href="/") Webdo
+      if currentUser
+        nav(rol='navigation')
+          ul
+            li.nav-link
+              a(href="{{pathFor 'users'}}")
+                i.material-icons group
+            li.nav-link
+              +with currentUser
+                a(href="{{pathFor 'user.gifts'}}")
+                  i.material-icons person
+            li.nav-link
+              a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
+                i.material-icons add

@@ -22,6 +22,8 @@ momentjs:moment
 rzymek:moment-locale-fr
 useraccounts:materialize
 seba:minifiers-autoprefixer
-poetic:materialize-scss
 wolves:bourbon
 ecmascript
+wolves:neat
+wolves:bitters
+meyerweb-reset

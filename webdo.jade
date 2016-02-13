@@ -2,33 +2,17 @@ head
   title Webdo - Gestionnaire famillial de cadeaux
   link(rel="icon", type="image/png", href="/favicon.png")
   meta(name="viewport", content="width=device-width, initial-scale=1.0")
-
+  link(href="//fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic" rel="stylesheet" type="text/css")
+  link(href="//fonts.googleapis.com/css?family=Titillium+Web:400,400italic,600italic,600,700,700italic,900,300italic,300,200italic,200" rel="stylesheet" type="text/css")
+  link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
 template(name="masterLayout")
-  +navBar
-  .container
-    +yield
-
-template(name="navBar")
-  nav(role="navigation")
+  .body
+    +navbar
     .container
-      .nav-wrapper
-        a.brand-logo(href="/") Webdo
-          // span(style="color: red") &#0223;
-        if currentUser
-          ul.right
-            li
-              a(href="{{pathFor 'users'}}")
-                i.mdi-social-people
-            li
-              +with currentUser
-                a(href="{{pathFor 'user.gifts'}}")
-                  i.mdi-social-person
-            li
-              a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
-                i.mdi-content-add
+      +yield
+
 
 template(name="home")
-  h3 Gestionnaire Famillial de cadeaux
   if currentUser
     +homeGifts
     a.logout(href="/") Déconnecter
@@ -38,7 +22,7 @@ template(name="home")
 template(name="homeGifts")
     .row
       .col.s12.m6.l8
-        h4 Cadeaux &agrave; acheter
+        h1 Cadeaux &agrave; acheter
         if giftToBuy
           .row
             each toBuyGifts
@@ -47,7 +31,7 @@ template(name="homeGifts")
         else
           .well Aucune cadeau &agrave; acheter
 
-        h4 Cadeaux achet&eacute;s
+        h2 Cadeaux achet&eacute;s
         if giftBuyed
           .row
             each buyedGifts
@@ -56,7 +40,7 @@ template(name="homeGifts")
         else
           .well Tu n'as toujours pas acheter tes cadeaux!
       .col.s12.m6.l4
-        h4 Dernier cadeaux ajoutés
+        h2 Derniers ajouts
         each latestGifts
           .col.s12.m12
               +gift
