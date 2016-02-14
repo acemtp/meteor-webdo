@@ -1,8 +1,6 @@
 header.navigation {
-  $base-border-color: darken(#009688, 10%) !default;
-  $base-border-radius: 3px !default;
-  $action-color: #477DCA !default;
-  $dark-gray: #333 !default;
+  // $action-color: #477DCA !default;
+  // $dark-gray: #333 !default;
   $large-screen: em(860) !default;
   $navigation-padding: 1em;
   $navigation-background: #009688;
@@ -25,6 +23,7 @@ header.navigation {
   width: 100%;
   z-index: 999;
   padding-top: 1em;
+  margin-bottom: 1em;
 
   .navigation-wrapper {
     @include clearfix;

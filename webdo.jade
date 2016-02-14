@@ -19,7 +19,20 @@ template(name="home")
   else
     +atForm
 
+template(name="giftList")
+  h1.title= title
+  .gift-list
+    each gifts
+      +gift
+
 template(name="homeGifts")
+  if giftToBuy
+    +giftList title="À acheter" gifts=toBuyGifts
+  if giftBuyed
+    +giftList title="Achet&eacute;s" gifts=buyedGifts
+  +giftList title="Nouveau" gifts=latestGifts
+
+template(name="homeGifts_")
     .row
       .col.s12.m6.l8
         h1 Cadeaux &agrave; acheter
@@ -118,7 +131,7 @@ template(name="userGifts")
       a(href="{{pathFor route='user.gifts' query='archived=1'}}") Voir les cadeaux archiv&eacute;s
 
 
-template(name="gift")
+template(name="gift__")
   a(href="{{pathFor 'gift.show'}}")
     .gift.card.small
       .card-image.waves-effect.waves-block.waves-light(style="height:230px")

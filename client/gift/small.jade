@@ -1,0 +1,22 @@
+template(name="gift")
+  .gift-small
+    .gift-small-image
+      img(src="{{image}}" alt=title)
+    .gift-small-title= title
+    .gift-small-description
+      p= userName
+      p= description
+
+template(name="gift_")
+  a(href="{{pathFor 'gift.show'}}")
+    .gift.card.small
+      .card-image.waves-effect.waves-block.waves-light(style="height:230px")
+        img.responsive-img(src="{{image}}" alt=title)
+        .card-title.truncate= title
+      .card-content
+        .stars
+          each prio
+            span.mdi-action-grade
+        div= userName
+        .gift-action
+          +giftAction
