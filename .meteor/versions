@@ -110,7 +110,7 @@ ui@1.0.8
 underscore@1.0.5-modules.8
 url@1.0.6-modules.8
 useraccounts:core@1.13.1
-useraccounts:materialize@1.13.1
+useraccounts:unstyled@1.13.1
 webapp@1.2.4-modules.8
 webapp-hashing@1.0.6-modules.8
 wolves:bitters@3.1.0
