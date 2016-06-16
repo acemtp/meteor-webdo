@@ -20,10 +20,10 @@ gildaspk:autoform-materialize
 ddp
 momentjs:moment
 rzymek:moment-locale-fr
-seba:minifiers-autoprefixer
 wolves:bourbon
 ecmascript
 wolves:neat
 wolves:bitters
 meyerweb-reset
 useraccounts:unstyled
+seba:minifiers-autoprefixer
