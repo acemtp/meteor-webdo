@@ -696,6 +696,7 @@ Router.route('/gift/:_id', {
     return gift;
   }
 });
+
 Router.route('/gift/:_id/update', {
   name: 'gift.update',
   waitOn: function () {
@@ -707,6 +708,7 @@ Router.route('/gift/:_id/update', {
 });
 
 Router.route('/users', {
+  name: 'users',
   waitOn: function () {
     return Meteor.subscribe('users');
   }
