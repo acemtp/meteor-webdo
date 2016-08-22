@@ -1,0 +1,19 @@
+template(name="home")
+  if currentUser
+    +homeGifts
+    a.logout(href="/") Déconnecter
+  else
+    +atForm
+
+template(name="homeGifts")
+  if giftToBuy
+    +giftList title="À acheter" gifts=toBuyGifts
+  if giftBuyed
+    +giftList title="Achet&eacute;s" gifts=buyedGifts
+  +giftList title="Nouveau" gifts=latestGifts
+
+template(name="giftList")
+  h1.title= title
+  .gift-list
+    each gifts
+      +gift

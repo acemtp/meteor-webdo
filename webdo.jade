@@ -5,58 +5,12 @@ head
   link(href="//fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic" rel="stylesheet" type="text/css")
   link(href="//fonts.googleapis.com/css?family=Titillium+Web:400,400italic,600italic,600,700,700italic,900,300italic,300,200italic,200" rel="stylesheet" type="text/css")
   link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
+
 template(name="masterLayout")
   .body
     +navbar
     .container
       +yield
-
-
-template(name="home")
-  if currentUser
-    +homeGifts
-    a.logout(href="/") Déconnecter
-  else
-    +atForm
-
-template(name="giftList")
-  h1.title= title
-  .gift-list
-    each gifts
-      +gift
-
-template(name="homeGifts")
-  if giftToBuy
-    +giftList title="À acheter" gifts=toBuyGifts
-  if giftBuyed
-    +giftList title="Achet&eacute;s" gifts=buyedGifts
-  +giftList title="Nouveau" gifts=latestGifts
-
-template(name="homeGifts_")
-    .row
-      .col.s12.m6.l8
-        h1 Cadeaux &agrave; acheter
-        if giftToBuy
-          .row
-            each toBuyGifts
-              .col.s12.m12.l6
-                +gift
-        else
-          .well Aucune cadeau &agrave; acheter
-
-        h2 Cadeaux achet&eacute;s
-        if giftBuyed
-          .row
-            each buyedGifts
-              .col.s12.m12.l6
-                +gift
-        else
-          .well Tu n'as toujours pas acheter tes cadeaux!
-      .col.s12.m6.l4
-        h2 Derniers ajouts
-        each latestGifts
-          .col.s12.m12
-              +gift
 
 template(name="giftFieldset")
     fieldset
@@ -93,7 +47,7 @@ template(name="giftUpdate")
 template(name="userUpdate")
   +quickForm schema=profile doc=this id="updateUserForm"
 
-template(name="userGifts")
+template(name="userGifts_")
   .row
     .col.s12.m6
       .card
@@ -120,30 +74,14 @@ template(name="userGifts")
     .row
       .col.s12.m3
         a.btn.btn-primary(href="{{pathFor route='user.update'}}") modifier mon profile
-  .row
+  .gift-list
     each gifts
-      .col.s12.m3
-        +gift
+     +gift
   div
     if archived
       a(href="{{pathFor 'user.gifts'}}") Voir les cadeaux
     else
       a(href="{{pathFor route='user.gifts' query='archived=1'}}") Voir les cadeaux archiv&eacute;s
-
-
-template(name="gift__")
-  a(href="{{pathFor 'gift.show'}}")
-    .gift.card.small
-      .card-image.waves-effect.waves-block.waves-light(style="height:230px")
-        img.responsive-img(src="{{image}}" alt=title)
-        .card-title.truncate= title
-      .card-content
-        .stars
-          each prio
-            span.mdi-action-grade
-        div= userName
-        .gift-action
-          +giftAction
 
 template(name="giftAction")
   if ownerIs currentUser
@@ -254,17 +192,9 @@ template(name="giftComment")
   p= message
 
 template(name="users")
-  .row
+  .user-list
     each users
-      .col.s12.m4
-        a(href="{{pathFor 'user.gifts'}}")
-          .user.card.small
-            .card-image.waves-effect.waves-block.waves-light(sytle="height:300px")
-              if profile.avatar
-                img.responsive-img(src=profile.avatar, alt=profile.name)
-              else
-                img.responsive-img(src="/anonymous.jpg", alt=profile.name)
-              span.card-title= username
+      +userSmall
 
 template(name="loading")
   .row

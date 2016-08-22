@@ -1,5 +1,5 @@
 
-.gift-list, h1.title {
+.user-list, h1.title {
   @include outer-container;
   font-family: $sans-serif-2;
   margin-bottom: 0.6em;
@@ -15,7 +15,7 @@ h1.title {
   }
 }
 
-.gift-small {
+.user-small {
   // $base-border-color: gainsboro !default;
   // $base-background-color: white !default;
   // $base-font-color: $dark-gray !default;
@@ -28,6 +28,16 @@ h1.title {
 
   @include span-columns(3);
   @include omega(4n);
+
+  // XXX BUG in tablet size
+  // @include media($tablet) {
+  //   @include omega(3n);
+  //   @include span-columns(4);
+  // }
+  @include media($mobile) {
+    @include omega(2n);
+    @include span-columns(2);
+  }
   background-color: $card-background;
   border-radius: $base-border-radius;
   border: $card-border;
@@ -37,38 +47,30 @@ h1.title {
   position: relative;
 
 
-  .gift-small-image {
+  .user-small-image {
     overflow: hidden;
-    height: 150px;
-    max-height: 150px;
+    height: 250px;
+    max-height: 250px;
     background-color: $card-image-hover-color;
 
     img {
       @include transition (all 0.2s ease-in-out);
+      // border-top-left-radius: $base-border-radius;
+      // border-top-right-radius: $base-border-radius;
       // width: 100%;
-      @include size(100%);
+      // @include size(100%);
       opacity: 1;
     }
   }
 
-  .gift-small-title {
+  .user-small-title {
     @include transition (all 0.2s ease-in-out);
     background-color: $card-header-background;
+    border-bottom: $card-border;
     border-radius: $base-border-radius $base-border-radius 0 0;
     font-weight: bold;
     line-height: 1.5em;
-    padding: ($base-spacing / 2) ($base-spacing / 2);
-  }
-
-  .gift-small-description {
-    font-size: 0.9em;
-    line-height: 1.5em;
-    border-bottom: $card-border;
     padding: ($base-spacing / 3) ($base-spacing / 2);
-
-    p {
-      margin: 0 0 ($base-spacing / 2);
-    }
   }
 
   &:focus,
@@ -83,7 +85,7 @@ h1.title {
   &:active {
     background-color: $card-background;
 
-    .gift-small-title {
+    .user-small-title {
       background-color: $card-background;
     }
   }

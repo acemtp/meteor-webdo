@@ -1,0 +1,86 @@
+template(name="user.profile")
+  .row
+    if isEditableBy currentUser
+      .col.s12.padding
+        a.btn.btn-primary.btn-responsive(href="{{pathFor 'gift.update'}}")
+          i.mdi-editor-mode-edit
+            span  Edit
+        if archived
+          a.btn.btn-responsive.btn-danger.unarchive
+            i.mdi-content-inbox
+            span  D&eacute;-archiver
+        else
+          a.btn.btn-responsive.btn-danger.archive
+            i.mdi-content-archive
+            span  Archiver
+    else
+      .col.s12.padding.pull-right
+        a.btn.btn-responsive.btn-primary.lock
+          i.mdi-action-lock-open
+            span
+              if lockerId
+                | par {{lockerName}}
+              else
+                | Réserver
+        a.btn.btn-responsive.btn-success.buy
+          i.mdi-action-add-shopping-cart
+            span
+              if buyerId
+                | par {{buyerName}}
+              else
+                | Acheter
+
+  .row
+    h1.col.s12= title
+
+  .row
+    .col.s12.m6.padding
+      if image
+        img.responsive-img(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
+      else
+        img.responsive-img(src="/favicon.png", alt=title)
+      .stars
+        each prio
+          span.mdi-action-grade
+      .padding.visible-xs
+        if lockerId
+          p Réservé par : {{lockerName}}
+        if buyerId
+          p Acheté par : {{buyerName}}
+      .padding
+        p Créé le : {{createdAt}}
+    .col.s12.m6.well
+      if link
+        p
+          a(href=link, target="_blank") Visiter le site marchand
+      +markdown
+        {{detail}}
+  .row
+    if ownerIsNot currentUser
+      .col.s12.m6
+        each privateComments
+          +giftComment
+        .panel.panel-primary
+          .panel-heading
+            h4.panel-title Commentaire
+          .panel-body
+            +autoForm collection="Comments" id="insertPrivateComment" type="insert"
+              +afFieldInput name="message"
+              +afFieldInput name="visible" value="false"
+              +afFieldInput name="giftId" value=../_id
+              br
+              button.btn.btn-success(type="submit") Envoyer
+
+    .col.s12.m6
+      each publicComments
+        +giftComment
+      .panel.panel-warning
+        .panel-heading
+          h4.panel-title Ce message sera visible par <b>{{ownerName}}</b>
+        .panel-body
+          +autoForm collection="Comments" id="insertPublicComment" type="insert"
+            +afFieldInput name="message"
+            +afFieldInput name="visible" value="true"
+            +afFieldInput name="giftId" value=../_id
+            br
+            button.btn.btn-success(type="submit") Envoyer

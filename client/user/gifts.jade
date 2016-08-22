@@ -1,0 +1,72 @@
+template(name="userGifts")
+  .user-profile
+    .user-section.user-picture
+      .user-image
+        img(src=user.profile.avatar, alt=user.username)
+      h1= user.username
+    .user-section.user-description
+      +markdown
+        {{user.profile.description}}
+      .user-like
+        .panel.panel-success
+          .panel-heading
+            h3.panel-title J'aime
+          .panel-body
+            +markdown
+              {{user.profile.like}}
+      .user-like
+        .panel.panel-danger
+          .panel-heading
+            h3.panel-title Je n'aime pas
+          .panel-body
+            +markdown
+              {{user.profile.dislike}}
+
+  if isOwner
+    .row
+      .col.s12.m3
+        a.btn.btn-primary(href="{{pathFor route='user.update'}}") modifier mon profile
+
+  .gift-list
+    each gifts
+     +gift
+  div
+    if archived
+      a(href="{{pathFor 'user.gifts'}}") Voir les cadeaux
+    else
+      a(href="{{pathFor route='user.gifts' query='archived=1'}}") Voir les cadeaux archiv&eacute;s
+template(name="userGiftsOld")
+  .row
+    .col.s12.m6
+      .card
+        .card-image.waves-effect.waves-block.waves-light
+          img.responsive-img(src=user.profile.avatar, alt=user.username)
+          h1.card-title= user.username
+        .card-content
+          +markdown
+            {{user.profile.description}}
+    .col.s12.m6
+      .panel.panel-success
+        .panel-heading
+          h3.panel-title J'aime
+        .panel-body
+          +markdown
+            {{user.profile.like}}
+      .panel.panel-danger
+        .panel-heading
+          h3.panel-title Je n'aime pas
+        .panel-body
+          +markdown
+            {{user.profile.dislike}}
+  if isOwner
+    .row
+      .col.s12.m3
+        a.btn.btn-primary(href="{{pathFor route='user.update'}}") modifier mon profile
+  .gift-list
+    each gifts
+     +gift
+  div
+    if archived
+      a(href="{{pathFor 'user.gifts'}}") Voir les cadeaux
+    else
+      a(href="{{pathFor route='user.gifts' query='archived=1'}}") Voir les cadeaux archiv&eacute;s

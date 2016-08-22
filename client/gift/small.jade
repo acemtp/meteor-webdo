@@ -1,11 +1,11 @@
 template(name="gift")
-  .gift-small
+  a.gift-small(href="{{pathFor 'gift.show'}}")
     .gift-small-image
       img(src="{{image}}" alt=title)
-    .gift-small-title= title
     .gift-small-description
       p= userName
       p= description
+    .gift-small-title= title
 
 template(name="gift_")
   a(href="{{pathFor 'gift.show'}}")
