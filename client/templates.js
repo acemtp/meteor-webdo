@@ -106,26 +106,6 @@ const findUserNameBy = (field) =>
     }
   };
 
-
-Template.gift.helpers({
-  prio() {
-    return _.range(this.priority);
-  },
-  buyedClass() {
-    return this.buyerId ? 'buyed' : '';
-  },
-  userName: findUserNameBy('ownerId'),
-});
-
-Template.gift.events({
-  'error img'(e) {
-    const { currentTarget } = e;
-    const fallback = '/photo/gift-default.png';
-    if (currentTarget.getAttribute('src') !== fallback)
-      currentTarget.src = fallback;
-  },
-});
-
 Template.users.helpers({
   users: Meteor.users.find.bind(Meteor.users, {}, { sort: { username: 1 } }),
 });

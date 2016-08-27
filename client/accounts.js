@@ -2,7 +2,7 @@ T9n.language = 'fr';
 //  T9n.missingPrefix = ">";
 //  T9n.missingPostfix = "<";
 
-AutoForm.setDefaultTemplate('materialize');
+AutoForm.setDefaultTemplate('plain');
 
 Accounts.ui.config({passwordSignupFields: 'USERNAME_ONLY'});
 

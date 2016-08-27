@@ -1,22 +1,86 @@
-template(name="gift")
+template(name="giftImage")
+  img(src="{{image}}" alt=title)
+
+template(name="giftSmall")
   a.gift-small(href="{{pathFor 'gift.show'}}")
     .gift-small-image
-      img(src="{{image}}" alt=title)
-    .gift-small-description
-      p= userName
-      p= description
-    .gift-small-title= title
+      +giftImage
+    .gift-small-description.card-border
+      | {{userName}}
+      span.stars
+        each prio
+          span
+    .gift-small-title.card-border= title
 
-template(name="gift_")
-  a(href="{{pathFor 'gift.show'}}")
-    .gift.card.small
-      .card-image.waves-effect.waves-block.waves-light(style="height:230px")
-        img.responsive-img(src="{{image}}" alt=title)
-        .card-title.truncate= title
-      .card-content
+template(name="giftShow")
+  .gift
+    h1= title
+    if isEditableBy currentUser
+      a.button.edit(href="{{pathFor 'gift.update'}}")
+        i Edit
+      if archived
+        button.unarchive
+          i D&eacute;-archiver
+      else
+        button.archive
+          i Archiver
+    else
+      button.lock
+        i
+        if lockerId
+          | par {{lockerName}}
+        else
+          | Réserver
+      button.buy
+        i
+        if buyerId
+          | par {{buyerName}}
+        else
+          | Acheter
+
+    .gift-profile
+      .gift-section.gift-picture
+        .gift-image
+          if image
+            +giftImage
+          else
+            img(src="/photo/gift-default.png", alt=title)
         .stars
           each prio
-            span.mdi-action-grade
-        div= userName
-        .gift-action
-          +giftAction
+            span
+        a.user-name(href="{{pathFor 'user.gifts' _id=ownerId}}") {{userName}}
+      .gift-section.gift-description
+        .padding
+          p Créé le : {{createdAt}}
+        if link
+          p
+            a(href=link, target="_blank") Visiter le site marchand
+        +markdown
+          {{detail}}
+    .all-comments
+      if ownerIsNot currentUser
+        .comments.private
+          each privateComments
+            +giftComment
+          h4 Commentaire
+          .panel-body
+            +autoForm collection="Comments" id="insertPrivateComment" type="insert"
+              +afFieldInput name="message"
+              +afFieldInput name="visible" value="false"
+              +afFieldInput name="giftId" value=../_id
+              br
+              button(type="submit") Envoyer
+
+      .comments
+        each publicComments
+          +giftComment
+        .warning
+          h4 Ce message sera visible par <b>{{ownerName}}</b>
+        div
+          +autoForm collection="Comments" id="insertPublicComment" type="insert"
+            +afFieldInput name="message"
+            +afFieldInput name="visible" value="true"
+            +afFieldInput name="giftId" value=../_id
+            br
+            button(type="submit") Envoyer
+

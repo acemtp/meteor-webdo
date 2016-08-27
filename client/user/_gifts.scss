@@ -6,71 +6,89 @@
 
   & > .user-section {
 
-    &.user-picture {
-      @include span-columns(4);
-    }
-    &.user-description {
-      @include span-columns(8);
-      padding: 1em;
-      min-height: 23em;
+    @include media($desk) {
+      &.user-picture {
+        @include span-columns(4);
+      }
+      &.user-description {
+        @include span-columns(8);
+        padding: 1em;
+        min-height: 23em;
 
-      & > .user-like {
-        @include span-columns(4 of 8);
-        margin-top: 2em
+        & > .user-like {
+          @include span-columns(4 of 8);
+          margin-top: 2em
+        }
+      }
+    }
+    @include media($tablet) {
+      &.user-picture {
+        @include span-columns(3);
+      }
+      &.user-description {
+        @include span-columns(6);
+        padding: 1em;
+        min-height: 23em;
+
+        & > .user-like {
+          @include span-columns(3 of 6);
+          margin-top: 2em
+        }
+      }
+    }
+    @include media($mobile) {
+      &.user-picture {
+        @include span-columns(4);
+      }
+      &.user-description {
+        @include span-columns(4);
+        padding: 1em;
+        min-height: 23em;
+
+        & > .user-like {
+          @include span-columns(2 of 4);
+          margin-top: 2em
+        }
       }
     }
 
-    $card-border-color: $base-border-color;
-    $card-border: 1px solid $card-border-color;
-    $card-background: lighten($card-border-color, 10%);
-    $card-header-background: $card-background;
-    $card-image-hover-opacity: 0.7;
-    $card-image-hover-color: $base-color;
-
-    background-color: $card-background;
-    border-radius: $base-border-radius;
-    border: $card-border;
-    box-shadow: 0 2px 4px darken($base-background-color, 10%);
-    cursor: pointer;
-    margin-bottom: 1em;
-    position: relative;
+    @include card;
 
     .user-image {
       overflow: hidden;
       height: 20em;
-      background-color: $card-image-hover-color;
 
       img {
         @include transition (all 0.2s ease-in-out);
-        width: 100%;
+        min-height: 20em;
+        min-width: 100%;
         // @include size(100%);
         opacity: 1;
       }
     }
     h1 {
       @include transition (all 0.2s ease-in-out);
-      background-color: $card-header-background;
       border-radius: $base-border-radius $base-border-radius 0 0;
       font-weight: bold;
-      line-height: 1.5em;
+      line-height: 1.6em;
       padding: ($base-spacing / 3) ($base-spacing / 2);
+      margin: 0.2em;
+
+      .edit-profile {
+        @include icon($editBlack);
+        float: right;
+        width: 1.5em;
+        height: 1.5em;
+      }
     }
 
     &:focus,
     &:hover {
       cursor: pointer;
-
-      img {
-        opacity: $card-image-hover-opacity;
-      }
-    }
-
-    &:active {
-      background-color: $card-background;
-
-      .user-small-title {
-        background-color: $card-background;
-      }
     }
   }
+}
+
+button.edit-profile {
+  margin-bottom: $base-spacing;
 }

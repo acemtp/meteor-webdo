@@ -42,10 +42,6 @@ header.navigation {
     font-family: $sans-serif-2;
     font-size: 2em;
     font-weight: 600;
-
-    @include media($tablet) {
-      font-size: 2.4em;
-    }
   }
 
   // Mobile view

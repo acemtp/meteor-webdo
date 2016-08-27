@@ -9,8 +9,7 @@ head
 template(name="masterLayout")
   .body
     +navbar
-    .container
-      +yield
+    +yield
 
 template(name="giftFieldset")
     fieldset
@@ -37,159 +36,24 @@ template(name="giftFieldset")
 template(name="giftCreate")
   +autoForm collection="Gifts" id="insertGiftForm" type="insert"
     +giftFieldset
-    button.btn.btn-float.mdi-action-done(type="submit")
+    button(type="submit") Ajouter
 
 template(name="giftUpdate")
   +autoForm collection="Gifts" doc=this id="updateGiftForm" type="update"
     +giftFieldset
-    button.btn.btn-primary(type="submit") Mettre à jour le cadeau
+    button(type="submit") Mettre à jour le cadeau
 
 template(name="userUpdate")
-  +quickForm schema=profile doc=this id="updateUserForm"
-
-template(name="userGifts_")
-  .row
-    .col.s12.m6
-      .card
-        .card-image.waves-effect.waves-block.waves-light
-          img.responsive-img(src=user.profile.avatar, alt=user.username)
-          h1.card-title= user.username
-        .card-content
-          +markdown
-            {{user.profile.description}}
-    .col.s12.m6
-      .panel.panel-success
-        .panel-heading
-          h3.panel-title J'aime
-        .panel-body
-          +markdown
-            {{user.profile.like}}
-      .panel.panel-danger
-        .panel-heading
-          h3.panel-title Je n'aime pas
-        .panel-body
-          +markdown
-            {{user.profile.dislike}}
-  if isOwner
-    .row
-      .col.s12.m3
-        a.btn.btn-primary(href="{{pathFor route='user.update'}}") modifier mon profile
-  .gift-list
-    each gifts
-     +gift
-  div
-    if archived
-      a(href="{{pathFor 'user.gifts'}}") Voir les cadeaux
-    else
-      a(href="{{pathFor route='user.gifts' query='archived=1'}}") Voir les cadeaux archiv&eacute;s
-
-template(name="giftAction")
-  if ownerIs currentUser
-    if archived
-      i.unarchive.mdi-content-inbox
-    else
-      i.archive.mdi-content-archive
-  else
-    if archived
-      i.unarchive.mdi-content-inbox
-    else if buyerId
-      i.archive.mdi-content-archive
-    else if lockerId
-      i.buy.mdi-action-add-shopping-cart
-    else
-      i.lock.mdi-action-lock-open
-
-template(name="giftShow")
-  .row
-    if isEditableBy currentUser
-      .col.s12.padding
-        a.btn.btn-primary.btn-responsive(href="{{pathFor 'gift.update'}}")
-          i.mdi-editor-mode-edit
-            span  Edit
-        if archived
-          a.btn.btn-responsive.btn-danger.unarchive
-            i.mdi-content-inbox
-            span  D&eacute;-archiver
-        else
-          a.btn.btn-responsive.btn-danger.archive
-            i.mdi-content-archive
-            span  Archiver
-    else
-      .col.s12.padding.pull-right
-        a.btn.btn-responsive.btn-primary.lock
-          i.mdi-action-lock-open
-            span
-              if lockerId
-                | par {{lockerName}}
-              else
-                | Réserver
-        a.btn.btn-responsive.btn-success.buy
-          i.mdi-action-add-shopping-cart
-            span
-              if buyerId
-                | par {{buyerName}}
-              else
-                | Acheter
-
-  .row
-    h1.col.s12= title
-
-  .row
-    .col.s12.m6.padding
-      if image
-        img.responsive-img(src="http://i.embed.ly/1/display/crop?key=cc929639d5194e01a5d5f054d84dd43e&height=400&width=400&url={{image}}", alt=title)
-      else
-        img.responsive-img(src="/favicon.png", alt=title)
-      .stars
-        each prio
-          span.mdi-action-grade
-      .padding.visible-xs
-        if lockerId
-          p Réservé par : {{lockerName}}
-        if buyerId
-          p Acheté par : {{buyerName}}
-      .padding
-        p Créé le : {{createdAt}}
-    .col.s12.m6.well
-      if link
-        p
-          a(href=link, target="_blank") Visiter le site marchand
-      +markdown
-        {{detail}}
-  .row
-    if ownerIsNot currentUser
-      .col.s12.m6
-        each privateComments
-          +giftComment
-        .panel.panel-primary
-          .panel-heading
-            h4.panel-title Commentaire
-          .panel-body
-            +autoForm collection="Comments" id="insertPrivateComment" type="insert"
-              +afFieldInput name="message"
-              +afFieldInput name="visible" value="false"
-              +afFieldInput name="giftId" value=../_id
-              br
-              button.btn.btn-success(type="submit") Envoyer
-
-    .col.s12.m6
-      each publicComments
-        +giftComment
-      .panel.panel-warning
-        .panel-heading
-          h4.panel-title Ce message sera visible par <b>{{ownerName}}</b>
-        .panel-body
-          +autoForm collection="Comments" id="insertPublicComment" type="insert"
-            +afFieldInput name="message"
-            +afFieldInput name="visible" value="true"
-            +afFieldInput name="giftId" value=../_id
-            br
-            button.btn.btn-success(type="submit") Envoyer
+  +autoForm schema=profile doc=this id="updateUserForm"
+    {{> afQuickFields}}
+    button(type="submit") Mettre à jour mon profile
 
 template(name="giftComment")
   div Par {{author}}
     span= createdAt
-  p= message
+  p
+    +markdown 
+      {{message}}
 
 template(name="users")
   .user-list
@@ -229,3 +93,20 @@ template(name="loading")
           .circle-clipper.right
             .circle
       div Loading ...
+
+// XXX redo action directly on the gift?
+template(name="giftAction")
+  if ownerIs currentUser
+    if archived
+      i.unarchive.mdi-content-inbox
+    else
+      i.archive.mdi-content-archive
+  else
+    if archived
+      i.unarchive.mdi-content-inbox
+    else if buyerId
+      i.archive.mdi-content-archive
+    else if lockerId
+      i.buy.mdi-action-add-shopping-cart
+    else
+      i.lock.mdi-action-lock-open
