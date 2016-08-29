@@ -2,24 +2,24 @@ Router.route('/', {
   name: 'home',
   waitOn() {
     return [
-      Meteor.subscribe('users'),
-      Meteor.subscribe('gifts.tobuy'),
-      Meteor.subscribe('gifts.buyed'),
-      Meteor.subscribe('gifts.latest'),
+      subs.subscribe('users'),
+      subs.subscribe('gifts.tobuy'),
+      subs.subscribe('gifts.buyed'),
+      subs.subscribe('gifts.latest'),
     ];
   },
   data() {
     return {
       toBuyGifts: Gifts.find(
-        { lockerId: Meteor.userId(), buyerId: null },
+        { archived: false, lockerId: Meteor.userId(), buyerId: null },
         { sort: { priority: -1 } }
       ),
       buyedGifts: Gifts.find(
-        { buyerId: Meteor.userId() },
+        { archived: false, buyerId: Meteor.userId() },
         { sort: { lockerId: 1, priority: -1 } }
       ),
       latestGifts: Gifts.find(
-        { ownerId: { $ne: Meteor.userId() } },
+        { archived: false, ownerId: { $ne: Meteor.userId() } },
         { sort: { createdAt: -1 }, limit: 10 }
       ),
     };

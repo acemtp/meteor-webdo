@@ -1,6 +1,7 @@
 Gifts = new Mongo.Collection('gifts');
 Comments = new Mongo.Collection('comments');
 moment.locale('fr');
+subs = new SubsManager();
 
 Gifts.attachSchema({
   title: {
@@ -194,7 +195,7 @@ Router.configure({
 Router.route('/user/update', {
   name: 'user.update',
   waitOn() {
-    return Meteor.subscribe('user.profile');
+    return subs.subscribe('user.profile');
   },
   data() {
     return Meteor.users.findOne(Meteor.userId());
@@ -204,14 +205,14 @@ Router.route('/user/update', {
 Router.route('/user/:_id/gift/create', {
   name: 'gift.create',
   waitOn() {
-    return Meteor.subscribe('users');
+    return subs.subscribe('users');
   },
 });
 
 Router.route('/user/:_id/gifts', {
   name: 'user.gifts',
   waitOn() {
-    return Meteor.subscribe('user.gifts', this.params._id);
+    return subs.subscribe('user.gifts', this.params._id);
   },
   data() {
     const archived = this.params.query.archived === '1';
@@ -235,9 +236,9 @@ Router.route('/gift/:_id', {
   name: 'gift.show',
   waitOn() {
     return [
-      Meteor.subscribe('gift.show', this.params._id),
-      Meteor.subscribe('gift.comments', this.params._id),
-      Meteor.subscribe('users'),
+      subs.subscribe('gift.show', this.params._id),
+      subs.subscribe('gift.comments', this.params._id),
+      subs.subscribe('users'),
     ];
   },
   data() {
@@ -250,7 +251,7 @@ Router.route('/gift/:_id', {
 Router.route('/gift/:_id/update', {
   name: 'gift.update',
   waitOn() {
-    return [Meteor.subscribe('gift.show', this.params._id), Meteor.subscribe('users')];
+    return [subs.subscribe('gift.show', this.params._id), subs.subscribe('users')];
   },
   data() {
     return Gifts.findOne(this.params._id);
@@ -260,7 +261,7 @@ Router.route('/gift/:_id/update', {
 Router.route('/users', {
   name: 'users',
   waitOn() {
-    return Meteor.subscribe('users');
+    return subs.subscribe('users');
   },
 });
 

@@ -105,9 +105,8 @@ h1.title {
     padding: ($base-spacing / 3) ($base-spacing / 2);    
   }
 
-  button, a {
+  button, a.button {
     margin: 0 1em 1em 0;
-    border: 1px solid;
 
     &.lock i { @include icon($lock); }
     &.lock-open i { @include icon($lockOpen); }
@@ -145,11 +144,6 @@ h1.title {
         @include span-columns(4);      
       }
 
-    }
-    @include media($mobile) {
-      .comments {
-        // @include span-columns(8);
-      }
     }
     .comments .warning h4 {
       color: #cc2200;

@@ -17,10 +17,12 @@
     SimpleSchema: false
     T9n: false
     toastr: false
+    SubsManager: false
     Comments: true
     Gifts: true
     UI: true
     profile: true
+    subs: true
   rules:
     curly:
       - 2

@@ -98,17 +98,20 @@ header.navigation {
   ul li.nav-link {
     background: transparent;
     display: inline;
-    line-height: $navigation-height;
+    line-height: 1em;
     overflow: hidden;
     padding-right: 0.8em;
     text-align: right;
-    width: 100%;
     z-index: 9999;
 
     @include media ($horizontal-bar-mode) {
       text-decoration: none;
       width: auto;
     }
+
+    .users { @include icon($people); padding-left: 2em; padding-bottom: 2em }
+    .user { @include icon($person); padding-left: 2em; padding-bottom: 2em }
+    .new-gift { @include icon($plus); padding-left: 2em; padding-bottom: 2em }
 
     a {
       color: $navigation-color;

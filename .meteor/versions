@@ -62,6 +62,7 @@ markdown@1.0.10
 mdg:validation-error@0.5.1
 meteor@1.1.15_1
 meteor-platform@1.2.6
+meteorhacks:subs-manager@1.6.4
 meyerweb-reset@1.0.7
 minifier-css@1.1.12_1
 minifier-js@1.1.12_1

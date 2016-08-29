@@ -7,11 +7,11 @@ template(name="navbar")
           ul
             li.nav-link
               a(href="{{pathFor 'users'}}")
-                i.material-icons group
+                i.users
             li.nav-link
               +with currentUser
                 a(href="{{pathFor 'user.gifts'}}")
-                  i.material-icons person
+                  i.user
             li.nav-link
               a(href="{{pathFor 'gift.create' _id=currentUser._id}}")
-                i.material-icons add
+                i.new-gift
