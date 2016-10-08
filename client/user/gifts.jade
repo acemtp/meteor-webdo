@@ -2,7 +2,7 @@ template(name="userGifts")
   .user-profile
     .user-section.user-picture
       .user-image
-        img(src=user.profile.avatar, alt=user.username)
+        +userPicture user
       h1
         | {{user.username}}
         if isOwner

@@ -44,6 +44,10 @@ h1.title {
       // width: 100%;
       // @include size(100%);
       opacity: 1;
+      max-width: 100%;
+      height: auto;
+      width: 100%;
+      min-height: 100%;
     }
   }
 
