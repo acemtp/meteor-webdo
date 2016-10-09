@@ -17,17 +17,24 @@ h1.title {
 
 .user-small {
 
+  @include media($mobile) {
+    @include span-columns(3);
+    @include omega(2n);
+  }
+  @include media($tablet) {
+    @include omega-reset(2n);
+    @include span-columns(3);
+    @include omega(3n);
+  }
   @include media($desk) {
+    @include omega-reset(3n);
     @include span-columns(3);
     @include omega(4n);
   }
-  @include media($tablet) {
-    @include omega(3n);
+  @include media($lg-desk) {
+    @include omega-reset(4n);
     @include span-columns(3);
-  }
-  @include media($mobile) {
-    @include omega(2n);
-    @include span-columns(2);
+    @include omega(5n);
   }
   @include card;
 
