@@ -4,6 +4,8 @@ Meteor.publish('users', function publishUsers() {
 
   return Meteor.users.find({
     _id: { $in: user.profile.friends || [] },
+  }, {
+    // fields: { 'profile.avatar': 1, username: 1 },
   });
 });
 
@@ -11,24 +13,28 @@ Meteor.publish('user.profile', function publishUserProfile() {
   return Meteor.users.find({ _id: this.userId }, { limit: 1 });
 });
 
+const giftFields = { title: 1, image: 1, priority: 1, archived: 1, priority: -1, buyerId: 1, lockerId: 1, priority: -1, title: 1, ownerId: 1 };
 Meteor.publish('user.gifts', function pubishUserGifts(userId) {
   check(userId, String);
   const request = { ownerId: userId };
-  const options = {};
+  const options = {
+    fields: giftFields,
+  };
   if (this.userId === userId) {
     request.suggested = false;
-    options.fields = { lockerId: 0, buyerId: 0 };
+    delete options.fields.lockerId;
+    delete options.fields.buyerId;
   }
 
   return [Gifts.find(request, options), Meteor.users.find({ _id: userId })];
 });
 
 Meteor.publish('gifts.tobuy', function publishGiftsTobuy() {
-  return Gifts.find({ archived: false, lockerId: this.userId, buyerId: null });
+  return Gifts.find({ archived: false, lockerId: this.userId, buyerId: null }, { fields: giftFields });
 });
 
 Meteor.publish('gifts.buyed', function publishGiftsBuyed() {
-  return Gifts.find({ archived: false, buyerId: this.userId });
+  return Gifts.find({ archived: false, buyerId: this.userId }, { fields: giftFields });
 });
 
 Meteor.publish('gifts.latest', function publishGiftsLatest() {
@@ -39,7 +45,7 @@ Meteor.publish('gifts.latest', function publishGiftsLatest() {
   if (userIdx >= 0) friends.splice(userIdx, 1);
 
   const selector = { archived: false, ownerId: { $in: friends } };
-  const options = { limit: 10, sort: { createdAt: -1 } };
+  const options = { limit: 10, sort: { createdAt: -1 }, fields: giftFields };
 
   return Gifts.find(selector, options);
 });
