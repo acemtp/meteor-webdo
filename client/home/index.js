@@ -11,7 +11,7 @@ Router.route('/', {
   data() {
     return {
       toBuyGifts: Gifts.find(
-        { archived: false, lockerId: Meteor.userId(), buyerId: null },
+        { archived: false, lockerId: Meteor.userId(), buyerId: { $exists: false } },
         { sort: { priority: -1 } }
       ),
       buyedGifts: Gifts.find(

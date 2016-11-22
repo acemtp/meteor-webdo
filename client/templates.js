@@ -6,7 +6,7 @@ Template.home.events({
 
 Template.homeGifts.helpers({
   giftToBuy() {
-    return !!Gifts.findOne({ lockerId: Meteor.userId(), buyerId: null });
+    return !!Gifts.findOne({ lockerId: Meteor.userId(), buyerId: { $exists: false } });
   },
   giftBuyed() {
     return !!Gifts.findOne({ buyerId: Meteor.userId() });
@@ -131,14 +131,14 @@ Template.giftShow.helpers({
   },
   isEditableBy(currentUser) {
     const edit = currentUser && (this.ownerId === currentUser._id || this.suggested);
-    console.log('isEditableBy', edit, this);
+    // console.log('isEditableBy', edit, this);
     return edit;
   },
   publicComments() {
-    return Comments.find({ visible: true }).fetch();
+    return Comments.find({ giftId: this._id, visible: true });
   },
   privateComments() {
-    return Comments.find({ visible: false }).fetch();
+    return Comments.find({ giftId: this._id, visible: false });
   },
   createdAt() {
     return moment(this.createdAt).format('LLLL');

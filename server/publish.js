@@ -30,7 +30,7 @@ Meteor.publish('user.gifts', function pubishUserGifts(userId) {
 });
 
 Meteor.publish('gifts.tobuy', function publishGiftsTobuy() {
-  return Gifts.find({ archived: false, lockerId: this.userId, buyerId: null }, { fields: giftFields });
+  return Gifts.find({ archived: false, lockerId: this.userId, buyerId: { $exists: false } }, { fields: giftFields });
 });
 
 Meteor.publish('gifts.buyed', function publishGiftsBuyed() {
