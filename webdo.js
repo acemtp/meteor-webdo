@@ -12,6 +12,7 @@ Gifts.attachSchema({
   detail: {
     type: String,
     label: 'Détail',
+    optional: true,
   },
   link: {
     type: String,
