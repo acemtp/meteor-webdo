@@ -42,6 +42,8 @@ Template.giftSmall.helpers({
     return this.buyerId ? 'buyed' : '';
   },
   userName: findUserNameBy('ownerId'),
+  buyerName: findUserNameBy('buyerId'),
+  lockerName: findUserNameBy('lockerId'),
 });
 
 Template.giftShow.helpers({

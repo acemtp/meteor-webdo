@@ -73,7 +73,25 @@ h1.title {
         @include icon($star);
         padding-left: 14px;
       }
+    }
   }
+  .gift-small-state {
+    font-size: 0.9em;
+    line-height: 1.5em;
+    padding: ($base-spacing / 3) ($base-spacing / 2);
+    .stars {
+      line-height: 1em;
+      padding-top: .4em;
+      float: right;
+      span {
+        @include icon($star);
+        padding-left: 14px;
+      }
+    }
+
+    .buyed { @include icon($buyed, '#000000');}
+    .lock { @include icon($lock, '#000000'); }
+    .lockOpen { @include icon($lockOpen, '#000000'); }
   }
 
   &:focus,
