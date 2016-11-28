@@ -10,14 +10,15 @@ template(name="giftSmall")
       span.stars
         each prio
           span
-    .gift-small-state.card-border
-      if buyerId
-        .buyed par {{buyerName}}
-      else
-        if lockerId
-          .lock par {{lockerName}}
+    unless isOwner
+      .gift-small-state.card-border
+        if buyerId
+          .buyed par {{buyerName}}
         else
-          | Disponbile       
+          if lockerId
+            .lock par {{lockerName}}
+          else
+            | Disponbile       
     .gift-small-title.card-border= title
 
 template(name="giftShow")

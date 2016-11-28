@@ -13,20 +13,20 @@ Meteor.publish('user.profile', function publishUserProfile() {
   return Meteor.users.find({ _id: this.userId }, { limit: 1 });
 });
 
-const giftFields = { title: 1, image: 1, priority: 1, createdAt: 1, archived: 1, priority: -1, buyerId: 1, lockerId: 1, priority: -1, title: 1, ownerId: 1 };
+const giftFields = { title: 1, image: 1, priority: 1, createdAt: 1, archived: 1, buyerId: 1, lockerId: 1, ownerId: 1 };
 Meteor.publish('user.gifts', function pubishUserGifts(userId) {
   check(userId, String);
   const request = { ownerId: userId };
   const options = {
     fields: giftFields,
   };
-  if (this.userId === userId) {
-    request.suggested = false;
-    delete options.fields.lockerId;
-    delete options.fields.buyerId;
-  }
+  // if (this.userId === userId) {
+  //   request.suggested = false;
+  //   delete options.fields.lockerId;
+  //   delete options.fields.buyerId;
+  // }
 
-  return [Gifts.find(request, options), Meteor.users.find({ _id: userId })];
+  return Gifts.find(request, options);
 });
 
 Meteor.publish('gifts.tobuy', function publishGiftsTobuy() {

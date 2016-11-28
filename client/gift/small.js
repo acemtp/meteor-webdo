@@ -41,6 +41,9 @@ Template.giftSmall.helpers({
   buyedClass() {
     return this.buyerId ? 'buyed' : '';
   },
+  isOwner() {
+    return this.ownerId === Meteor.userId();
+  },
   userName: findUserNameBy('ownerId'),
   buyerName: findUserNameBy('buyerId'),
   lockerName: findUserNameBy('lockerId'),
