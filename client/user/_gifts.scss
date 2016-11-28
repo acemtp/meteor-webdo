@@ -71,12 +71,10 @@
 
     .user-image {
       overflow: hidden;
-      height: 20em;
 
       img {
         @include transition (all 0.2s ease-in-out);
-        min-height: 20em;
-        min-width: 100%;
+        width: 100%;
         // @include size(100%);
         opacity: 1;
       }

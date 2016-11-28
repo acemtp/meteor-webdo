@@ -11,7 +11,7 @@ Template.giftImage.onDestroyed(function giftImageOnDestroy() {
 
 Template.giftImage.helpers({
   image() {
-    return this.image || '/photo/gift-default.png';
+    return this.image || 'http://webdo.ploki.info/photo/gift-default.png';
   },
 });
 

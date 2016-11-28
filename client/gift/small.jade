@@ -1,5 +1,5 @@
 template(name="giftImage")
-  img(src="{{image}}" alt=title)
+  img(src="http://res.cloudinary.com/webdo/image/fetch/w_400,h_400,c_scale,c_fill,f_auto/{{image}}", alt=title)
 
 template(name="giftSmall")
   a.gift-small(href="{{pathFor 'gift.show'}}")

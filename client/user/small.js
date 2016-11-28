@@ -11,6 +11,8 @@ Template.userPicture.onDestroyed(function userPictureOnDestroy() {
 
 Template.userPicture.helpers({
   image() {
-    return this.profile.avatar || '/photo/anonymous.gif';
+    const url = this.profile.avatar || '/photo/anonymous.gif';
+    const imageUrl = url.indexOf('http') === 0? url : `http://webdo.ploki.info${url}`;
+    return imageUrl.indexOf('googleusercontent') === -1 ? `http://res.cloudinary.com/webdo/image/fetch/w_400,h_400,c_scale,c_fill,f_auto/${imageUrl}` : imageUrl;
   },
 });
