@@ -24,7 +24,7 @@
     profile: true
     subs: true
   rules:
-    max-len: 120
+    max-len: 1
     curly:
       - 2
       - "multi"
