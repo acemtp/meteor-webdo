@@ -28,7 +28,7 @@ template(name="giftFieldset")
 
       +afQuickField name='ownerId' options=friends value=giftOwnerId
       +afQuickField name='priority' options=priorities
-      +afQuickField name='detail' rows=10
+      +afQuickField name='detail' type='textarea' rows=10
 
 template(name="giftCreate")
   +autoForm collection="Gifts" id="insertGiftForm" type="insert"

@@ -9,10 +9,8 @@ showdown@1.0.8
 accounts-password@1.3.6
 houston:admin
 mquandalle:jade
-aldeed:collection2
 aldeed:autoform
 iron:router
-aldeed:simple-schema
 http@1.2.12
 chrismbeckett:toastr
 fourseven:scss
@@ -29,3 +27,5 @@ seba:minifiers-autoprefixer
 meteorhacks:subs-manager
 shell-server
 dynamic-import
+aldeed:collection2-core@2.0.0
+aldeed:schema-deny

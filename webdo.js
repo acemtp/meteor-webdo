@@ -1,3 +1,6 @@
+import SimpleSchema from 'simpl-schema';
+SimpleSchema.extendOptions(['autoform']);
+
 Gifts = new Mongo.Collection('gifts');
 Comments = new Mongo.Collection('comments');
 moment.locale('fr');
