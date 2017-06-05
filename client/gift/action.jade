@@ -1,0 +1,16 @@
+// XXX redo action directly on the gift?
+template(name="giftAction")
+  if ownerIs currentUser
+    if archived
+      i.unarchive.mdi-content-inbox
+    else
+      i.archive.mdi-content-archive
+  else
+    if archived
+      i.unarchive.mdi-content-inbox
+    else if buyerId
+      i.archive.mdi-content-archive
+    else if lockerId
+      i.buy.mdi-action-add-shopping-cart
+    else
+      i.lock.mdi-action-lock-open
