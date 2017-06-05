@@ -83,7 +83,7 @@ Gifts.attachSchema({
     },
     denyUpdate: true,
   },
-});
+}, { tracker: Tracker });
 
 Gifts.allow({
   insert: Meteor.userId,
@@ -148,7 +148,7 @@ Comments.attachSchema({
     type: Boolean,
     defaultValue: false,
   },
-});
+}, { tracker: Tracker });
 
 Comments.allow({
   insert: Meteor.userId,
@@ -188,4 +188,4 @@ profile = new SimpleSchema({
     label: 'Le lien vers votre photo',
     max: 1000,
   },
-});
+}, { tracker: Tracker });
