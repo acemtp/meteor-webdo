@@ -1,0 +1,24 @@
+{
+  "name": "meteor-webdo",
+  "version": "1.0.0",
+  "description": "webdo made with meteor",
+  "main": "webdo.js",
+  "dependencies": {
+    "babel-runtime": "^6.23.0",
+    "bcrypt": "^1.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acemtp/meteor-webdo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/acemtp/meteor-webdo/issues"
+  },
+  "homepage": "https://github.com/acemtp/meteor-webdo#readme"
+}
