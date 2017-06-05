@@ -17,26 +17,33 @@ h1.title {
 
 .gift-small {
 
-  @include media($desk) {
+  @include media($mobile) {
     @include span-columns(3);
-    @include omega(4n);
+    @include omega(2n);
   }
   @include media($tablet) {
+    @include omega-reset(2n);
     @include span-columns(3);
     @include omega(3n);
   }
-  @include media($mobile) {
-    @include span-columns(2);
-    @include omega(2n);
+  @include media($desk) {
+    @include omega-reset(3n);
+    @include span-columns(3);
+    @include omega(4n);
+  }
+  @include media($lg-desk) {
+    @include omega-reset(4n);
+    @include span-columns(3);
+    @include omega(5n);
   }
 
   @include card;
 
   .gift-small-image {
     overflow: hidden;
-    height: 150px;
+    /*height: 150px;
     max-height: 150px;
-    background-color: $base-color;
+    background-color: $base-color;*/
 
     img {
       @include transition (all 0.2s ease-in-out);
@@ -50,7 +57,7 @@ h1.title {
     @include transition (all 0.2s ease-in-out);
     border-radius: $base-border-radius $base-border-radius 0 0;
     font-weight: bold;
-    line-height: 1.5em;
+    line-height: 1.4em;
     padding: ($base-spacing / 2) ($base-spacing / 2);
   }
 
@@ -59,14 +66,32 @@ h1.title {
     line-height: 1.5em;
     padding: ($base-spacing / 3) ($base-spacing / 2);
     .stars {
-      line-height: 14px;
-      padding-top: 8px;
+      line-height: 1em;
+      padding-top: .4em;
       float: right;
       span {
         @include icon($star);
         padding-left: 14px;
       }
+    }
   }
+  .gift-small-state {
+    font-size: 0.9em;
+    line-height: 1.5em;
+    padding: ($base-spacing / 3) ($base-spacing / 2);
+    .stars {
+      line-height: 1em;
+      padding-top: .4em;
+      float: right;
+      span {
+        @include icon($star);
+        padding-left: 14px;
+      }
+    }
+
+    .buyed { @include icon($buyed, '#000000');}
+    .lock { @include icon($lock, '#000000'); }
+    .lockOpen { @include icon($lockOpen, '#000000'); }
   }
 
   &:focus,
@@ -169,15 +194,10 @@ h1.title {
 
     .gift-image {
       overflow: hidden;
-      height: 20em;
-      background-color: $base-color;
 
       img {
         @include transition (all 0.2s ease-in-out);
         width: 100%;
-        height: 20em;
-        min-width: 100%;
-        // @include size(100%);
         opacity: 1;
       }
     }

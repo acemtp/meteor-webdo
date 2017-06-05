@@ -12,13 +12,13 @@ template(name="giftFieldset")
     fieldset
       legend Information du cadeau
 
-      +afQuickField name='title' autofocus=''
-
       .form-group(class="{{#if afFieldIsInvalid name='link'}}has-error{{/if}}")
         label.control-label {{afFieldLabelText name='link'}}
-        +afFieldInput name="link" max=1024
+        +afFieldInput name="link" max=1024 autofocus=''
         if afFieldIsInvalid name='link'
           span.help-block {{afFieldMessage name='link'}}
+
+      +afQuickField name='title'
 
       .form-group(class="{{#if afFieldIsInvalid name='image'}}has-error{{/if}}")
         label.control-label {{afFieldLabelText name='image'}}

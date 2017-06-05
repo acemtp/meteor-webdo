@@ -23,7 +23,8 @@ $base-font-color: $dark-gray !default;
 $sans-serif: 'PT Sans', sans-serif;
 $sans-serif-2: 'Titillium Web', sans-serif;
 
-@import 'util';
+@import "util";
+@import "omega-reset";
 
 @import "client/navbar/navbar";
 @import "client/gift/small";
@@ -41,5 +42,11 @@ form {
     span {
       color: indianred;
     }
+  }
+}
+
+body {
+  @include media($mobile) {
+    font-size: 13px;
   }
 }

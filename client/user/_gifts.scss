@@ -6,6 +6,21 @@
 
   & > .user-section {
 
+    @include media($lg-desk) {
+      &.user-picture {
+        @include span-columns(5);
+      }
+      &.user-description {
+        @include span-columns(10);
+        padding: 1em;
+        min-height: 23em;
+
+        & > .user-like {
+          @include span-columns(5 of 10);
+          margin-top: 2em
+        }
+      }
+    }
     @include media($desk) {
       &.user-picture {
         @include span-columns(4);
@@ -38,15 +53,15 @@
     }
     @include media($mobile) {
       &.user-picture {
-        @include span-columns(4);
+        @include span-columns(6);
       }
       &.user-description {
-        @include span-columns(4);
+        @include span-columns(6);
         padding: 1em;
         min-height: 23em;
 
         & > .user-like {
-          @include span-columns(2 of 4);
+          @include span-columns(3 of 6);
           margin-top: 2em
         }
       }
@@ -56,12 +71,10 @@
 
     .user-image {
       overflow: hidden;
-      height: 20em;
 
       img {
         @include transition (all 0.2s ease-in-out);
-        min-height: 20em;
-        min-width: 100%;
+        width: 100%;
         // @include size(100%);
         opacity: 1;
       }

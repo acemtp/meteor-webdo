@@ -15,6 +15,7 @@ Gifts.attachSchema({
   detail: {
     type: String,
     label: 'Détail',
+    optional: true,
   },
   link: {
     type: String,
@@ -241,7 +242,6 @@ Router.route('/gift/:_id', {
     return [
       subs.subscribe('gift.show', this.params._id),
       subs.subscribe('gift.comments', this.params._id),
-      subs.subscribe('users'),
     ];
   },
   data() {
@@ -254,7 +254,7 @@ Router.route('/gift/:_id', {
 Router.route('/gift/:_id/update', {
   name: 'gift.update',
   waitOn() {
-    return [subs.subscribe('gift.show', this.params._id), subs.subscribe('users')];
+    return subs.subscribe('gift.show', this.params._id);
   },
   data() {
     return Gifts.findOne(this.params._id);
@@ -263,11 +263,17 @@ Router.route('/gift/:_id/update', {
 
 Router.route('/users', {
   name: 'users',
-  waitOn() {
-    return subs.subscribe('users');
-  },
 });
 
 Router.configure({
   layoutTemplate: 'masterLayout',
 });
+
+if (Meteor.isClient) {
+  Template.masterLayout.onCreated(function () {
+    this.autorun(() => {
+      Meteor.user();
+      subs.subscribe('users');
+    });
+  });
+}
