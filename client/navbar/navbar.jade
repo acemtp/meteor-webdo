@@ -10,7 +10,7 @@ template(name="navbar")
                 i.users
             li.nav-link
               +with currentUser
-                a(href="{{pathFor 'user.gifts'}}")
+                a(href="{{pathFor 'user'}}")
                   i.user
             li.nav-link
               a(href="{{pathFor 'gift.create' _id=currentUser._id}}")

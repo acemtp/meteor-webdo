@@ -7,6 +7,8 @@
     "babel-runtime": "^6.23.0",
     "bcrypt": "^1.0.2",
     "meteor-node-stubs": "^0.2.11",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
     "simpl-schema": "^0.3.0"
   },
   "devDependencies": {},

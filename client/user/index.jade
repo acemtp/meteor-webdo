@@ -1,8 +1,8 @@
-template(name="userGifts")
+template(name="user")
   .user-profile
     .user-section.user-picture
       .user-image
-        +userPicture user
+        +React component=userPicture user=user
       h1
         | {{user.username}}
         if isOwner
@@ -32,6 +32,6 @@ template(name="userGifts")
      +giftSmall
   div
     if archived
-      a(href="{{pathFor 'user.gifts'}}") Voir les cadeaux
+      a(href="{{pathFor 'user'}}") Voir les cadeaux
     else
-      a(href="{{pathFor route='user.gifts' query='archived=1'}}") Voir les cadeaux archiv&eacute;s
+      a(href="{{pathFor route='user' query='archived=1'}}") Voir les cadeaux archiv&eacute;s

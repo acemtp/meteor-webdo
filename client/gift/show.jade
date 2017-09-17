@@ -35,7 +35,7 @@ template(name="giftShow")
         .stars
           each prio
             span
-        a.user-name(href="{{pathFor 'user.gifts' _id=ownerId}}") {{userName}}
+        a.user-name(href="{{pathFor 'user' _id=ownerId}}") {{userName}}
       .gift-section.gift-description
         .padding
           p Créé le : {{createdAt}}

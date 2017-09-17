@@ -1,5 +1,5 @@
-export const findUserNameBy = (field) =>
-  function findUserNameByField() {
+export default function findUserNameBy(field) {
+  return function findUserNameByField() {
     try {
       return Meteor.users.findOne(this[field]).username;
     } catch (e) {
@@ -7,3 +7,4 @@ export const findUserNameBy = (field) =>
       return 'Utilisateur inconnu';
     }
   };
+}

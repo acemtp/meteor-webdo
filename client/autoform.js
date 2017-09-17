@@ -16,7 +16,7 @@ AutoForm.hooks({
       return false;
     },
     onSuccess() {
-      Router.go('user.gifts', { _id: this.docId });
+      Router.go('user', { _id: this.docId });
     },
     onError(formType, error) {
       console.log('updateUserForm, onError:', formType, error);

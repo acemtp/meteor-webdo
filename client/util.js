@@ -13,25 +13,6 @@ Template.homeGifts.helpers({
   },
 });
 
-Template.userUpdate.helpers({
-  profile() {
-    return profile;
-  },
-});
-
-Template.userGifts.helpers({
-  isOwner() {
-    return this._id === Meteor.userId();
-  },
-  userGiftsArchived() {
-    return Router.go('userGifts', { _id: this._id }, { query: 'archived=1' });
-  },
-});
-
-Template.users.helpers({
-  users: Meteor.users.find.bind(Meteor.users, {}, { sort: { username: 1 } }),
-});
-
 Template.giftComment.helpers({
   createdAt() {
     return moment(this.createdAt).fromNow();

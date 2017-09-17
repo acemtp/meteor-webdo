@@ -1,5 +1,5 @@
-import { getAction } from '/imports/client/lib/action.js';
-import { findUserNameBy } from '/imports/client/lib/user';
+import { getAction } from '../../imports/client/lib/action';
+import findUserNameBy from '../../imports/client/lib/user';
 
 Template.giftShow.helpers({
   prio() {

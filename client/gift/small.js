@@ -1,4 +1,4 @@
-import { findUserNameBy } from '/imports/client/lib/user';
+import findUserNameBy from '../../imports/client/lib/user';
 
 Template.giftSmall.helpers({
   prio() {

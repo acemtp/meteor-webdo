@@ -29,3 +29,4 @@ dynamic-import
 aldeed:collection2-core@2.0.0
 aldeed:schema-deny
 aldeed:autoform
+react-template-helper

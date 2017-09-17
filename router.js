@@ -23,7 +23,7 @@ Router.route('/user/:_id/gift/create', {
 });
 
 Router.route('/user/:_id/gifts', {
-  name: 'user.gifts',
+  name: 'user',
   waitOn() {
     return subs.subscribe('user.gifts', this.params._id);
   },

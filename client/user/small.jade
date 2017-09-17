@@ -1,8 +1,0 @@
-template(name="userSmall")
-  a.user-small(href="{{pathFor 'user.gifts'}}")
-    .user-small-image
-      +userPicture
-    .user-small-title= username
-
-template(name="userPicture")
-  img(src="{{image}}", alt=username)
