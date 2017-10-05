@@ -1,3 +1,4 @@
+import { subs, Gifts, Comments } from './collections';
 
 Router.configure({
   loadingTemplate: 'loading',

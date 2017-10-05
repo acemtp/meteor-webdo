@@ -1,3 +1,5 @@
+import { Gifts } from '../collections';
+
 Template.home.events({
   'click a.logout'() {
     AccountsTemplates.logout();
@@ -26,7 +28,7 @@ UI.registerHelper('priorities', () => [
   { label: "2 étoiles - J'y pense", value: 2 },
 ]);
 
-UI.registerHelper('friends', () => Meteor
+UI.registerHelper('friends', () => (Meteor
   .users
   .find(
     { _id: { $in: Meteor.user().profile.friends } },
@@ -34,6 +36,6 @@ UI.registerHelper('friends', () => Meteor
   .map(user => ({
     label: user.username,
     value: user._id,
-  })
+  }))
 ));
 

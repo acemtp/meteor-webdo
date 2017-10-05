@@ -60,6 +60,7 @@ Gifts.attachSchema({
       if (this.isInsert) return new Date();
       if (this.isUpsert) return { $setOnInsert: new Date() };
       this.unset();
+      return undefined;
     },
     denyUpdate: true,
   },
@@ -82,6 +83,7 @@ Gifts.attachSchema({
       if (this.isInsert) return value;
       if (this.isUpsert) return { $setOnInsert: value };
       this.unset();
+      return undefined;
     },
     denyUpdate: true,
   },
@@ -116,6 +118,7 @@ Comments.attachSchema({
       if (this.isInsert) return new Date();
       if (this.isUpsert) return { $setOnInsert: new Date() };
       this.unset();
+      return undefined;
     },
     denyUpdate: true,
   },
@@ -126,6 +129,7 @@ Comments.attachSchema({
       if (this.isInsert) return username;
       if (this.isUpsert) return { $setOnInsert: username };
       this.unset();
+      return undefined;
     },
     denyUpdate: true,
   },
@@ -135,6 +139,7 @@ Comments.attachSchema({
       if (this.isInsert) return this.userId;
       if (this.isUpsert) return { $setOnInsert: this.userId };
       this.unset();
+      return undefined;
     },
     denyUpdate: true,
   },

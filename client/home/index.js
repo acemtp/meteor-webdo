@@ -14,16 +14,13 @@ Router.route('/', {
     return {
       toBuyGifts: Gifts.find(
         { archived: false, lockerId: Meteor.userId(), buyerId: { $exists: false } },
-        { sort: { priority: -1 } }
-      ),
+        { sort: { priority: -1 } }),
       buyedGifts: Gifts.find(
         { archived: false, buyerId: Meteor.userId() },
-        { sort: { lockerId: 1, priority: -1 } }
-      ),
+        { sort: { lockerId: 1, priority: -1 } }),
       latestGifts: Gifts.find(
         { archived: false, ownerId: { $ne: Meteor.userId() } },
-        { sort: { createdAt: -1 }, limit: 10 }
-      ),
+        { sort: { createdAt: -1 }, limit: 10 }),
     };
   },
 });

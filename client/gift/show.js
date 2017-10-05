@@ -1,6 +1,6 @@
 import { getAction } from '../../imports/client/lib/action';
 import findUserNameBy from '../../imports/client/lib/user';
-import { Gifts } from '../../collections';
+import { Gifts, Comments } from '../../collections';
 
 Template.giftShow.helpers({
   prio() {

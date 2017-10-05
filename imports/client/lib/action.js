@@ -1,3 +1,4 @@
+import { Gifts } from '../../../collections';
 
 export const getAction = (doc, field) => {
   const action = { go: { $set: {} }, undo: { $unset: {} } };
