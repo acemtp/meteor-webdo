@@ -1,10 +1,12 @@
 import SimpleSchema from 'simpl-schema';
+
 SimpleSchema.extendOptions(['autoform']);
 
-Gifts = new Mongo.Collection('gifts');
-Comments = new Mongo.Collection('comments');
+export const Gifts = new Mongo.Collection('gifts');
+export const Comments = new Mongo.Collection('comments');
+export const subs = new SubsManager();
+
 moment.locale('fr');
-subs = new SubsManager();
 
 Gifts.attachSchema({
   title: {
@@ -155,7 +157,7 @@ Comments.allow({
   update: Meteor.userId,
 });
 
-profile = new SimpleSchema({
+export const profile = new SimpleSchema({
   profile: {
     type: Object,
   },
@@ -189,3 +191,4 @@ profile = new SimpleSchema({
     max: 1000,
   },
 }, { tracker: Tracker });
+

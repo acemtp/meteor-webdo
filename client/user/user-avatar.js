@@ -34,7 +34,7 @@ export class UserPicture extends React.Component {
 export class UserAvatar extends React.Component {
   render() {
     return (
-      <a className="user-small" href={Router.path('user', this.props.user)}>
+      <a className="user-small" href={this.props.user.href}>
         <div className="user-small-Image">
           <UserPicture user={this.props.user} />
         </div>
@@ -53,7 +53,7 @@ export class Users extends React.Component {
   }
   render() {
     return (
-      <div className=".user-list">{this.props.users.map(user => <UserAvatar key={user._id} user={user} />)}</div>
+      <div className=".user-list">{this.props.users.map(user => <UserAvatar key={user._id} user={Object.assign(user, { href: Router.path('user', user)})} />)}</div>
     );
   }
 }

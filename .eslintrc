@@ -17,11 +17,8 @@
     T9n: false
     toastr: false
     SubsManager: false
-    Comments: true
-    Gifts: true
     UI: true
     profile: true
-    subs: true
   parserOptions:
     ecmaVersion: 6
     sourceType: "module"

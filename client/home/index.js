@@ -1,3 +1,5 @@
+import { subs, Gifts } from '../../collections';
+
 Router.route('/', {
   name: 'home',
   waitOn() {
