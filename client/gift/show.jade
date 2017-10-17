@@ -51,7 +51,7 @@ template(name="giftShow")
             +giftComment
           h4 Commentaire
           .panel-body
-            +autoForm collection="Comments" id="insertPrivateComment" type="insert"
+            +autoForm collection=Comments id="insertPrivateComment" type="insert"
               +afFieldInput name="message"
               +afFieldInput name="visible" value="false"
               +afFieldInput name="giftId" value=../_id
@@ -64,7 +64,7 @@ template(name="giftShow")
         .warning
           h4 Ce message sera visible par <b>{{ownerName}}</b>
         div
-          +autoForm collection="Comments" id="insertPublicComment" type="insert"
+          +autoForm collection=Comments id="insertPublicComment" type="insert"
             +afFieldInput name="message"
             +afFieldInput name="visible" value="true"
             +afFieldInput name="giftId" value=../_id

@@ -30,6 +30,9 @@ Template.giftShow.helpers({
   createdAt() {
     return moment(this.createdAt).format('LLLL');
   },
+  Comments() {
+    return Comments;
+  },
 });
 
 Template.giftShow.events({

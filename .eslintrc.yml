@@ -1,5 +1,7 @@
 ---
-  extends: airbnb/base
+  settings:
+    import/resolver: meteor
+  extends: airbnb-base
   env:
     meteor: true
     node: true

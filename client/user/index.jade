@@ -1,37 +1,3 @@
 template(name="user")
-  .user-profile
-    .user-section.user-picture
-      .user-image
-        +React component=userPicture user=user
-      h1
-        | {{user.username}}
-        if isOwner
-          a.edit-profile(href="{{pathFor route='user.update'}}")
-
-    .user-section.user-description
-      +markdown
-        {{user.profile.description}}
-      .user-like
-        .panel.panel-success
-          .panel-heading
-            h3.panel-title J'aime
-          .panel-body
-            +markdown
-              {{user.profile.like}}
-      .user-like
-        .panel.panel-danger
-          .panel-heading
-            h3.panel-title Je n'aime pas
-          .panel-body
-            +markdown
-              {{user.profile.dislike}}
-
-
-  .gift-list
-    each gifts
-     +giftSmall
   div
-    if archived
-      a(href="{{pathFor 'user'}}") Voir les cadeaux
-    else
-      a(href="{{pathFor route='user' query='archived=1'}}") Voir les cadeaux archiv&eacute;s
+    +React component=User user=data.user gifts=data.gifts archived=data.archived

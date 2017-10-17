@@ -125,7 +125,7 @@ Comments.attachSchema({
   author: {
     type: String,
     autoValue() {
-      const username = Meteor.users.findOne(this.userId).username;
+      const { username } = Meteor.users.findOne(this.userId);
       if (this.isInsert) return username;
       if (this.isUpsert) return { $setOnInsert: username };
       this.unset();
