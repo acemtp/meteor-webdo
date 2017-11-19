@@ -1,7 +1,9 @@
 ---
   settings:
     import/resolver: meteor
-  extends: airbnb-base
+  extends:
+    - airbnb-base
+    - plugin:react/recommended
   env:
     meteor: true
     node: true
@@ -15,7 +17,6 @@
     AutoForm: false
     check: false
     console: false
-    Router: false
     T9n: false
     toastr: false
     SubsManager: false

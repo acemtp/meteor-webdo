@@ -1,25 +1,24 @@
-import { Router } from 'meteor/iron:router';
 import React from 'react';
 
 import { GiftImage } from './image';
 import findUserNameBy from '../../imports/client/lib/user';
 
-Template.giftSmall.helpers({
-  prio() {
-    return _.range(this.priority);
-  },
-  buyedClass() {
-    return this.buyerId ? 'buyed' : '';
-  },
-  isOwner() {
-    return this.ownerId === Meteor.userId();
-  },
-  userName: findUserNameBy('ownerId'),
-  buyerName: findUserNameBy('buyerId'),
-  lockerName: findUserNameBy('lockerId'),
-});
+// Template.giftSmall.helpers({
+//   prio() {
+//     return _.range(this.priority);
+//   },
+//   buyedClass() {
+//     return this.buyerId ? 'buyed' : '';
+//   },
+//   isOwner() {
+//     return this.ownerId === Meteor.userId();
+//   },
+//   userName: findUserNameBy('ownerId'),
+//   buyerName: findUserNameBy('buyerId'),
+//   lockerName: findUserNameBy('lockerId'),
+// });
 
-class SmallGift extends React.Component {
+export class SmallGift extends React.Component {
   constructor() {
     super();
     this.userName = findUserNameBy('ownerId', 'gift');
@@ -29,7 +28,7 @@ class SmallGift extends React.Component {
   }
   render() {
     return (
-      <a className="gift-small" href={Router.path('gift.show', this.props.gift)}>
+      <a className="gift-small" href={`Router.path('gift.show', this.props.gift)`}>
         <div className="gift-small-image">
           <GiftImage image={this.props.gift.image} title={this.props.gift.title} />
         </div>
@@ -57,7 +56,3 @@ class SmallGift extends React.Component {
     );
   }
 }
-
-export {
-  SmallGift,
-};

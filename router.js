@@ -1,3 +1,4 @@
+/*
 import { subs, Gifts, Comments } from './collections';
 
 Router.configure({
@@ -78,3 +79,4 @@ Router.route('/users', {
 Router.configure({
   layoutTemplate: 'masterLayout',
 });
+*/

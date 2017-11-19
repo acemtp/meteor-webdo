@@ -1,0 +1,15 @@
+# Defines a user type and its fields
+type User {
+ _id: ID
+ emails: [Email]
+ profile: UserProfile
+}
+# Defines a user profile type and its fields
+type UserProfile {
+ name: String
+}
+# defines Email type and its fields
+type Email {
+ address: String
+ verified: Boolean
+}

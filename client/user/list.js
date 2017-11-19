@@ -1,5 +1,5 @@
-import { Users } from './user-avatar';
+// import { Users } from './user-avatar';
 
-Template.users.helpers({
-  Users() { return Users; },
-});
+// Template.users.helpers({
+//   Users() { return Users; },
+// });

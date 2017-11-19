@@ -1,4 +1,5 @@
 import { Gifts, Comments } from '../collections';
+import { check } from 'meteor/check';
 
 Meteor.publish('users', function publishUsers() {
   const user = Meteor.users.findOne(this.userId, { fields: { 'profile.friends': 1 } });
