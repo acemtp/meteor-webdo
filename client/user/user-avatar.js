@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Remarkable from 'remarkable';
 import RemarkableReactRenderer from 'remarkable-react';
-import { SmallGift } from '../gift/small';
+import { SmallGift } from '../gift';
 import { subs, Gifts } from '../../collections';
 import { withTracker } from 'meteor/react-meteor-data';
 

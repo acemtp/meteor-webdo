@@ -1,27 +1,34 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import { GiftImage } from './image';
+import { Img } from '../user/user-avatar';
 import findUserNameBy from '../../imports/client/lib/user';
 
-// Template.giftSmall.helpers({
-//   prio() {
-//     return _.range(this.priority);
-//   },
-//   buyedClass() {
-//     return this.buyerId ? 'buyed' : '';
-//   },
-//   isOwner() {
-//     return this.ownerId === Meteor.userId();
-//   },
-//   userName: findUserNameBy('ownerId'),
-//   buyerName: findUserNameBy('buyerId'),
-//   lockerName: findUserNameBy('lockerId'),
-// });
+export const GiftImage = ({ image, title }) => (
+  <Img
+    src={`http://res.cloudinary.com/webdo/image/fetch/w_400,h_400,c_scale,c_fill,f_auto/${image}`}
+    alt={title}
+    fallback="/photo/gift-default.png"
+  />
+);
+
+GiftImage.propTypes = {
+  image: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+};
 
 export class SmallGift extends React.Component {
   constructor() {
     super();
     this.userName = findUserNameBy('ownerId', 'gift');
+    this.buyerName = findUserNameBy('buyerId');
+    this.lockerName = findUserNameBy('lockerId');
+  }
+  prio() {
+    return Array.from(Array(this.props.gift.priority));
+  }
+  buyedClass() {
+    return this.buyerId ? 'buyed' : '';
   }
   isOwner() {
     return this.props.gift.ownerId === Meteor.userId();
@@ -35,18 +42,16 @@ export class SmallGift extends React.Component {
         <div className="gift-small-description card-border">
           {this.userName()}
           <span className="stars">
-            {Array.from(Array(this.props.gift.priority)).map((u, i) => (<span key={`${this.props.gift._id}-star-${i}`} />))}
+            {this.prio().map((u, i) => (<span key={`${this.props.gift._id}-star-${i}`} />))}
           </span>
         </div>
         {this.isOwner() ? '' : (
           <div className="gift-small-state card-border">
-            {this.props.buyerId ?
-              (<div className="buyed">par {this.buyerName()} </div>)
-              :
-              (this.lockerId ?
-                (<div className="lock">par {this.lockerName()} </div>)
-                :
-                ('Disponible')
+            {this.props.buyerId
+            ? (<div className="buyed">par {this.buyerName()} </div>)
+            : (this.lockerId
+              ? (<div className="lock">par {this.lockerName()} </div>)
+              : ('Disponible')
               )
             }
           </div>

@@ -28,10 +28,3 @@ import { Img } from '../user/user-avatar';
 //   },
 // });
 
-export class GiftImage extends React.Component {
-  render() {
-    return (
-      <Img src={`http://res.cloudinary.com/webdo/image/fetch/w_400,h_400,c_scale,c_fill,f_auto/${this.props.image}`} alt={this.props.title} fallback="/photo/gift-default.png" />
-    );
-  }
-}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
-import { SmallGift } from '../gift/small';
+import { SmallGift } from '../gift';
 import { subs, Gifts } from '../../collections';
 /*
 import { subs, Gifts } from '../../collections';
