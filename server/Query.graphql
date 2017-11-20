@@ -1,6 +1,7 @@
 # Main type (the root of all queries)
 type Query {
  me:User
- gift: Gift
+ gift(id: String!): Gift
  gifts: [Gift]
+ latestGifts: [Gift]
 }

@@ -1,6 +1,9 @@
 #Defines a Todo type and its attributes
 type Gift {
- _id: ID
- title: String!
- detail: String!
+  _id: ID
+  title: String!
+  detail: String
+  image: String
+  priority: Int!
+  ownerId: String!
 }

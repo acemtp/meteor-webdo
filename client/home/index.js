@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import { withTracker } from 'meteor/react-meteor-data';
 import { SmallGift } from '../gift';
 import { subs, Gifts } from '../../collections';
@@ -29,7 +31,6 @@ Router.route('/', {
   },
 });
 */
-console.log('gift small', { SmallGift });
 export class GiftList extends Component {
   /*
   h1.title= title
@@ -49,7 +50,18 @@ export class GiftList extends Component {
   }
 }
 
-
+const NewGifts = graphql(gql`
+query LatestGiftsQuery {
+  latestGifts {
+    _id
+    title
+    detail
+    priority
+    image
+    ownerId
+  }
+}
+`)(({ data: { latestGifts: gifts } }) => (<GiftList title="Nouveau" gifts={gifts} />));
 export class HomeContainer extends Component {
   /*
   waitOn() {
@@ -85,7 +97,7 @@ export class HomeContainer extends Component {
       <div>
         {this.props.giftToBuys && this.props.giftToBuys.length && <GiftList title="À acheter" gifts={this.props.giftsToBuy} />}
         {this.props.giftsBuyed && this.props.giftsBuyed.length && <GiftList title="Acheté" gifts={this.props.giftsBuyed} />}
-        <GiftList title="Nouveau" gifts={this.props.latestGifts} />
+        <NewGifts />
       </div>
     );
   }
