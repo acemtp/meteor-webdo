@@ -1,0 +1,9 @@
+type Comment {
+  giftId: String
+  message: String
+  createdAt: String
+  author: String
+  authorId: String
+  visible: Boolean
+  removed: Boolean
+}

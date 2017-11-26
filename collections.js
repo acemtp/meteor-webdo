@@ -1,7 +1,6 @@
 import SimpleSchema from 'simpl-schema';
 import { Mongo } from 'meteor/mongo';
 import { Tracker } from 'meteor/tracker';
-import SchemaBridge from 'meteor/kuip:schema-graphql-bridge';
 
 SimpleSchema.extendOptions(['autoform']);
 
@@ -96,8 +95,6 @@ Gifts.allow({
   insert: () => false,
   update: () => false,
 });
-
-SchemaBridge.schema(Gifts.simpleSchema(), 'Gift', { wrap: false });
 
 Comments.attachSchema({
   giftId: {

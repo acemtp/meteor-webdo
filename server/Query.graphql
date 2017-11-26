@@ -2,6 +2,15 @@
 type Query {
  me:User
  gift(id: String!): Gift
- gifts: [Gift]
+ gifts(userId: String, filter: GiftFilter = ownerId, sortBy: GiftSort = createdAt, limit: Int = 1000): [Gift]
  latestGifts: [Gift]
+}
+
+enum GiftFilter {
+  ownerId
+  latest
+}
+
+enum GiftSort {
+  createdAt
 }
