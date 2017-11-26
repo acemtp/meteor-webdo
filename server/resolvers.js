@@ -32,7 +32,7 @@ const Query = {
 
     return Gifts.find(selector, { sort: { [sortBy]: -1 }, limit }).fetch();
   },
-  latestGifts(root, args, context) {
+  latestGifts(root, args, context) {console.log('args', arguments);
     if (!context.userId) throw new Error('Unknown User (not logged in)');
     return Gifts.find(
       { archived: false, ownerId: { $ne: Meteor.userId() } },
