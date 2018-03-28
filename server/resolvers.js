@@ -12,6 +12,10 @@ const me = (root, args, context) => {
 
 const Query = {
   me,
+  user(route, { id }, context) {
+    if (!context.userId) throw new Error('Unknown User (not logged in)');
+    return Meteor.users.findOne(id);
+  },
   gift(root, { id }, context) {
     if (!context.userId) throw new Error('Unknown User (not logged in)');
     return Gifts.findOne(id);
@@ -23,22 +27,31 @@ const Query = {
 
     const filters = {
       friends: { ownerId: { $in: user.profile.friends }},
-      ownerId: { ownerId: userId || context.userId },
       createdByCurrentUser: { createdBy: context.userId },
       latest: { archived: false },
+      ownerId: { ownerId: userId || context.userId },
+      lockerId: { lockerId: userId || context.userId },
+      buyerId: { buyerId: userId || context.userId },
     };
 
     const selector = Object.assign({ $or: [filters.friends, filters.createdByCurrentUser] }, filters[filter]);
 
     return Gifts.find(selector, { sort: { [sortBy]: -1 }, limit }).fetch();
   },
-  latestGifts(root, args, context) {console.log('args', arguments);
+  latestGifts(root, args, context) {
     if (!context.userId) throw new Error('Unknown User (not logged in)');
     return Gifts.find(
       { archived: false, ownerId: { $ne: Meteor.userId() } },
       { sort: { createdAt: -1 }, limit: 10 }).map(g => Object.assign({ detail: ''}, g));
   },
 };
+
+const User = {
+  gifts(parent) {
+    return Gifts.find({ ownerId: parent._id });
+  },
+};
+
 const Gift = {
   owner(parent) {
     return Meteor.users.findOne(parent.ownerId);
@@ -60,4 +73,5 @@ export default {
   Query,
   Mutation,
   Gift,
+  User,
 };

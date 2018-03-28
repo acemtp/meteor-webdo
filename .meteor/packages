@@ -28,6 +28,6 @@ orionsoft:graphql-compiler
 orionsoft:apollo
 nicolaslopezj:apollo-accounts@2.1.0
 kuip:schema-graphql-bridge
-apollo
 aldeed:collection2
 aldeed:schema-deny
+swydo:ddp-apollo

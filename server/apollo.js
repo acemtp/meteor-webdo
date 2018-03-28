@@ -1,16 +1,18 @@
-import cors from 'cors';
-import { createApolloServer } from 'meteor/orionsoft:apollo';
+import { GraphQLScalarType } from 'graphql';
+import { Kind } from 'graphql/language';
 import {SchemaTypes as Auth} from 'meteor/nicolaslopezj:apollo-accounts';
+// for ddp-apollo
+import { setup } from 'meteor/swydo:ddp-apollo';
+
 import { makeExecutableSchema } from 'graphql-tools';
 import resolvers from './resolvers';
 import Mutation from './mutation';
-import { GraphQLScalarType } from 'graphql';
-import { Kind } from 'graphql/language';
 
 import User from './User.graphql';
 import Query from './Query.graphql';
 import Gift from './Gift.graphql';
 import Comment from './Comment.graphql';
+
 
 const typeDefs = [
   `scalar Date`,
@@ -36,9 +38,7 @@ resolvers.Date = new GraphQLScalarType({
     return value.getTime(); // value sent to the client
   },
   parseLiteral(ast) {
-    if(ast.kind === Kind.INT) {
-      return parseInt(ast.value, 10); // ast value is always in string format
-    }
+    if (ast.kind === Kind.INT) return parseInt(ast.value, 10); // ast value is always in string format
     return null;
   },
 });
@@ -48,11 +48,6 @@ const schema = makeExecutableSchema({
   resolvers,
 });
 
-createApolloServer({
+setup({
   schema,
-}, {
-  configServer(graphQLServer) {
-    graphQLServer.use(cors());
-  },
-  graphiql: true,
 });

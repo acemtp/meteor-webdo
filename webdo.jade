@@ -6,17 +6,10 @@ head
 body
   #root
 
-template(name="userUpdate")
-  +autoForm schema=profile doc=this id="updateUserForm"
-    {{> afQuickFields}}
-    button(type="submit") Mettre à jour mon profile
-
-template(name="giftComment")
-  div Par {{author}}
-    span= createdAt
-  p
-    +markdown 
-      {{message}}
+//- template(name="userUpdate")
+//-   +autoForm schema=profile doc=this id="updateUserForm"
+//-     {{> afQuickFields}}
+//-     button(type="submit") Mettre à jour mon profile
 
 template(name="loading")
   .row

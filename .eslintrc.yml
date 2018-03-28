@@ -1,8 +1,9 @@
 ---
   settings:
     import/resolver: meteor
-  extends:
-    - airbnb-base
+  parser: babel-eslint
+  extends: 
+    - airbnb
     - plugin:react/recommended
   env:
     meteor: true
@@ -47,3 +48,15 @@
     key-spacing: 0
     prefer-arrow-callback: 0
     no-nested-ternary: 0
+    react/jsx-filename-extension: 0
+    import/extensions:
+      - off
+      - never
+    jsx-a11y/anchor-is-valid:
+      - error
+      -
+        components:
+          - Link
+        specialLink:
+          - to
+

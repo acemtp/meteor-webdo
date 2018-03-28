@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import { Img } from '../user/user-avatar';
-import findUserNameBy from '../../imports/client/lib/user';
+import { Gift } from './show';
 
+export { Gift };
 export const GiftImage = ({ image, title }) => (
   image ? 
     (
@@ -26,12 +28,6 @@ GiftImage.propTypes = {
 };
 
 export class SmallGift extends React.Component {
-  constructor() {
-    super();
-    this.userName = findUserNameBy('ownerId', 'gift');
-    this.buyerName = findUserNameBy('buyerId');
-    this.lockerName = findUserNameBy('lockerId');
-  }
   prio() {
     return Array.from(Array(this.props.gift.priority));
   }
@@ -43,29 +39,29 @@ export class SmallGift extends React.Component {
   }
   render() {
     return (
-      <a className="gift-small" href={`Router.path('gift.show', this.props.gift)`}>
+      <Link className="gift-small" to={`/gift/${this.props.gift._id}`}>
         <div className="gift-small-image">
           <GiftImage image={this.props.gift.image} title={this.props.gift.title} />
         </div>
         <div className="gift-small-description card-border">
-          {this.userName()}
+          {this.props.gift.owner.username}
           <span className="stars">
             {this.prio().map((u, i) => (<span key={`${this.props.gift._id}-star-${i}`} />))}
           </span>
         </div>
         {this.isOwner() ? '' : (
           <div className="gift-small-state card-border">
-            {this.props.buyerId
-            ? (<div className="buyed">par {this.buyerName()} </div>)
-            : (this.lockerId
-              ? (<div className="lock">par {this.lockerName()} </div>)
+            {this.props.buyer
+            ? (<div className="buyed">par {this.props.buyer.username} </div>)
+            : (this.locker
+              ? (<div className="lock">par {this.props} </div>)
               : ('Disponible')
               )
             }
           </div>
         )}
         <div className="gift-small-title card-border">{this.props.gift.title}</div>
-      </a>
+      </Link>
     );
   }
 }

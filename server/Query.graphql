@@ -1,6 +1,7 @@
 # Main type (the root of all queries)
 type Query {
  me:User
+ user(id: String): User
  gift(id: String!): Gift
  gifts(userId: String, filter: GiftFilter = ownerId, sortBy: GiftSort = createdAt, limit: Int = 1000): [Gift]
  latestGifts: [Gift]
@@ -8,6 +9,8 @@ type Query {
 
 enum GiftFilter {
   ownerId
+  buyerId
+  lockerId
   latest
 }
 

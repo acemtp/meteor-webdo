@@ -7,11 +7,11 @@ import { App } from './layout';
 import client from './apollo';
 // import './main.scss';
 
-Meteor.startup(() => render((
+Meteor.startup(() => render(
 <ApolloProvider client={client}>
   <BrowserRouter>
     <div>
       <App />
     </div>
   </BrowserRouter>
-</ApolloProvider>), document.getElementById('app')));
+</ApolloProvider>, document.getElementById('app')));

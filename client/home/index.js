@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import { withTracker } from 'meteor/react-meteor-data';
 import { SmallGift } from '../gift';
 import { subs, Gifts } from '../../collections';
+
 /*
 import { subs, Gifts } from '../../collections';
 Router.route('/', {
@@ -31,77 +32,43 @@ Router.route('/', {
   },
 });
 */
-export class GiftList extends Component {
-  /*
-  h1.title= title
-  .gift-list
-    each gifts
-      +giftSmall
-  */
-  render() {
-    return (
-      <div>
-        <h1 className="title">{this.props.title}</h1>
-        <div className="gift-list">
-          {(this.props.gifts || []).map(gift => <SmallGift key={gift._id} gift={gift} />)}
-        </div>
-      </div>
-    );
-  }
-}
 
-const NewGifts = graphql(gql`
-query LatestGiftsQuery {
-  latestGifts {
+
+const NewGiftsGraphQL = graphql(gql`
+query gifts($type: GiftFilter) {
+  gifts(filter: $type, limit: 5) {
     _id
     title
     detail
     priority
     image
-    ownerId
+    owner {
+      username
+    }
   }
 }
-`)(({ data: { latestGifts: gifts } }) => (<GiftList title="Nouveau" gifts={gifts} />));
-export class HomeContainer extends Component {
-  /*
-  waitOn() {
-    return [
-      subs.subscribe('users'),
-      subs.subscribe('gifts.tobuy'),
-      subs.subscribe('gifts.buyed'),
-      subs.subscribe('gifts.latest'),
-    ];
-  },
-  data() {
-    return {
-      toBuyGifts: Gifts.find(
-        { archived: false, lockerId: Meteor.userId(), buyerId: { $exists: false } },
-        { sort: { priority: -1 } }),
-      buyedGifts: Gifts.find(
-        { archived: false, buyerId: Meteor.userId() },
-        { sort: { lockerId: 1, priority: -1 } }),
-      latestGifts: Gifts.find(
-        { archived: false, ownerId: { $ne: Meteor.userId() } },
-        { sort: { createdAt: -1 }, limit: 10 }),
-    };
-  },
-  // template
-  if giftToBuy
-    +giftList title="À acheter" gifts=toBuyGifts
-  if giftBuyed
-    +giftList title="Achetés" gifts=buyedGifts
-  +giftList title="Nouveau" gifts=latestGifts
-  */
-  render() {
-    return (
-      <div>
-        {this.props.giftToBuys && this.props.giftToBuys.length && <GiftList title="À acheter" gifts={this.props.giftsToBuy} />}
-        {this.props.giftsBuyed && this.props.giftsBuyed.length && <GiftList title="Acheté" gifts={this.props.giftsBuyed} />}
-        <NewGifts />
+`, {
+    options(props) { return { variables: { type: props.type || 'latest' } }; },
+    props({ data: { gifts, loading } }) { return { gifts, loading }; },
+  });
+
+export const GiftList = NewGiftsGraphQL(({ title, gifts, loading }) => (
+  !loading && gifts && gifts.length ?
+    (<div>
+      <h1 className="title">{title}</h1>
+      <div className="gift-list">
+        {(gifts || []).map(gift => <SmallGift key={gift._id} gift={gift} />)}
       </div>
-    );
-  }
-}
+    </div>) : ''
+));
+
+export const HomeContainer = () => (
+<div>
+  <GiftList title="À acheter" type="lockerId" />
+  <GiftList title="Acheté" type="buyerId" />
+  <GiftList title="Nouveau" />
+</div>);
+
 export const Home = withTracker(() => {
   const toBuyHandler = subs.subscribe('gifts.tobuy');
   const buyedHandler = subs.subscribe('gifts.buyed');

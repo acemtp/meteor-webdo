@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { graphql, withApollo } from 'react-apollo';
+import gql from 'graphql-tag';
+import { Link, withRouter } from 'react-router-dom';
 import Remarkable from 'remarkable';
 import RemarkableReactRenderer from 'remarkable-react';
+import AutoForm from 'uniforms-unstyled/AutoForm';
+
 import { SmallGift } from '../gift';
-import { subs, Gifts } from '../../collections';
-import { withTracker } from 'meteor/react-meteor-data';
+import { profile } from '../../collections';
 
 const md = new Remarkable();
 md.renderer = new RemarkableReactRenderer();
@@ -76,6 +79,8 @@ class UserComponent extends Component {
     return this.props.user._id === Meteor.userId();
   }
   render() {
+    console.log('render user', { props: this.props, this: this });
+    if (this.props.loading) return <div>Loading...</div>;
     return (
       <div>
         <div className="user-profile">
@@ -83,7 +88,7 @@ class UserComponent extends Component {
             <div className="user-image">
               <UserPicture user={this.props.user} />
             </div>
-            <h1>{this.props.user.username}{this.isOwner() ? (<a className="edit-profile" href={`Router.path('user.update', this.props.user)`} />) : ''}</h1>
+            <h1>{this.props.user.username}{this.isOwner() ? (<a className="edit-profile" href="/user/update" />) : ''}</h1>
           </div>
           <div className="user-section user-description">
             <div>{md.render(this.props.user.profile.description)}</div>
@@ -106,9 +111,9 @@ class UserComponent extends Component {
           </div>
         </div>
         <div className="gift-list">
-          {this.props.giftsLoading
+          {this.props.loading
             ? <div>Loading...</div>
-            : this.props.gifts.map(gift => <SmallGift key={gift._id} gift={gift} />)
+            : this.props.user.gifts.map(gift => <SmallGift key={gift._id} gift={gift} />)
           }
         </div>
         <div>
@@ -122,10 +127,34 @@ class UserComponent extends Component {
   }
 }
 
-export const User = withTracker((props) => {
-  const handle = subs.subscribe('user.gifts', props.user._id);
-  return {
-    giftsLoading: !handle.ready(),
-    gifts: Gifts.find({ ownerId: props.user._id }).fetch(),
-  };
-})(UserComponent);
+const UserGraphQL = graphql(gql`
+query userGifts($userId: String) {
+  user(id: $userId) {
+    username
+    profile {
+      description
+      like
+      dislike
+    }
+    gifts {
+      _id
+      title
+      detail
+      priority
+      image
+      owner {
+        username
+      }
+    }
+  }
+}
+`, {
+  options(props) { console.log('UserGraphQL', { props }); return { variables: { userId: props.match.params.id } }; },
+  props({ data }) { const { user, loading } = data; console.log('props', { loading, user }); return { user, loading }; },
+});
+
+export const User = withApollo(withRouter(UserGraphQL(UserComponent)));
+
+export const UserUpdate = () => (
+  <AutoForm schema={profile} onSubmit={doc => console.log('TODO save doc', doc)} model={Meteor.user()} />
+);

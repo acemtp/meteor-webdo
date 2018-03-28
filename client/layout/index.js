@@ -1,12 +1,13 @@
 import React from 'react';
-import { Route, Switch, Link, Redirect, withRouter } from 'react-router-dom';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import { subs } from '../../collections';
-import { Users, User } from '../user/user-avatar';
+import { Users, User, UserUpdate } from '../user/user-avatar';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Accounts, STATES } from 'meteor/std:accounts-ui';
 import { Home } from '../home';
 import { NavBar } from '../navbar/navbar';
-
+import { Gift } from '../gift';
+console.log('gift ', Gift)
 // import styles from '../webdo.scss';
 // Template.masterLayout.onCreated(function () {
 //   this.autorun(() => {
@@ -23,8 +24,8 @@ export const Loading = () => (
 
 const LayoutLoggedOut = () => (
   <div>
-    <Route path="/" component={() => <Accounts.ui.LoginForm />} />
-    <Route path="/signUp" component={() => <Accounts.ui.LoginForm formState={STATES.SIGN_UP} />} />
+    <Route path="/" component={Accounts.ui.LoginForm} />
+    <Route path="/signUp" component={Accounts.ui.LoginForm} formState={STATES.SIGN_UP} />
   </div>
 );
 
@@ -32,7 +33,9 @@ const LayoutLoggedInContainer = props => (
   <Switch>
     <Route path="/" exact component={Home} />
     <Route path="/users" exact component={() => <Users {...props} />} />
+    <Route path="/user/update" component={() => <UserUpdate />} />
     <Route path="/user/:id" component={data => <User user={Meteor.users.findOne(data.match.params.id)} />} />
+    <Route path="/gift/:id" component={Gift} />
     <Redirect to="/" />
   </Switch>
 );
@@ -49,10 +52,10 @@ const LayoutLoggedIn = withRouter(withTracker(() => {
 const LayoutContainer = ({ currentUser }) => (
   <div>
     <NavBar currentUser={currentUser} />
-  {currentUser
-  ? <LayoutLoggedIn />
-  : <LayoutLoggedOut />
-  }
+    {currentUser
+    ? <LayoutLoggedIn />
+    : <LayoutLoggedOut />
+    }
   </div>
 );
 const App = withRouter(withTracker(props => Object.assign({ currentUser: Meteor.user() }, props))(LayoutContainer));

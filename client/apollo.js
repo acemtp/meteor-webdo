@@ -1,8 +1,7 @@
 import { ApolloClient } from 'apollo-client';
-import { HttpLink, InMemoryCache } from 'apollo-client-preset';
+import { DDPLink } from 'meteor/swydo:ddp-apollo';
+import { InMemoryCache } from 'apollo-client-preset';
 import { ApolloLink, concat } from 'apollo-link';
-
-const httpLink = new HttpLink({ uri: '/graphql' });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
@@ -16,7 +15,9 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 });
 
 const client = new ApolloClient({
-  link: concat(authMiddleware, httpLink),
+  link: concat(authMiddleware, new DDPLink({
+    connection: Meteor.connection,
+  })),
   cache: new InMemoryCache(),
 });
 export default client;
