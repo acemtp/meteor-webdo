@@ -64,6 +64,25 @@ import { GiftImage} from '../gift/index';
 //     Gifts.update(this._id, action.go);
 //   },
 // });
+
+export const gifts = {
+  fragments: {
+    GiftSmall: gql`
+    fragment GiftSmall on Gift {
+      _id
+      title
+      detail
+      priority
+      image
+      createdAt
+      owner {
+        _id
+        username
+      }
+    }`,
+  },
+};
+
 const GiftComment = ({ giftComment }) => (
   <div>
     <div>Par {'Author'} <span>{'createdAt'}</span></div>
@@ -80,17 +99,9 @@ const GiftComment = ({ giftComment }) => (
 const GiftGraphQL = graphql(gql`
 query gift($id: String) {
   gift(id: $id) {
-    _id
-    title
-    detail
-    priority
-    image
-    createdAt
-    owner {
-      _id
-      username
-    }
+    ...GiftSmall
   }
+  ${gifts.fragments.GiftSmall}
 }
 `, {
   options(props) { return { variables: { id: props.match.params.id } }; },

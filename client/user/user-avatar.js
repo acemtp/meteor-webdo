@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { graphql, withApollo } from 'react-apollo';
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Link, withRouter } from 'react-router-dom';
 import Remarkable from 'remarkable';
@@ -7,6 +7,7 @@ import RemarkableReactRenderer from 'remarkable-react';
 import AutoForm from 'uniforms-unstyled/AutoForm';
 
 import { SmallGift } from '../gift';
+import { gifts } from '../gift/show';
 import { profile } from '../../collections';
 
 const md = new Remarkable();
@@ -127,33 +128,39 @@ class UserComponent extends Component {
   }
 }
 
-const UserGraphQL = graphql(gql`
+const UserGraphQL = gql`
 query userGifts($userId: String) {
   user(id: $userId) {
     username
     profile {
+      avatar
       description
       like
       dislike
     }
     gifts {
-      _id
-      title
-      detail
-      priority
-      image
-      owner {
-        username
-      }
+      ...GiftSmall
     }
   }
 }
-`, {
-  options(props) { console.log('UserGraphQL', { props }); return { variables: { userId: props.match.params.id } }; },
-  props({ data }) { const { user, loading } = data; console.log('props', { loading, user }); return { user, loading }; },
-});
+${gifts.fragments.GiftSmall}
+`;
+// , {
+//   options(props) { console.log('UserGraphQL', { props }); return { variables: { userId: props.match.params.id } }; },
+//   props({ data }) { const { user, loading } = data; console.log('props', { loading, user }); return { user, loading }; },
+// });
 
-export const User = withApollo(withRouter(UserGraphQL(UserComponent)));
+// export const User = withApollo(withRouter(UserGraphQL(UserComponent)));
+export const User = withRouter(({ match: { params: { id }} }) => (
+  <Query query={UserGraphQL} variables={{ userId: id }}>
+    {({ loading, error, data }) => {
+      if (error) return <div>{error.toString()}</div>;
+      if (loading) return <div>Loading...</div>;
+      console.log('Query user', { user: data.user });
+      return <UserComponent user={data.user} />;
+    }}
+  </Query>
+));
 
 export const UserUpdate = () => (
   <AutoForm schema={profile} onSubmit={doc => console.log('TODO save doc', doc)} model={Meteor.user()} />
