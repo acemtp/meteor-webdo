@@ -7,7 +7,6 @@ import { Accounts, STATES } from 'meteor/std:accounts-ui';
 import { Home } from '../home';
 import { NavBar } from '../navbar/navbar';
 import { Gift } from '../gift';
-console.log('gift ', Gift)
 // import styles from '../webdo.scss';
 // Template.masterLayout.onCreated(function () {
 //   this.autorun(() => {
@@ -32,10 +31,10 @@ const LayoutLoggedOut = () => (
 const LayoutLoggedInContainer = props => (
   <Switch>
     <Route path="/" exact component={Home} />
-    <Route path="/users" exact component={() => <Users {...props} />} />
-    <Route path="/user/update" component={() => <UserUpdate />} />
-    <Route path="/user/:id" component={data => <User user={Meteor.users.findOne(data.match.params.id)} />} />
-    <Route path="/gift/:id" component={Gift} />
+    <Route path="/users" exact render={() => <Users {...props} />} />
+    <Route path="/user/update" render={() => <UserUpdate />} />
+    <Route path="/user/:id/:archived?" render={data => (console.log({data }),<User userId={data.match.params.id} archived={!!data.match.params.archived}/>)} />
+    <Route path="/gift/:id" render={data => <Gift giftId={data.match.params.id} />} />
     <Redirect to="/" />
   </Switch>
 );

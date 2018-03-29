@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { getAction, doAction } from '/imports/client/lib/action';
 
 // Template.giftAction.helpers({
 //   ownerIs(currentUser) {
@@ -45,28 +44,28 @@ import React, { Component } from 'react';
 //   else
 //     i.lock.mdi-action-lock-open
 
-export class GiftActions extends Component {
-  render() {
-    const { archived, lockerId, locker, buyerId, buyer } = this.props;
-    return (
-      <div>
-      { this.isEditableBy
-      ? (<span>
-        <a className="button edit" href={`pathFor 'gift.update'`}>
-          <i>Edit</i>
-        </a>
-        <button className={archived ? 'unarchive' : 'archive'}>
-          <i>{archived ? 'D&eacute;-archiver' : 'Archiver'}</i>
-        </button></span>
-      ) : (<span>
-        <button className="lock">
-          <i>{lockerId ? `par ${locker.username}` : 'Réserver'}</i>
-        </button>
-        <button className="buy">
-          <i>{buyerId ? `par ${buyer.username}` : 'Réserver'}</i>
-        </button></span>
+const GiftActions = ({ archived, lockerId, locker, buyerId, buyer }) => (
+  <div>
+    {this.isEditableBy
+      ? (
+        <span>
+          <a className="button edit" href={`pathFor 'gift.update'`}>
+            <i>Edit</i>
+          </a>
+          <button className={archived ? 'unarchive' : 'archive'}>
+            <i>{archived ? 'D&eacute;-archiver' : 'Archiver'}</i>
+          </button>
+        </span>
+      ) : (
+        <span>
+          <button className="lock">
+            <i>{lockerId ? `par ${locker.username}` : 'Réserver'}</i>
+          </button>
+          <button className="buy">
+            <i>{buyerId ? `par ${buyer.username}` : 'Réserver'}</i>
+          </button>
+        </span>
       ) }
-      </div>
-    );
-  }
-}
+  </div>
+);
+export default GiftActions;

@@ -42,13 +42,17 @@ const Query = {
     if (!context.userId) throw new Error('Unknown User (not logged in)');
     return Gifts.find(
       { archived: false, ownerId: { $ne: Meteor.userId() } },
-      { sort: { createdAt: -1 }, limit: 10 }).map(g => Object.assign({ detail: ''}, g));
+      { sort: { createdAt: -1 }, limit: 10 },
+    ).map(g => Object.assign({ detail: ''}, g));
   },
 };
 
 const User = {
-  gifts(parent) {
-    return Gifts.find({ ownerId: parent._id });
+  gifts(root, { archived }, { userId }) {
+    const selector = { ownerId: root._id, archived };
+
+    if (root._id === userId) selector.suggested = false;
+    return Gifts.find(selector, { sort: { createdAt: -1 } });
   },
 };
 

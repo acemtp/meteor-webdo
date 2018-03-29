@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Remarkable from 'remarkable';
 import RemarkableReactRenderer from 'remarkable-react';
 import AutoForm from 'uniforms-unstyled/AutoForm';
 
 import { SmallGift } from '../gift';
-import { gifts } from '../gift/show';
+import { gift } from '../gift/show';
 import { profile } from '../../collections';
 
 const md = new Remarkable();
@@ -19,53 +19,46 @@ function userImage(user) {
   return imageUrl.indexOf('googleusercontent') === -1 ? `http://res.cloudinary.com/webdo/image/fetch/w_400,h_400,c_scale,c_fill,f_auto/${imageUrl}` : imageUrl;
 }
 
-export class Img extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      src: this.props.src,
-    };
-  }
-  errorHandler() {
-    if (this.state.src === this.props.fallback) return;
-    this.setState({ src: this.props.fallback });
-  }
-  render() {
-    return (<img src={this.state.src} alt={this.props.alt} onError={this.errorHandler.bind(this)} />);
-  }
-}
 
-export class UserPicture extends Component {
-  render() {
-    return (
-      <Img src={userImage(this.props.user)} alt={this.props.user.username} fallback='/photo/anonymous.gif' />
-    );
-  }
-}
+// export class Img extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       src: this.props.src,
+//     };
+//   }
+//   errorHandler() {
+//     if (this.state.src === this.props.fallback) return;
+//     this.setState({ src: this.props.fallback });
+//   }
+//   render() {
+//     return (<img src={this.state.src} alt={this.props.alt} onError={() => this.errorHandler()} />);
+//   }
+// }
 
+const errorHandler = ({ target }) => {
+  const { fallback } = target.dataset;
+  if (!fallback || target.src === fallback) return;
+  target.setAttribute('src', fallback);
+};
 
-export class UserAvatar extends Component {
-  render() {
-    return (
-      <Link className="user-small" to={this.props.user.href}>
-        <div className="user-small-Image">
-          <UserPicture user={this.props.user} />
-        </div>
-        <div className="user-small-title">{this.props.user.username}</div>
-      </Link>
-    );
-  }
-}
+export const Img = ({ src, alt, fallback }) => (<img src={src} alt={alt} onError={errorHandler} data-fallback={fallback} />);
 
-export class Users extends Component {
-  render() {
-    return (
-      this.props.usersLoading ? <div>loading ...</div> :
-      <div className=".user-list">{this.props.users.map(user => <UserAvatar key={user._id} user={Object.assign(user, { href: `/user/${user._id}` })} />)}</div>
-    );
-  }
-}
+export const UserPicture = ({ user }) => <Img src={userImage(user)} alt={user.username} fallback="/photo/anonymous.gif" />;
 
+export const UserAvatar = ({ user }) => (
+  <Link className="user-small" to={user.href}>
+    <div className="user-small-Image">
+      <UserPicture user={user} />
+    </div>
+    <div className="user-small-title">{user.username}</div>
+  </Link>
+);
+
+export const Users = ({ usersLoading, users }) => (
+  usersLoading ? <div>loading ...</div> :
+  <div className=".user-list">{users.map(user => <UserAvatar key={user._id} user={Object.assign(user, { href: `/user/${user._id}` })} />)}</div>
+);
 
 // export const Users = withTracker(() => {
 //   const handle = subs.subscribe('users');
@@ -112,6 +105,7 @@ class UserComponent extends Component {
           </div>
         </div>
         <div className="gift-list">
+          {this.props.archived && (<h2>Cadeaux archiver</h2>)}
           {this.props.loading
             ? <div>Loading...</div>
             : this.props.user.gifts.map(gift => <SmallGift key={gift._id} gift={gift} />)
@@ -119,8 +113,8 @@ class UserComponent extends Component {
         </div>
         <div>
           {this.props.archived
-          ? <a href={`Router.path('user', this.props.user)`}>Voir les cadeaux</a>
-          : <a href={`Router.path('user', this.props.user, { query: { archived: 1 } })`}>Voir les cadeaux archiv&eacute;s</a>
+          ? <Link to={`/user/${this.props.user._id}`}>Voir les cadeaux</Link>
+          : <Link to={`/user/${this.props.user._id}/archived`}>Voir les cadeaux archiv&eacute;s</Link>
           }
         </div>
       </div>
@@ -129,8 +123,9 @@ class UserComponent extends Component {
 }
 
 const UserGraphQL = gql`
-query userGifts($userId: String) {
+query userGifts($userId: String, $archived: Boolean) {
   user(id: $userId) {
+    _id
     username
     profile {
       avatar
@@ -138,29 +133,24 @@ query userGifts($userId: String) {
       like
       dislike
     }
-    gifts {
+    gifts(archived: $archived) {
       ...GiftSmall
     }
   }
 }
-${gifts.fragments.GiftSmall}
+${gift.fragments.GiftSmall}
 `;
-// , {
-//   options(props) { console.log('UserGraphQL', { props }); return { variables: { userId: props.match.params.id } }; },
-//   props({ data }) { const { user, loading } = data; console.log('props', { loading, user }); return { user, loading }; },
-// });
 
-// export const User = withApollo(withRouter(UserGraphQL(UserComponent)));
-export const User = withRouter(({ match: { params: { id }} }) => (
-  <Query query={UserGraphQL} variables={{ userId: id }}>
+export const User = ({ userId, archived }) => (
+  <Query query={UserGraphQL} variables={{ userId, archived: !!archived }}>
     {({ loading, error, data }) => {
       if (error) return <div>{error.toString()}</div>;
       if (loading) return <div>Loading...</div>;
-      console.log('Query user', { user: data.user });
-      return <UserComponent user={data.user} />;
+
+     return <UserComponent user={data.user} archived={archived} />;
     }}
   </Query>
-));
+);
 
 export const UserUpdate = () => (
   <AutoForm schema={profile} onSubmit={doc => console.log('TODO save doc', doc)} model={Meteor.user()} />

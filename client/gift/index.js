@@ -7,19 +7,18 @@ import { Gift } from './show';
 
 export { Gift };
 export const GiftImage = ({ image, title }) => (
-  image ? 
-    (
-      <Img
+  image ? (
+    <Img
       src={`http://res.cloudinary.com/webdo/image/fetch/w_400,h_400,c_scale,c_fill,f_auto/${image}`}
       alt={title}
       fallback="/photo/gift-default.png"
     />
-    ) : (
-      <Img
+  ) : (
+    <Img
       src="/photo/gift-default.png"
       alt={title}
     />
-    )
+  )
 );
 
 GiftImage.propTypes = {

@@ -4,7 +4,7 @@ type User {
  username: String
  emails: [Email]
  profile: UserProfile
- gifts: [Gift] # TODO: add parameter to get archived gifts
+ gifts(archived: Boolean): [Gift] # TODO: add parameter to get archived gifts
 }
 # Defines a user profile type and its fields
 type UserProfile {
