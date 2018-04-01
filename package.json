@@ -21,9 +21,9 @@
     "graphql-tools": "^2.23.1",
     "meteor-node-stubs": "^0.3.3",
     "prop-types": "^15.6.1",
-    "react": "^16.3.0-rc.0",
+    "react": "^16.3.0",
     "react-apollo": "^3.0.0-alpha.0",
-    "react-dom": "^16.3.0-rc.0",
+    "react-dom": "^16.3.0",
     "react-markdown": "^3.3.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
@@ -34,9 +34,9 @@
     "uniforms-unstyled": "^1.23.2"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^3.3.15",
-    "@storybook/addon-links": "^3.3.15",
-    "@storybook/react": "^3.3.15",
+    "@storybook/addon-actions": "^3.4.0",
+    "@storybook/addon-links": "^3.4.0",
+    "@storybook/react": "^3.4.0",
     "babel-eslint": "^8.2.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
@@ -46,12 +46,12 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-import-resolver-meteor": "^0.4.0",
-    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "node-sass": "^4.8.3",
     "sass-loader": "^6.0.7",
-    "webpack": "^4.3.0"
+    "webpack": "^4.4.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

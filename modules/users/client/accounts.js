@@ -17,6 +17,7 @@ T9n.setLanguage('fr');
 Accounts.ui.config({
   minimumPasswordLength: 2,
   passwordSignupFields: 'USERNAME_ONLY',
+  homeRoutePath: '/home',
 });
 
 // AccountsTemplates.configure({

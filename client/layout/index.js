@@ -1,9 +1,11 @@
 import React from 'react';
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-import { subs } from '../../collections';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import { Query } from 'react-apollo';
+
+import { Accounts } from 'meteor/std:accounts-ui';
+
 import { Users, User, UserUpdate } from '../user/user-avatar';
-import { withTracker } from 'meteor/react-meteor-data';
-import { Accounts, STATES } from 'meteor/std:accounts-ui';
+import { query } from '../../modules/users/client/me';
 import { Home } from '../home';
 import { NavBar } from '../navbar/navbar';
 import { Gift } from '../gift';
@@ -21,41 +23,66 @@ export const Loading = () => (
   </div>
 );
 
-const LayoutLoggedOut = () => (
-  <div>
-    <Route path="/" component={Accounts.ui.LoginForm} />
-    <Route path="/signUp" component={Accounts.ui.LoginForm} formState={STATES.SIGN_UP} />
-  </div>
-);
 
 const LayoutLoggedInContainer = props => (
   <Switch>
-    <Route path="/" exact component={Home} />
+    <Route path="/home" component={Home} />
     <Route path="/users" exact render={() => <Users {...props} />} />
     <Route path="/user/update" render={() => <UserUpdate />} />
-    <Route path="/user/:id/:archived?" render={data => (console.log({data }),<User userId={data.match.params.id} archived={!!data.match.params.archived}/>)} />
+    <Route path="/user/:id/:archived?" render={data => (console.log({data }), <User userId={data.match.params.id} archived={!!data.match.params.archived}/>)} />
     <Route path="/gift/:id" render={data => <Gift giftId={data.match.params.id} />} />
-    <Redirect to="/" />
+    <Redirect to="/home" />
   </Switch>
 );
 
-const LayoutLoggedIn = withRouter(withTracker(() => {
-  const handle = subs.subscribe('users');
-  return {
-    currentUser: Meteor.user(),
-    usersLoading: !handle.ready(),
-    users: Meteor.users.find().fetch(),
-  };
-})(LayoutLoggedInContainer));
-
-const LayoutContainer = ({ currentUser }) => (
-  <div>
-    <NavBar currentUser={currentUser} />
-    {currentUser
-    ? <LayoutLoggedIn />
-    : <LayoutLoggedOut />
-    }
-  </div>
+const EnsureLoggedInContainer = () => (
+  <Query query={query}>
+    {({ loading, error }) => {
+      if (loading) return <h1>loading...</h1>;
+      if (error) {
+        const { graphQLErrors } = error;
+        if (graphQLErrors.find(err => err.message === 'Unknown User (not logged in)')) {
+          console.log('err', { error });
+          return <Redirect to="/login" />;
+        }
+      }
+      return <LayoutLoggedInContainer />;
+    }}
+  </Query>
 );
-const App = withRouter(withTracker(props => Object.assign({ currentUser: Meteor.user() }, props))(LayoutContainer));
+
+
+// TODO: namage login logout and see if they are an other way to do it
+// class RootApp extends React.Component {
+//   componentDidUpdate(prevProps) {
+//     const { dispatch, redirectUrl } = this.props;
+//     const isLoggingOut = prevProps.isLoggedIn && !this.props.isLoggedIn;
+//     const isLoggingIn = !prevProps.isLoggedIn && this.props.isLoggedIn;
+
+//     if (isLoggingIn) {
+//       dispatch(navigateTo(redirectUrl));
+//     } else if (isLoggingOut) {
+//       // do any kind of cleanup or post-logout redirection here
+//     }
+//   }
+
+//   render() {
+//     return this.props.children;
+//   }
+// }
+
+const App = () => (
+  <React.Fragment>
+    <NavBar />
+    <Route path="/">
+      <div>
+        <Switch>
+          <Route path="/login" component={Accounts.ui.LoginForm} />
+          <Route component={EnsureLoggedInContainer} />
+        </Switch>
+      </div>
+    </Route>
+  </React.Fragment>
+);
+
 export { App };
