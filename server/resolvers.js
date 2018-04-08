@@ -3,7 +3,7 @@ import { Resolvers as Auth } from 'meteor/nicolaslopezj:apollo-accounts';
 import { Meteor } from 'meteor/meteor';
 import { Gifts } from '../collections';
 
-const me = (root, args, context) => {
+const currentUser = (root, args, context) => {
   // if the user is not logged in throw an error
   if (!context.userId) throw new Error('Unknown User (not logged in)');
   // find the user using the userId from the context
@@ -11,7 +11,7 @@ const me = (root, args, context) => {
 };
 
 const Query = {
-  me,
+  currentUser,
   user(route, { id }, context) {
     if (!context.userId) throw new Error('Unknown User (not logged in)');
     return Meteor.users.findOne(id);

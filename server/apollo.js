@@ -8,7 +8,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import resolvers from './resolvers';
 import Mutation from './mutation';
 
-import User from './User.graphql';
+import User from '../modules/users/server/User.graphql';
 import Query from './Query.graphql';
 import Gift from './Gift.graphql';
 import Comment from './Comment.graphql';

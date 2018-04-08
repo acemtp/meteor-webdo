@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const query = gql`
-query me {
-  me {
+query currentUser {
+  currentUser {
     _id
     username
   }

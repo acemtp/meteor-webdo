@@ -1,6 +1,6 @@
 # Main type (the root of all queries)
 type Query {
- me:User
+ currentUser: User
  user(id: String): User
  gift(id: String!): Gift
  gifts(userId: String, filter: GiftFilter = ownerId, sortBy: GiftSort = createdAt, limit: Int = 1000): [Gift]

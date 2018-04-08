@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Query } from 'react-apollo';
 
-import { query } from '../../modules/users/client/me';
+import { query } from '../../modules/users/client/currentUser';
 
 const NavBar = () => (
   <Query query={query}>
@@ -10,12 +10,12 @@ const NavBar = () => (
       <header className="navigation" role="banner">
         <div className="navigation-wrapper">
           <Link className="logo" to="/home">Webdo</Link>
-          {data && data.me ?
+          {data && data.currentUser ?
             <nav>
               <ul>
-                <li className="nav-link"><Link to="/users"><i className="users"></i></Link></li>
-                <li className="nav-link"><Link to={`/user/${data.me._id}`}><i className="user"></i></Link></li>
-                <li className="nav-link"><Link to={`/user/${data.me._id}/gift/create`}><i className="new-gift"></i></Link></li>
+                <li className="nav-link"><Link to="/users"><i className="users" /></Link></li>
+                <li className="nav-link"><Link to={`/user/${data.currentUser._id}`}><i className="user" /></Link></li>
+                <li className="nav-link"><Link to={`/user/${data.currentUser._id}/gift/create`}><i className="new-gift" /></Link></li>
               </ul>
             </nav>
           : ''}
