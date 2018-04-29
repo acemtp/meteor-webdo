@@ -4,8 +4,9 @@ import { Query } from 'react-apollo';
 
 import { Accounts } from 'meteor/std:accounts-ui';
 
-import { Users, User, UserUpdate } from '../user/user-avatar';
+import { User, UserUpdate } from '../user/user-avatar';
 import { query } from '../../modules/users/client/currentUser';
+import Friends from '../../modules/users/client/list';
 import { Home } from '../home';
 import { NavBar } from '../navbar/navbar';
 import { Gift } from '../gift';
@@ -24,10 +25,10 @@ export const Loading = () => (
 );
 
 
-const LayoutLoggedInContainer = props => (
+const LayoutLoggedInContainer = () => (
   <Switch>
     <Route path="/home" component={Home} />
-    <Route path="/users" exact render={() => <Users {...props} />} />
+    <Route path="/users" exact render={() => <Friends />} />
     <Route path="/user/update" render={() => <UserUpdate />} />
     <Route path="/user/:id/:archived?" render={data => (console.log({data }), <User userId={data.match.params.id} archived={!!data.match.params.archived}/>)} />
     <Route path="/gift/:id" render={data => <Gift giftId={data.match.params.id} />} />
@@ -52,7 +53,7 @@ const EnsureLoggedInContainer = () => (
 );
 
 
-// TODO: namage login logout and see if they are an other way to do it
+// TODO: manage login logout and see if they are an other way to do it
 // class RootApp extends React.Component {
 //   componentDidUpdate(prevProps) {
 //     const { dispatch, redirectUrl } = this.props;

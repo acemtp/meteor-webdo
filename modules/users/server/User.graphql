@@ -12,7 +12,9 @@ type UserProfile {
  birthday: Date
  description: String
  dislike: String
- like: String 
+ like: String
+ friends: [String]
+ userFriends: [User]
 }
 # defines Email type and its fields
 type Email {

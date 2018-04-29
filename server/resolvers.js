@@ -14,6 +14,9 @@ const Query = {
   currentUser,
   user(route, { id }, context) {
     if (!context.userId) throw new Error('Unknown User (not logged in)');
+    // const $in = [id, context.userId];
+    // if (Meteor.users.find({_id: { $in }, 'profile.friends': { $in } }) !== 2) throw new Error('No mutual friendship');
+
     return Meteor.users.findOne(id);
   },
   gift(root, { id }, context) {
@@ -53,6 +56,12 @@ const User = {
 
     if (root._id === userId) selector.suggested = false;
     return Gifts.find(selector, { sort: { createdAt: -1 } });
+  },
+  profile: {
+    userFriends(root) {
+console.log('look for friends', { root, rp: root.profile })
+      return Meteor.users.find({ _id: { $in: root.profile.friends }}, { sort: { createdAt: -1 } });
+    },
   },
 };
 

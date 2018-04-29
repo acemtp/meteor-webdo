@@ -47,17 +47,12 @@ export const Img = ({ src, alt, fallback }) => (<img src={src} alt={alt} onError
 export const UserPicture = ({ user }) => <Img src={userImage(user)} alt={user.username} fallback="/photo/anonymous.gif" />;
 
 export const UserAvatar = ({ user }) => (
-  <Link className="user-small" to={user.href}>
+  <Link className="user-small" to={`/users/${user._id}`}>
     <div className="user-small-Image">
       <UserPicture user={user} />
     </div>
     <div className="user-small-title">{user.username}</div>
   </Link>
-);
-
-export const Users = ({ usersLoading, users }) => (
-  usersLoading ? <div>loading ...</div> :
-  <div className=".user-list">{users.map(user => <UserAvatar key={user._id} user={Object.assign(user, { href: `/user/${user._id}` })} />)}</div>
 );
 
 // export const Users = withTracker(() => {
