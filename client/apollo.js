@@ -19,5 +19,6 @@ const client = new ApolloClient({
     connection: Meteor.connection,
   })),
   cache: new InMemoryCache(),
+  connectToDevTools: true,
 });
 export default client;

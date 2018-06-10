@@ -23,7 +23,7 @@
 //   },
 // });
 
-// TODO rewrite in react
+// TODO: rewrite in react
 // template(name="giftFieldset")
 // fieldset
 //   legend Information du cadeau

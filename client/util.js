@@ -1,4 +1,4 @@
-import { Gifts } from '../collections';
+// import { Gifts } from '../collections';
 
 // Template.home.events({
 //   'click a.logout'() {

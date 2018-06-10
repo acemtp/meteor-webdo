@@ -29,7 +29,7 @@ Accounts.ui.config({
 //   sendVerificationEmail: false,
 //   focusFirstInput: true,
 //   homeRoutePath: 'home',
-//   onLogoutHook() { /* TODO make react router go to '/' // Router.go('/'); */ },
+//   onLogoutHook() { /* TODO: make react router go to '/' // Router.go('/'); */ },
 // });
 
 // // remove email fields

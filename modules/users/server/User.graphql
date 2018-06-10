@@ -16,6 +16,14 @@ type UserProfile {
  friends: [String]
  userFriends: [User]
 }
+
+input UserProfileInput {
+ avatar: String
+ birthday: Date
+ description: String
+ dislike: String
+ like: String
+}
 # defines Email type and its fields
 type Email {
  address: String

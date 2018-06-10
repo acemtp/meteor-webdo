@@ -4,11 +4,13 @@ import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 import Remarkable from 'remarkable';
 import RemarkableReactRenderer from 'remarkable-react';
-import AutoForm from 'uniforms-unstyled/AutoForm';
+import AutoForm from 'uniforms-unstyled/AutoForm'; // replace with react-final-form?
+import SubmitField from 'uniforms-unstyled/SubmitField'; // replace with react-final-form?
 
 import { SmallGift } from '../gift';
 import { gift } from '../gift/show';
 import { profile } from '../../collections';
+import { queryProfile } from '../../modules/users/client/currentUser';
 
 const md = new Remarkable();
 md.renderer = new RemarkableReactRenderer();
@@ -147,6 +149,31 @@ export const User = ({ userId, archived }) => (
   </Query>
 );
 
+const userProfileMutation = gql`
+mutation updateUserProfile($userProfile: UserProfileInput!) {
+  updateUserProfile(userProfile: $userProfile) {
+    id
+    profile
+  }
+}
+`;
+
+const MySubmitField = props => <SubmitField value="Mettre à jour mon profile" {...props} />; // It's <input type="submit" />;
+
 export const UserUpdate = () => (
-  <AutoForm schema={profile} onSubmit={doc => console.log('TODO save doc', doc)} model={Meteor.user()} />
+  <Query query={queryProfile}>
+    {({ client, data, loading }) => (
+      !loading && <AutoForm
+        schema={profile}
+        onSubmit={async (user) => {
+          const { profile: userProfile } = profile.clean(user);
+          profile.validate({ profile: userProfile });
+          console.log('call mutation', { client, userProfile });
+          await client.mutate({ mutation: userProfileMutation, variables: { userProfile } });
+        }}
+        model={profile.clean(data.currentUser)}
+        submitField={MySubmitField}
+      />
+    )}
+  </Query>
 );

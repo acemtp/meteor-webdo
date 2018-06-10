@@ -1,4 +1,4 @@
-# TODO
+# TODO:
 
 1. Remplacer les template Blaze par react
 2. Remplacer autoform par un equivalant react

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import React from 'react';
-import { withApollo, Query } from 'react-apollo';
-import { withRouter, Link } from 'react-router-dom';
+import { Query } from 'react-apollo';
+import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
 import GiftActions from './action';
@@ -100,6 +100,7 @@ const GiftGraphQL = gql`
 query gift($giftId: String) {
   gift(id: $giftId) {
     ...GiftSmall
+    canEdit
   }
 }
 ${gift.fragments.GiftSmall}
@@ -107,7 +108,7 @@ ${gift.fragments.GiftSmall}
 
 const commentChange = event => console.log('commentChange', event);
 
-// TODO in React
+// TODO: in React
 // template(name="giftShow")
 export const Gift = ({ giftId }) => (
   <Query query={GiftGraphQL} variables={{giftId}}>

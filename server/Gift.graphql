@@ -8,6 +8,7 @@ type Gift {
   priority: Int
   ownerId: String
   owner: User
+  isOwner: Boolean
   createdAt: Date
   lockerId: String
   locker: User
@@ -15,5 +16,6 @@ type Gift {
   buyer: User
   archived: Boolean
   suggested: Boolean
+  canEdit: Boolean
   comments: [Comment!]
 }

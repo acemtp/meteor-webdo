@@ -30,6 +30,7 @@ const LayoutLoggedInContainer = () => (
     <Route path="/home" component={Home} />
     <Route path="/users" exact render={() => <Friends />} />
     <Route path="/user/update" render={() => <UserUpdate />} />
+    <Route path="/user/:id/gift/create" render={() => <GiftCreate />} />
     <Route path="/user/:id/:archived?" render={data => (console.log({data }), <User userId={data.match.params.id} archived={!!data.match.params.archived}/>)} />
     <Route path="/gift/:id" render={data => <Gift giftId={data.match.params.id} />} />
     <Redirect to="/home" />

@@ -44,28 +44,30 @@ import React, { Component } from 'react';
 //   else
 //     i.lock.mdi-action-lock-open
 
-const GiftActions = ({ archived, lockerId, locker, buyerId, buyer }) => (
+const GiftActions = ({ canEdit, isOwner, archived, lockerId, locker, buyerId, buyer }) => (
   <div>
-    {this.isEditableBy
-      ? (
-        <span>
+    <span>
+      {canEdit && (
+        <React.Fragment>
           <a className="button edit" href={`pathFor 'gift.update'`}>
             <i>Edit</i>
           </a>
           <button className={archived ? 'unarchive' : 'archive'}>
             <i>{archived ? 'D&eacute;-archiver' : 'Archiver'}</i>
           </button>
-        </span>
-      ) : (
-        <span>
+        </React.Fragment>
+      )}
+      {!isOwner && (
+        <React.Fragment>
           <button className="lock">
             <i>{lockerId ? `par ${locker.username}` : 'Réserver'}</i>
           </button>
           <button className="buy">
             <i>{buyerId ? `par ${buyer.username}` : 'Réserver'}</i>
           </button>
-        </span>
-      ) }
+        </React.Fragment>
+      )}
+    </span>
   </div>
 );
 export default GiftActions;

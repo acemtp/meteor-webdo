@@ -14,4 +14,18 @@ query currentUser {
 }
 `;
 
+export const queryProfile = gql`
+query currentUser {
+  currentUser {
+    _id
+    username
+    profile {
+      like
+      dislike
+      avatar
+      description
+    }
+  }
+}
+`;
 export const CurrentUser = ({ children }) => (<Query query={query}>{children}</Query>);
