@@ -1,4 +1,9 @@
+import React from 'react';
+import AutoField from 'uniforms-unstyled/AutoField';
+import AutoForm from 'uniforms-unstyled/AutoForm';
+import SubmitField from 'uniforms-unstyled/SubmitField'; // replace with react-final-form?
 
+import { Gifts } from '../../collections';
 // Template.giftFieldset.helpers({
 //   giftOwnerId() {
 //     return Meteor.userId();
@@ -45,6 +50,39 @@
 //   +afQuickField name='ownerId' options=friends value=giftOwnerId
 //   +afQuickField name='priority' options=priorities
 //   +afQuickField name='detail' type='textarea' rows=10
+const GiftFieldSet = () => (
+  // TODO: add class has-error on error
+  <fieldset>
+    <div className="form-group">
+      <label className="control-label" htmlFor="gift-link">Link</label>
+      <AutoField id="gift-link" name="link" />
+      <span className="help-block">Link</span>
+
+    </div>
+  </fieldset>
+);
+
+export const GiftCreate = () => (
+  // TODO: add class has-error on error
+  <AutoForm
+    schema={Gifts.simpleSchema()}
+    onSubmit={async (user) => {
+      return alert('TODO: submit new gift');
+      // await client.mutate({ mutation: userProfileMutation, variables: { userProfile } });
+    }}
+    SubmitFiled={props => <SubmitField value="Créé" {...props} />}
+  >
+    <GiftFieldSet />
+    <SubmitField className="" />
+  </AutoForm>
+);
+
+export const GiftEdit = () => (
+  // TODO: add class has-error on error
+  <AutoForm SubmitFiled={props => <SubmitField value="Éditer" {...props} />}>
+    <GiftFieldSet />
+  </AutoForm>
+);
 
 // template(name="giftCreate")
 // +autoForm collection="Gifts" id="insertGiftForm" type="insert"

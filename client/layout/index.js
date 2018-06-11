@@ -9,7 +9,7 @@ import { query } from '../../modules/users/client/currentUser';
 import Friends from '../../modules/users/client/list';
 import { Home } from '../home';
 import { NavBar } from '../navbar/navbar';
-import { Gift } from '../gift';
+import { Gift, GiftCreate } from '../gift';
 // import styles from '../webdo.scss';
 // Template.masterLayout.onCreated(function () {
 //   this.autorun(() => {

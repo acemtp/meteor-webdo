@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 
 import { Img } from '../user/user-avatar';
 import { Gift } from './show';
+import { GiftCreate } from './form';
 
-export { Gift };
+export { Gift, GiftCreate };
 export const GiftImage = ({ image, title }) => (
   image ? (
     <Img
