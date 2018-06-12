@@ -65,12 +65,10 @@ const User = {
     const selector = { ownerId: root._id, archived };
 
     if (root._id === userId) selector.suggested = false;
-    return Gifts.find(selector, { sort: { createdAt: -1 } });
+    return Gifts.find(selector, { sort: { createdAt: -1 } }).fetch();
   },
-  profile: {
-    userFriends(root) {
-      return Meteor.users.find({ _id: { $in: root.profile.friends }}, { sort: { createdAt: -1 } });
-    },
+  userFriends(root) {console.log('userFriends *** *** ***', { root });
+    return Meteor.users.find({ _id: { $in: root.profile.friends }}, { sort: { createdAt: -1 } }).fetch();
   },
 };
 

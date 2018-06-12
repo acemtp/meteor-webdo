@@ -10,6 +10,10 @@ query currentUser {
     profile {
       friends
     }
+    userFriends {
+      _id
+      username
+    }
   }
 }
 `;

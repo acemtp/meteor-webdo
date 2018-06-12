@@ -5,6 +5,7 @@ type User {
  emails: [Email]
  profile: UserProfile
  gifts(archived: Boolean): [Gift] # TODO: add parameter to get archived gifts
+ userFriends: [User]
 }
 # Defines a user profile type and its fields
 type UserProfile {
@@ -14,7 +15,6 @@ type UserProfile {
  dislike: String
  like: String
  friends: [String]
- userFriends: [User]
 }
 
 input UserProfileInput {

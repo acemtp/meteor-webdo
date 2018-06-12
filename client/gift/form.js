@@ -2,8 +2,11 @@ import React from 'react';
 import AutoField from 'uniforms-unstyled/AutoField';
 import AutoForm from 'uniforms-unstyled/AutoForm';
 import SubmitField from 'uniforms-unstyled/SubmitField'; // replace with react-final-form?
+import LongTextField from 'uniforms-unstyled/LongTextField'; // replace with react-final-form?
 
 import { Gifts } from '../../collections';
+import { CurrentUser } from '/modules/users/client/currentUser';
+
 // Template.giftFieldset.helpers({
 //   giftOwnerId() {
 //     return Meteor.userId();
@@ -50,16 +53,36 @@ import { Gifts } from '../../collections';
 //   +afQuickField name='ownerId' options=friends value=giftOwnerId
 //   +afQuickField name='priority' options=priorities
 //   +afQuickField name='detail' type='textarea' rows=10
-const GiftFieldSet = () => (
-  // TODO: add class has-error on error
-  <fieldset>
-    <div className="form-group">
-      <label className="control-label" htmlFor="gift-link">Link</label>
-      <AutoField id="gift-link" name="link" />
-      <span className="help-block">Link</span>
 
-    </div>
-  </fieldset>
+const GiftFieldSet = () => (
+  <CurrentUser>
+    {({ data: { currentUser }, loading }) => (console.log({ currentUser, loading }),
+    // TODO: add class has-error on error
+    !loading && <fieldset>
+      <div className="form-group">
+        <label className="control-label" htmlFor="gift-link">Link</label>
+        <AutoField id="gift-link" name="link" />
+        <span className="help-block">Link</span>
+
+        <AutoField id="gift-title" name="title" />
+        <AutoField id="gift-image" name="image" />
+        <AutoField id="gift-owner-id" name="ownerId" options={(currentUser.userFriends || []).map(user => ({ label: user.username, value: user._id}))} />
+        <AutoField
+          id="gift-priority"
+          name="priority"
+          options={[
+            { label: '5 étoiles - Doit avoir', value: 5 },
+            { label: '4 étoiles - Adorerais avoir', value: 4 },
+            { label: '3 étoiles - Aimerais avoir', value: 3 },
+            { label: "2 étoiles - J'y pense", value: 2 },
+          ]}
+        />
+        <LongTextField id="gift-detail" name="detail" rows="10" />
+
+      </div>
+    </fieldset>
+  )}
+  </CurrentUser>
 );
 
 export const GiftCreate = () => (
@@ -70,17 +93,17 @@ export const GiftCreate = () => (
       return alert('TODO: submit new gift');
       // await client.mutate({ mutation: userProfileMutation, variables: { userProfile } });
     }}
-    SubmitFiled={props => <SubmitField value="Créé" {...props} />}
   >
     <GiftFieldSet />
-    <SubmitField className="" />
+    <SubmitField value="Créé" />
   </AutoForm>
 );
 
 export const GiftEdit = () => (
   // TODO: add class has-error on error
-  <AutoForm SubmitFiled={props => <SubmitField value="Éditer" {...props} />}>
+  <AutoForm>
     <GiftFieldSet />
+    <SubmitField value="Éditer" />
   </AutoForm>
 );
 
