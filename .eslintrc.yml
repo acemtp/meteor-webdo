@@ -59,4 +59,5 @@
           - Link
         specialLink:
           - to
+    import/no-absolute-path: 0
 
