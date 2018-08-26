@@ -7,9 +7,7 @@ const currentUser = (root, args, context) => {
   // if the user is not logged in throw an error
   if (!context.userId) throw new Error('Unknown User (not logged in)');
   // find the user using the userId from the context
-  const user = Meteor.users.findOne(context.userId);
-  console.log({ user });
-  return user;
+  return Meteor.users.findOne(context.userId);
 };
 
 const Query = {
@@ -67,7 +65,7 @@ const User = {
     if (root._id === userId) selector.suggested = false;
     return Gifts.find(selector, { sort: { createdAt: -1 } }).fetch();
   },
-  userFriends(root) {console.log('userFriends *** *** ***', { root });
+  userFriends(root) {
     return Meteor.users.find({ _id: { $in: root.profile.friends }}, { sort: { createdAt: -1 } }).fetch();
   },
 };
@@ -115,6 +113,42 @@ const Mutation = {
     profile.validate(modifier, { modifier: true });
     Meteor.users.update(context.userId, modifier);
     return Meteor.users.findOne(context.userId);
+  },
+
+  createGift(root, { gift }, context) {
+    console.log('createGift called', { root, gift, context });
+    if (!context.userId) throw new Error('Unknown User (not logged in)');
+
+    const keys = Object.keys(gift);
+    // set default value
+    gift.createdAt = new Date();
+    gift.archived = false;
+    gift.suggested = Meteor.userId() !== gift.ownerId;
+
+    Gifts.simpleSchema().validate(gift);
+    const giftId = Gifts.insert(gift);
+    return Gifts.findOne(giftId);
+  },
+  updateGift(root, { giftId, gift }, context) {
+    console.log('updateGift called', { root, gift, context });
+    if (!context.userId) throw new Error('Unknown User (not logged in)');
+
+    const keys = Object.keys(gift);
+
+    const update = keys.filter(key => gift[key] !== undefined);
+    const remove = keys.filter(key => gift[key] === undefined);
+
+    // It's a good idea to omit empty modifiers.
+    const $set = update.reduce((acc, key) => ({ ...acc, [key]: gift[key] }), {});
+    const $unset = remove.reduce((acc, key) => ({ ...acc, [key]: '' }), {});
+
+    const modifier = {};
+    if (Object.keys($set).length) modifier.$set = $set;
+    if (Object.keys($unset).length) modifier.$unset = $unset;
+
+    Gifts.simpleSchema().validate(modifier, { modifier: true });
+    Gifts.update(giftId, modifier);
+    return Gifts.findOne(context.userId);
   },
 };
 

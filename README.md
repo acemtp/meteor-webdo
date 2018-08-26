@@ -1,6 +1,9 @@
 # TODO:
 
-## TODO: Wip formulaire GiftCreate
+- GiftUpdate
+- Fix gift view action
+- Add gift comment form
+
 
 1. Remplacer les template Blaze par react WIP
 2. Remplacer autoform par un equivalant react WIP uniforms

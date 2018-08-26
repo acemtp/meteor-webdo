@@ -1,3 +1,6 @@
+import { check } from 'meteor/check';
+import { HTTP } from 'meteor/http';
+
 function onStartup() {
   Accounts.onCreateUser((options, user) => {
     const newUser = Object.assign({}, user);

@@ -1,0 +1,10 @@
+#Defines a Gift input type and its attributes
+input GiftInput {
+  # this is atest
+  title: String
+  detail: String
+  link: String
+  image: String
+  priority: Int
+  ownerId: String
+}
