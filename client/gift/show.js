@@ -96,7 +96,7 @@ const GiftComment = ({ giftComment }) => (
 //     +markdown 
 //       {{message}}
 
-const GiftGraphQL = gql`
+export const GiftGraphQL = gql`
 query gift($giftId: String) {
   gift(id: $giftId) {
     ...GiftSmall
@@ -117,6 +117,7 @@ export const Gift = ({ giftId }) => (
     if (loading) return <div>Loading...</div>;
     if (!gift) return <div>gift not found :'(</div>;
     const { _id, title, archived, image, priority, owner, createdAt } = gift;
+    console.log('Gift', { gift });
     return (
       <div className="gift">
         <h1>{title}</h1>

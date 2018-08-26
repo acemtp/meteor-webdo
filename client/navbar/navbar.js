@@ -15,7 +15,7 @@ const NavBar = () => (
               <ul>
                 <li className="nav-link"><Link to="/users"><i className="users" /></Link></li>
                 <li className="nav-link"><Link to={`/user/${data.currentUser._id}`}><i className="user" /></Link></li>
-                <li className="nav-link"><Link to={`/user/${data.currentUser._id}/gift/create`}><i className="new-gift" /></Link></li>
+                <li className="nav-link"><Link to={`/user/gift/create`}><i className="new-gift" /></Link></li>
               </ul>
             </nav>
           : ''}

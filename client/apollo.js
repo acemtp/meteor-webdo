@@ -18,7 +18,9 @@ const client = new ApolloClient({
   link: concat(authMiddleware, new DDPLink({
     connection: Meteor.connection,
   })),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    dataIdFromObject: object => object._id,
+  }),
   connectToDevTools: true,
 });
 export default client;

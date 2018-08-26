@@ -129,7 +129,7 @@ const Mutation = {
     const giftId = Gifts.insert(gift);
     return Gifts.findOne(giftId);
   },
-  updateGift(root, { giftId, gift }, context) {
+  updateGift(root, { _id, gift }, context) {
     console.log('updateGift called', { root, gift, context });
     if (!context.userId) throw new Error('Unknown User (not logged in)');
 
@@ -147,7 +147,7 @@ const Mutation = {
     if (Object.keys($unset).length) modifier.$unset = $unset;
 
     Gifts.simpleSchema().validate(modifier, { modifier: true });
-    Gifts.update(giftId, modifier);
+    Gifts.update(_id, modifier);
     return Gifts.findOne(context.userId);
   },
 };

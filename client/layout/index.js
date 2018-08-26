@@ -9,7 +9,7 @@ import { query } from '../../modules/users/client/currentUser';
 import Friends from '../../modules/users/client/list';
 import { Home } from '../home';
 import { NavBar } from '../navbar/navbar';
-import { Gift, GiftCreate } from '../gift';
+import { Gift, GiftCreate, GiftEdit } from '../gift';
 // import styles from '../webdo.scss';
 // Template.masterLayout.onCreated(function () {
 //   this.autorun(() => {
@@ -30,8 +30,9 @@ const LayoutLoggedInContainer = () => (
     <Route path="/home" component={Home} />
     <Route path="/users" exact render={() => <Friends />} />
     <Route path="/user/update" render={() => <UserUpdate />} />
-    <Route path="/user/:id/gift/create" render={() => <GiftCreate />} />
     <Route path="/user/:id/:archived?" render={data => (console.log({data }), <User userId={data.match.params.id} archived={!!data.match.params.archived}/>)} />
+    <Route path="/gift/create" render={() => <GiftCreate />} />
+    <Route path="/gift/:id/edit" render={data => <GiftEdit giftId={data.match.params.id} />} />
     <Route path="/gift/:id" render={data => <Gift giftId={data.match.params.id} />} />
     <Redirect to="/home" />
   </Switch>

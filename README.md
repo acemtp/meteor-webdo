@@ -3,6 +3,7 @@
 - GiftUpdate
 - Fix gift view action
 - Add gift comment form
+- pb cache (gift edit => show, gift n'est pas a jour, pb id)
 
 
 1. Remplacer les template Blaze par react WIP

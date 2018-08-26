@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 // Template.giftAction.helpers({
 //   ownerIs(currentUser) {
@@ -44,17 +45,13 @@ import React, { Component } from 'react';
 //   else
 //     i.lock.mdi-action-lock-open
 
-const GiftActions = ({ canEdit, isOwner, archived, lockerId, locker, buyerId, buyer }) => (
+const GiftActions = ({ gift: {_id, canEdit, isOwner, archived, lockerId, locker, buyerId, buyer } }) => (console.log('GiftActions', { canEdit, isOwner, archived, lockerId, locker, buyerId, buyer }) ||
   <div>
     <span>
       {canEdit && (
         <React.Fragment>
-          <a className="button edit" href={`pathFor 'gift.update'`}>
-            <i>Edit</i>
-          </a>
-          <button className={archived ? 'unarchive' : 'archive'}>
-            <i>{archived ? 'D&eacute;-archiver' : 'Archiver'}</i>
-          </button>
+        <Link className="button edit" to={`/gift/${_id}/edit`}><i>Edit</i></Link>
+          <button className={archived ? 'unarchive' : 'archive'}><i>{archived ? 'D&eacute;-archiver' : 'Archiver'}</i></button>
         </React.Fragment>
       )}
       {!isOwner && (
