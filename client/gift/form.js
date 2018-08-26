@@ -3,7 +3,6 @@ import { CurrentUser } from '/modules/users/client/currentUser';
 import { ApolloConsumer, Query } from "react-apollo";
 import { Route } from 'react-router-dom';
 
-// for graphql bridge
 import GraphQLBridge from 'uniforms/GraphQLBridge';
 import { buildASTSchema, parse } from 'graphql';
 import GiftInput from '/modules/gifts/GiftInput.graphql';

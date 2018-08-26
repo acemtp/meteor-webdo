@@ -101,6 +101,7 @@ query gift($giftId: String) {
   gift(id: $giftId) {
     ...GiftSmall
     canEdit
+    archived
   }
 }
 ${gift.fragments.GiftSmall}

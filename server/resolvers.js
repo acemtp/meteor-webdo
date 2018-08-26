@@ -127,6 +127,7 @@ const Mutation = {
 
     Gifts.simpleSchema().validate(gift);
     const giftId = Gifts.insert(gift);
+
     return Gifts.findOne(giftId);
   },
   updateGift(root, { _id, gift }, context) {
@@ -148,7 +149,16 @@ const Mutation = {
 
     Gifts.simpleSchema().validate(modifier, { modifier: true });
     Gifts.update(_id, modifier);
-    return Gifts.findOne(context.userId);
+
+    return Gifts.findOne(giftId);
+  },
+  giftArchive(root, { _id }, context) {
+    Gifts.update(_id, { $set: { archived: true } });
+    return Gifts.findOne(_id);
+  },
+  giftUnArchive(root, { _id }, context) {
+    Gifts.update(_id, { $set: { archived: false } });
+    return Gifts.findOne(_id);
   },
 };
 

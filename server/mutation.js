@@ -6,6 +6,8 @@ type Mutation {
  updateUserProfile (userProfile: UserProfileInput): User
  createGift (gift: GiftInput): Gift
  updateGift (_id: ID, gift: GiftInput): Gift
+ giftArchive (_id: ID): Gift
+ giftUnArchive (_id: ID): Gift
 }
 `;
 
