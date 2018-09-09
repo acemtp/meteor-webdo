@@ -102,6 +102,17 @@ query gift($giftId: String) {
     ...GiftSmall
     canEdit
     archived
+    actions
+    lockerId
+    locker {
+      _id
+      username
+    }
+    buyerId
+    buyer {
+      _id
+      username
+    }
   }
 }
 ${gift.fragments.GiftSmall}

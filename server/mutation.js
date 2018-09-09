@@ -8,5 +8,7 @@ type Mutation {
  updateGift (_id: ID, gift: GiftInput): Gift
  giftArchive (_id: ID): Gift
  giftUnArchive (_id: ID): Gift
+ giftLock (_id: ID): Gift
+ giftBuy (_id: ID): Gift
 }
 `;

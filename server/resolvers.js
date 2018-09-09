@@ -66,7 +66,10 @@ const User = {
     return Gifts.find(selector, { sort: { createdAt: -1 } }).fetch();
   },
   userFriends(root) {
-    return Meteor.users.find({ _id: { $in: root.profile.friends }}, { sort: { createdAt: -1 } }).fetch();
+    return Meteor
+      .users
+      .find({ _id: { $in: root.profile.friends }}, { sort: { createdAt: -1 } })
+      .fetch();
   },
 };
 
@@ -88,6 +91,13 @@ const Gift = {
   },
   isOwner(parent, data, { userId }) {
     return parent.ownerId === userId;
+  },
+  actions(parent, data, { userId }) {
+    const isOwner = Gift.isOwner(parent, data, { userId });
+    const actions = isOwner ? ['edit', 'archive'] : ['lock', 'buy'];
+    if (data.suggested) actions.push('edit');
+
+    return actions;
   },
 };
 
@@ -156,12 +166,53 @@ const Mutation = {
     return newGift;
   },
   giftArchive(root, { _id }, context) {
+    console.log('giftArchive called', { root, _id, context });
+    if (!context.userId) throw new Error('Unknown User (not logged in)');
+
     Gifts.update(_id, { $set: { archived: true } });
     return Gifts.findOne(_id);
   },
   giftUnArchive(root, { _id }, context) {
+    console.log('giftUnArchive called', { root, _id, context });
+    if (!context.userId) throw new Error('Unknown User (not logged in)');
+
     Gifts.update(_id, { $set: { archived: false } });
     return Gifts.findOne(_id);
+  },
+  giftLock(root, { _id }, context) {
+    console.log('giftLock called', { root, _id, context });
+    if (!context.userId) throw new Error('Unknown User (not logged in)');
+    const gift = Gifts.findOne(_id);
+    if (context.userId === gift.ownerId) throw new Error(`You can't lock your own gift`);
+
+    const { lockerId } = gift;
+    if (!lockerId) {
+      Gifts.update(_id, { $set: { lockerId: context.userId } });
+      gift.lockerId = context.userId;
+    } else if (lockerId === context.userId) {
+      Gifts.update(_id, { $unset: { lockerId: 1 } });
+      delete gift.lockerId;
+    } else throw new Error('Only the one who locked the gift can unlock it.');
+
+    return gift;
+  },
+  giftBuy(root, { _id }, context) {
+    console.log('giftBuy called', { root, _id, context });
+    if (!context.userId) throw new Error('Unknown User (not logged in)');
+
+    const gift = Gifts.findOne(_id);
+    if (context.userId === gift.ownerId) throw new Error(`You can't buy your own gift`);
+
+    const { buyerId } = gift;
+    if (!buyerId) {
+      Gifts.update(_id, { $set: { buyerId: context.userId } });
+      gift.buyerId = context.userId;
+    } else if (buyerId === context.userId) {
+      Gifts.update(_id, { $unset: { buyerId: 1 } });
+      delete gift.buyerId;
+    } else throw new Error('Only the one who buy the gift can un buy it.');
+
+    return gift;
   },
 };
 
