@@ -22,5 +22,18 @@ const client = new ApolloClient({
     dataIdFromObject: object => object._id,
   }),
   connectToDevTools: true,
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-and-network',
+      errorPolicy: 'all',
+    },
+    query: {
+      fetchPolicy: 'cache-and-network',
+      errorPolicy: 'all',
+    },
+    mutate: {
+      errorPolicy: 'all',
+    },
+  },
 });
 export default client;

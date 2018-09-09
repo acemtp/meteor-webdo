@@ -1,9 +1,10 @@
 # TODO:
 
-- GiftUpdate
 - Fix gift view action
 - Add gift comment form
 - pb cache (gift edit => show, gift n'est pas a jour, pb id, ou si archived/unarchived)
+- gift action Reserver
+- gift action Acheter
 
 
 1. Remplacer les template Blaze par react WIP

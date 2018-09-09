@@ -10,4 +10,3 @@ type Mutation {
  giftUnArchive (_id: ID): Gift
 }
 `;
-

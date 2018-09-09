@@ -122,30 +122,33 @@ export const GiftCreate = () => (
     {({ history }) => (
       // TODO: add class has-error on error
       <ApolloConsumer>
-        {client => (<AutoForm
-        schema={bridge}
-        model={{ ownerId: Meteor.userId(), priority: 5 }}
-        onSubmit={async gift => client.mutate({ mutation: giftCreateMutation, variables: { gift } })}
-        onSubmitSuccess={({ data:{ createGift: { _id } } }) => (console.log('gift created', _id) || history.push(`/gift/${_id}`))}
-        onSubmitFailure={(...args) => {
-          console.error('Promise rejected!', ...args);
-          alert(`Failed to create gift :(`);
-        }}
-        onValidate={(model, error, callback) => {
-          console.log('onValidate', { model, error });
-          callback(error);
-        }}>
-        <GiftFieldSet />
-        <SubmitField value="Créé un nouveau cadeau" />
-
-      </AutoForm>)}
-    </ApolloConsumer>)}
+        {client => (
+          <AutoForm
+            schema={bridge}
+            model={{ ownerId: Meteor.userId(), priority: 5 }}
+            onSubmit={async gift => client.mutate({ mutation: giftCreateMutation, variables: { gift } })}
+            onSubmitSuccess={({ data:{ createGift: { _id } } }) => (console.log('gift created', _id) || history.push(`/gift/${_id}`))}
+            onSubmitFailure={(...args) => {
+              console.error('Promise rejected!', ...args);
+              alert(`Failed to create gift :(`);
+            }}
+            onValidate={(model, error, callback) => {
+              console.log('onValidate', { model, error });
+              callback(error);
+            }}
+          >
+            <GiftFieldSet />
+            <SubmitField value="Créé un nouveau cadeau" />
+          </AutoForm>
+        )}
+      </ApolloConsumer>
+    )}
   </Route>
 );
 
 const giftUpdateMutation = gql`
 mutation updateGift($giftId: String, $gift: GiftInput!) {
-  updateGift(id: $giftId, gift: $gift) {
+  updateGift(_id: $giftId, gift: $gift) {
     _id
     detail
   }
@@ -157,24 +160,26 @@ export const GiftEdit = ({ giftId }) => (
   <Route>
     {({ history }) => (
       <Query query={GiftGraphQL} variables={{ giftId }}>
-        {({ client, data, loading }) => (loading ||
+        {({ client, data, loading }) => (loading || (
           <AutoForm
             schema={bridge}
             model={validKeys.reduce((gift, key) => ({ ...gift, [key]: data.gift[key] }), {})}
-            onSubmit={async gift => client.mutate({ mutation: giftUpdateMutation, variables: { giftId, gift } })}
-            onSubmitSuccess={() => (history.push(`/gift/${giftId}`))}
-            onSubmitFailure={(...args) => {
-              console.error('Promise rejected!', ...args);
-              alert(`Failed to create gift :(`);
+            onSubmit={gift => console.log('onSubmit', { gift }) || client.mutate({ mutation: giftUpdateMutation, variables: { giftId, gift } })}
+            onSubmitSuccess={({ data: mutationData, errors }) => {
+              console.log('succeed', { mutationData, errors});
+              if (!errors || !errors.length) return history.push(`/gift/${giftId}`);
+              alert(`Something went wrong: \n${errors.map(e => e.message).join('\n')}`);
             }}
+            onSubmitFailure={(...args) => console.error('onSubmitFailure', args) || alert(`Internal error`)}
             onValidate={(model, error, callback) => {
               console.log('onValidate', { model, error });
               callback(error);
-          }}>
+            }}
+          >
             <GiftFieldSet />
             <SubmitField value="Mettre à jour le cadeau" />
           </AutoForm>
-        )}
+        ))}
       </Query>
     )}
   </Route>

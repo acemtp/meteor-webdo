@@ -142,15 +142,18 @@ const Mutation = {
     // It's a good idea to omit empty modifiers.
     const $set = update.reduce((acc, key) => ({ ...acc, [key]: gift[key] }), {});
     const $unset = remove.reduce((acc, key) => ({ ...acc, [key]: '' }), {});
-
     const modifier = {};
     if (Object.keys($set).length) modifier.$set = $set;
     if (Object.keys($unset).length) modifier.$unset = $unset;
 
+    console.log('before check', { _id, modifier })
     Gifts.simpleSchema().validate(modifier, { modifier: true });
     Gifts.update(_id, modifier);
+    console.log('after update', { _id, modifier })
 
-    return Gifts.findOne(giftId);
+    const newGift = Gifts.findOne(_id);
+    console.log('gift update', { gift, newGift, modifier });
+    return newGift;
   },
   giftArchive(root, { _id }, context) {
     Gifts.update(_id, { $set: { archived: true } });
