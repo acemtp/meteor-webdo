@@ -49,7 +49,7 @@ export const Img = ({ src, alt, fallback }) => (<img src={src} alt={alt} onError
 export const UserPicture = ({ user }) => <Img src={userImage(user)} alt={user.username} fallback="/photo/anonymous.gif" />;
 
 export const UserAvatar = ({ user }) => (
-  <Link className="user-small" to={`/users/${user._id}`}>
+  <Link className="user-small" to={`/user/${user._id}`}>
     <div className="user-small-Image">
       <UserPicture user={user} />
     </div>

@@ -9,7 +9,7 @@ const Friends = () => (
       if (loading) return <div>loading ...</div>;
 
       const { currentUser } = data;
-      if (!currentUser || !currentUser.profile || !currentUser.profile.friends) return <div>no friends found</div>;
+      if (!currentUser || !currentUser.profile || !currentUser.profile.friends) return <div>No friends found</div>;
 
       const { friends } = currentUser.profile;
       return (<div className=".currentUser-list">{friends.map(userId => <UserSmall userId={userId} key={userId} />)}</div>);
