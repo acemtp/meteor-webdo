@@ -5,65 +5,7 @@ import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
 import GiftActions from './action';
-import { GiftImage} from '../gift/index';
-
-// import { getAction } from '../../imports/client/lib/action';
-// import findUserNameBy from '../../imports/client/lib/user';
-// import { Gifts, Comments } from '../../collections';
-
-// Template.giftShow.helpers({
-//   prio() {
-//     return _.range(this.priority);
-//   },
-//   userName: findUserNameBy('ownerId'),
-//   lockerName: findUserNameBy('lockerId'),
-//   buyerName: findUserNameBy('buyerId'),
-//   ownerName: findUserNameBy('ownerId'),
-//   ownerIs(currentUser) {
-//     return currentUser && this.ownerId === currentUser._id;
-//   },
-//   ownerIsNot(currentUser) {
-//     return currentUser && this.ownerId !== currentUser._id;
-//   },
-//   isEditableBy(currentUser) {
-//     const edit = currentUser && (this.ownerId === currentUser._id || this.suggested);
-//     // console.log('isEditableBy', edit, this);
-//     return edit;
-//   },
-//   publicComments() {
-//     return Comments.find({ giftId: this._id, visible: true });
-//   },
-//   privateComments() {
-//     return Comments.find({ giftId: this._id, visible: false });
-//   },
-//   createdAt() {
-//     return moment(this.createdAt).format('LLLL');
-//   },
-//   Comments() {
-//     return Comments;
-//   },
-// });
-
-// Template.giftShow.events({
-//   'click .archive'(e) {
-//     e.preventDefault();
-//     Gifts.update(this._id, { $set: { archived: true } });
-//   },
-//   'click .unarchive'(e) {
-//     e.preventDefault();
-//     Gifts.update(this._id, { $set: { archived: false } });
-//   },
-//   'click .buy'(e) {
-//     e.preventDefault();
-//     const action = getAction(this, 'buyerId');
-//     Gifts.update(this._id, action.go);
-//   },
-//   'click .lock'(e) {
-//     e.preventDefault();
-//     const action = getAction(this, 'lockerId');
-//     Gifts.update(this._id, action.go);
-//   },
-// });
+import { GiftImage } from './index';
 
 export const gift = {
   fragments: {
@@ -83,18 +25,12 @@ export const gift = {
   },
 };
 
-const GiftComment = ({ giftComment }) => (
+const GiftComment = ({ giftComment: { author, createdAt, message } }) => (
   <div>
-    <div>Par {'Author'} <span>{'createdAt'}</span></div>
+    <div>Par {author} <span>{moment(createdAt).fromNow()}</span></div>
     <ReactMarkdown source={message} />
   </div>
 );
-// template(name="giftComment")
-//   div Par {{author}}
-//     span= createdAt
-//   p
-//     +markdown 
-//       {{message}}
 
 export const GiftGraphQL = gql`
 query gift($giftId: String) {
@@ -113,77 +49,117 @@ query gift($giftId: String) {
       _id
       username
     }
+    comments {
+      _id
+      createdAt
+      author
+      message
+    }
+    privateComments {
+      _id
+      createdAt
+      author
+      message
+    }
   }
 }
 ${gift.fragments.GiftSmall}
 `;
 
-const commentChange = event => console.log('commentChange', event);
+const giftCommentMutation = gql`
+mutation commentGift($giftId: String!, $visible: Boolean!, $message: String) {
+  commentGift(_id: $giftId, visible: $visible, message: $message) {
+    _id
+    detail
+    comments {
+      _id
+      message
+    }
+    privateComments {
+      _id
+      message
+    }
+  }
+}`;
 
-// TODO: in React
-// template(name="giftShow")
+const commentSubmit = async (client, data, giftId, visible, event) => {
+  event.preventDefault();
+  const message = (visible ? data.message : data.privateMessage).value;
+  console.log('commentChange', client, giftId, visible, message);
+  try {
+    const result = await client.mutate({ mutation: giftCommentMutation, variables: { giftId, visible, message } });
+    console.log('comment added', { result });
+  } catch (err) {
+    console.error('failed to add comment', { err });
+  }
+};
+
 export const Gift = ({ giftId }) => (
   <Query query={GiftGraphQL} variables={{giftId}}>
-    {({ data: { gift }, loading, error }) => {
-    if (error) return <div>{error}</div>;
-    if (loading) return <div>Loading...</div>;
-    if (!gift) return <div>gift not found :'(</div>;
-    const { _id, title, archived, image, priority, owner, createdAt } = gift;
-    console.log('Gift', { gift });
-    return (
-      <div className="gift">
-        <h1>{title}</h1>
-        <GiftActions gift={gift} />
-        <div className="gift-profile">
-          <div className="gift-section gift-picture">
-            <div className="gift-image">
-              {gift && gift.image ? <GiftImage title={title} image={image} /> : <img src="/photo/gift-default.png" alt={title} />}
+    {({ data: { gift }, loading, error, client }) => {
+      if (error) return <div>{error}</div>;
+      if (loading) return <div>Loading...</div>;
+      if (!gift) return <div>gift not found :'(</div>;
+      const { _id, title, archived, image, priority, owner, createdAt } = gift;
+      console.log('Gift', { gift, client });
+      const data = {};
+      return (
+        <div className="gift">
+          <h1>{title}</h1>
+          <GiftActions gift={gift} />
+          <div className="gift-profile">
+            <div className="gift-section gift-picture">
+              <div className="gift-image">
+                {gift && gift.image ? <GiftImage title={title} image={image} /> : <img src="/photo/gift-default.png" alt={title} />}
+              </div>
+              <div className="stars">
+                {Array.from(Array(priority)).map((u, i) => (<span key={`${_id}-star-${i}`} />))}
+              </div>
+              <Link className="user-name" to={`/user/${owner._id}`}>{owner.username}</Link>
             </div>
-            <div className="stars">
-              {Array.from(Array(priority)).map((u, i) => (<span key={`${_id}-star-${i}`} />))}
+            <div className="gift-section gift-description">
+              <div className="padding">
+                <p>Créé le : {moment(createdAt).format('ll')}</p>
+                {gift.link && <Link to={gift.link} />}
+                <ReactMarkdown source={gift.detail} />
+              </div>
             </div>
-            <Link className="user-name" to={`/user/${owner._id}`}>{owner.username}</Link>
           </div>
-          <div className="gift-section gift-description">
-            <div className="padding">
-              <p>Créé le : {moment(createdAt).format('ll')}</p>
-              {gift.link && <Link to={gift.link} />}
-              <ReactMarkdown source={gift.detail} />
-            </div>
-          </div>
-        </div>
-        <div className="all-comments">
-          {gift.privateComments &&
-            <div className="comments private">
-              {gift.privateComments.map((giftComment, i) => <GiftComment key={`${_id}-star-${i}`} giftComment={giftComment} />)}
-              <h4>Commentaire</h4>
+          <div className="all-comments">
+            {gift.owner._id !== Meteor.userId()
+              && (
+                <div className="comments private">
+                  {(gift.privateComments || []).map((giftComment, i) => <GiftComment key={`${_id}-star-${i}`} giftComment={giftComment} />)}
+                  <h4>Commentaire</h4>
+                  <div className="panel-body">
+                    <form onSubmit={commentSubmit.bind(null, client, data, giftId, false)}>
+                      <input name="message" ref={(el) => data.privateMessage = el} />
+                      <br />
+                      <button type="submit">Envoyer</button>
+                    </form>
+                  </div>
+                </div>
+              )
+            }
+            <div className="comments">
+              {(gift.comments || []).map((giftComment, i) => <GiftComment key={`${_id}-star-${i}`} giftComment={giftComment} />)}
+              <div className="warning">
+                <h4>
+                  Ce message sera visible par
+                  <b>{gift.owner.username}</b>
+                </h4>
+              </div>
               <div className="panel-body">
-                <form onChange={commentChange}>
-                  <input name="message" />
-                  <input name="visible" defaultValue="false" />
-                  <input name="giftId" value={gift._id} />
+                <form onSubmit={commentSubmit.bind(null, client, data, giftId, true)}>
+                  <input name="message" ref={(el) => data.message = el} />
                   <br />
                   <button type="submit">Envoyer</button>
                 </form>
               </div>
             </div>
-          }
-          <div className="comments">
-            {gift.comments && gift.comments.map((giftComment, i) => <GiftComment key={`${_id}-star-${i}`} giftComment={giftComment} />)}
-            <div className="warning"><h4>Ce message sera visible par <b>{gift.owner.username}</b></h4></div>
-            <div className="panel-body">
-              <form onChange={commentChange}>
-                <input name="message" />
-                <input name="visible" defaultValue="true" />
-                <input name="giftId" defaultValue={gift._id} />
-                <br />
-                <button type="submit">Envoyer</button>
-              </form>
-            </div>
           </div>
         </div>
-      </div>
-    );
-  }}
+      );
+    }}
   </Query>
 );

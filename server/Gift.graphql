@@ -18,5 +18,6 @@ type Gift {
   suggested: Boolean
   canEdit: Boolean
   comments: [Comment!]
+  privateComments: [Comment!]
   actions: [String!]
 }

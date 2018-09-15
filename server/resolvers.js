@@ -1,7 +1,7 @@
 // TODO:  use merged schema https://www.apollographql.com/docs/graphql-tools/schema-stitching.html#adding-resolvers
 import { Resolvers as Auth } from 'meteor/nicolaslopezj:apollo-accounts';
 import { Meteor } from 'meteor/meteor';
-import { Gifts, profile } from '../collections';
+import { Gifts, profile, Comments } from '../collections';
 
 const currentUser = (root, args, context) => {
   // if the user is not logged in throw an error
@@ -84,7 +84,12 @@ const Gift = {
     return parent.lockerId ? Meteor.users.findOne(parent.lockerId) : null;
   },
   comments(parent) {
-    return Gifts.find({ giftId: parent._id }).fetch();
+    return Comments.find({ giftId: parent._id, visible: true }).fetch();
+  },
+  privateComments(parent, data, { userId }) {
+    if (userId === parent.ownerId) return [];
+
+    return Comments.find({ giftId: parent._id, visible: false }).fetch();
   },
   canEdit(parent, data, { userId }) {
     return parent.ownerId === userId || parent.suggested;
@@ -212,6 +217,18 @@ const Mutation = {
       delete gift.buyerId;
     } else throw new Error('Only the one who buy the gift can un buy it.');
 
+    return gift;
+  },
+  commentGift(root, { _id, visible, message }, context) {
+    console.log('giftBuy called', { root, _id, context });
+    if (!context.userId) throw new Error('Unknown User (not logged in)');
+
+    const gift = Gifts.findOne(_id);
+    if (!visible && context.userId === gift.ownerId) throw new Error('You cant make a private comment on your comment');
+
+    const user = Meteor.users.findOne(context.userId);
+    const commentId = Comments.insert({ giftId: _id, visible, message, createdAt: new Date(), authorId: context.userId, author: user.username });
+    console.log('new comment', commentId)
     return gift;
   },
 };

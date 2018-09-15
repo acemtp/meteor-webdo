@@ -1,10 +1,9 @@
 # TODO:
 
-- Add gift comment form
-- pb cache (gift edit => show, gift n'est pas a jour, pb id, ou si archived/unarchived)
-- gift action Reserver
-- gift action Acheter
-
+- Find and use a tool for styling components
+- Update apollo login
+- Fix login (when you login top bar is not updated + you are not redirected to the correct route)
+- Refactor components
 
 1. Remplacer les template Blaze par react WIP
 2. Remplacer autoform par un equivalant react WIP uniforms

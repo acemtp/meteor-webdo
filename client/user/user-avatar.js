@@ -44,7 +44,9 @@ const errorHandler = ({ target }) => {
   target.setAttribute('src', fallback);
 };
 
-export const Img = ({ src, alt, fallback }) => (<img src={src} alt={alt} onError={errorHandler} data-fallback={fallback} />);
+export const Img = ({ src, alt, fallback }) => (
+  <img src={src} alt={alt} onError={errorHandler} data-fallback={fallback} />
+);
 
 export const UserPicture = ({ user }) => <Img src={userImage(user)} alt={user.username} fallback="/photo/anonymous.gif" />;
 

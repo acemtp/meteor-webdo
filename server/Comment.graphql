@@ -1,4 +1,5 @@
 type Comment {
+  _id: ID!
   giftId: String
   message: String
   createdAt: String
