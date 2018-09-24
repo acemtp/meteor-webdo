@@ -227,9 +227,16 @@ const Mutation = {
     if (!visible && context.userId === gift.ownerId) throw new Error('You cant make a private comment on your comment');
 
     const user = Meteor.users.findOne(context.userId);
-    const commentId = Comments.insert({ giftId: _id, visible, message, createdAt: new Date(), authorId: context.userId, author: user.username });
-    console.log('new comment', commentId)
-    return gift;
+    const commentId = Comments.insert({
+      giftId: _id,
+      visible,
+      message,
+      createdAt: new Date(),
+      authorId: context.userId,
+      author: user.username,
+    });
+
+    return Comments.findOne(commentId);
   },
 };
 

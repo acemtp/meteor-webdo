@@ -82,12 +82,13 @@ mutation commentGift($giftId: String!, $visible: Boolean!, $message: String) {
   }
 }`;
 
-const commentSubmit = async (client, data, giftId, visible, event) => {
+const commentSubmit = async (refetch, client, data, giftId, visible, event) => {
   event.preventDefault();
   const message = (visible ? data.message : data.privateMessage).value;
   console.log('commentChange', client, giftId, visible, message);
   try {
     const result = await client.mutate({ mutation: giftCommentMutation, variables: { giftId, visible, message } });
+    refetch();
     console.log('comment added', { result });
   } catch (err) {
     console.error('failed to add comment', { err });
@@ -96,7 +97,7 @@ const commentSubmit = async (client, data, giftId, visible, event) => {
 
 export const Gift = ({ giftId }) => (
   <Query query={GiftGraphQL} variables={{giftId}}>
-    {({ data: { gift }, loading, error, client }) => {
+    {({ data: { gift }, loading, error, client, refetch }) => {
       if (error) return <div>{error}</div>;
       if (loading) return <div>Loading...</div>;
       if (!gift) return <div>gift not found :'(</div>;
@@ -132,7 +133,7 @@ export const Gift = ({ giftId }) => (
                   {(gift.privateComments || []).map((giftComment, i) => <GiftComment key={`${_id}-star-${i}`} giftComment={giftComment} />)}
                   <h4>Commentaire</h4>
                   <div className="panel-body">
-                    <form onSubmit={commentSubmit.bind(null, client, data, giftId, false)}>
+                    <form onSubmit={commentSubmit.bind(null, refetch, client, data, giftId, false)}>
                       <input name="message" ref={(el) => data.privateMessage = el} />
                       <br />
                       <button type="submit">Envoyer</button>
@@ -150,7 +151,7 @@ export const Gift = ({ giftId }) => (
                 </h4>
               </div>
               <div className="panel-body">
-                <form onSubmit={commentSubmit.bind(null, client, data, giftId, true)}>
+                <form onSubmit={commentSubmit.bind(null, refetch, client, data, giftId, true)}>
                   <input name="message" ref={(el) => data.message = el} />
                   <br />
                   <button type="submit">Envoyer</button>

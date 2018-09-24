@@ -11,6 +11,7 @@ import { SmallGift } from '../gift';
 import { gift } from '../gift/show';
 import { profile } from '../../collections';
 import { queryProfile } from '../../modules/users/client/currentUser';
+import styled from 'styled-components';
 
 const md = new Remarkable();
 md.renderer = new RemarkableReactRenderer();
@@ -50,11 +51,16 @@ export const Img = ({ src, alt, fallback }) => (
 
 export const UserPicture = ({ user }) => <Img src={userImage(user)} alt={user.username} fallback="/photo/anonymous.gif" />;
 
+const UserSmallImage = styled.div`
+  background: blue;
+  color: red;
+`;
+
 export const UserAvatar = ({ user }) => (
   <Link className="user-small" to={`/user/${user._id}`}>
-    <div className="user-small-Image">
+    <UserSmallImage className="user-small-Image">
       <UserPicture user={user} />
-    </div>
+    </UserSmallImage>
     <div className="user-small-title">{user.username}</div>
   </Link>
 );

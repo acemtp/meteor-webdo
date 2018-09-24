@@ -10,6 +10,6 @@ type Mutation {
   giftUnArchive (_id: ID): Gift
   giftLock (_id: ID): Gift
   giftBuy (_id: ID): Gift
-  commentGift (_id: ID, visible: Boolean, message: String): Gift
+  commentGift (_id: ID, visible: Boolean, message: String): Comment
 }
 `;
