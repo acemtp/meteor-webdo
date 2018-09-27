@@ -11,8 +11,9 @@ import Mutation from './mutation';
 import User from '../modules/users/server/User.graphql';
 import Query from './Query.graphql';
 import Gift from './Gift.graphql';
-import GiftInput from '/modules/gifts/GiftInput.graphql';
 import Comment from './Comment.graphql';
+
+import GiftInput from '../modules/gifts/GiftInput.graphql';
 
 
 const typeDefs = [

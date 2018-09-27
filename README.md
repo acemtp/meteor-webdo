@@ -1,6 +1,7 @@
 # TODO:
 
-- Find and use a tool for styling components
+- remove dependencey on graphql for component used in storybook
+- Find and use a tool for styling components (style-components)
 - Update apollo login
 - Fix login (when you login top bar is not updated + you are not redirected to the correct route)
 - Refactor components

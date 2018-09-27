@@ -4,7 +4,7 @@ import { Query } from 'react-apollo';
 
 import { Accounts } from 'meteor/std:accounts-ui';
 
-import { User, UserUpdate } from '../user/user-avatar';
+import { User, UserUpdate } from '../user';
 import { query } from '../../modules/users/client/currentUser';
 import Friends from '../../modules/users/client/list';
 import { Home } from '../home';

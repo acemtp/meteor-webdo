@@ -1,24 +1,7 @@
 import gql from 'graphql-tag';
 import React from 'react';
-import { ApolloConsumer } from "react-apollo";
+import { ApolloConsumer } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import client from '../apollo';
-
-const giftArchiveArchivedMutation = gql`
-mutation giftArchive($giftId: ID!) {
-  giftArchive(_id: $giftId) {
-    _id
-    archived
-  }
-}`;
-
-const giftArchiveUnArchivedMutation = gql`
-mutation giftUnArchive($giftId: ID!) {
-  giftUnArchive(_id: $giftId) {
-    _id
-    archived
-  }
-}`;
 
 const mutation = (action, properties) => gql`
 mutation gift${action}($giftId: ID!) {
@@ -28,7 +11,8 @@ mutation gift${action}($giftId: ID!) {
   }
 }`;
 
-const GiftActions = ({
+const GiftActionsComponent = ({
+  client,
   gift: {
     _id, canEdit, isOwner, archived, lockerId, locker, buyerId, buyer, actions: availableActions
   }
@@ -49,4 +33,5 @@ const GiftActions = ({
   );
 };
 
+const GiftActions = ({ gift }) => <ApolloConsumer>{client => <GiftActionsComponent client={client} gift={gift} />}</ApolloConsumer>;
 export default GiftActions;

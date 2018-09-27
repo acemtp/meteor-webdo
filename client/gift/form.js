@@ -1,11 +1,12 @@
 import gql from 'graphql-tag';
 import { CurrentUser } from '/modules/users/client/currentUser';
-import { ApolloConsumer, Query } from "react-apollo";
+import { ApolloConsumer, Query } from 'react-apollo';
 import { Route } from 'react-router-dom';
 
 import GraphQLBridge from 'uniforms/GraphQLBridge';
-import { buildASTSchema, parse } from 'graphql';
-import GiftInput from '/modules/gifts/GiftInput.graphql';
+// import { buildASTSchema, parse } from 'graphql';
+import { buildASTSchema } from 'graphql/utilities/buildASTSchema';
+import { parse } from 'graphql/language/parser';
 
 import React from 'react';
 import AutoField from 'uniforms-unstyled/AutoField';
@@ -14,34 +15,35 @@ import SubmitField from 'uniforms-unstyled/SubmitField'; // replace with react-f
 import LongTextField from 'uniforms-unstyled/LongTextField'; // replace with react-final-form?
 import { GiftGraphQL } from './show';
 
-const onChange = function (link, ...args) {
-}
+import GiftInput from '../../modules/gifts/GiftInput.graphql';
+
 const GiftFieldSet = () => (
   <CurrentUser>
     {({ data: { currentUser }, loading }) => (
       // TODO: add class has-error on error
-      !loading &&
-      <fieldset>
-        <div className="form-group">
-          <AutoField id="gift-link" name="link" />
-          <span className="help-block">Certain lien peuvent automatiquement remplir les champs de description et le lien vers l'image.</span>
+      !loading && (
+        <fieldset>
+          <div className="form-group">
+            <AutoField id="gift-link" name="link" />
+            <span className="help-block">Certain lien peuvent automatiquement remplir les champs de description et le lien vers l'image.</span>
 
-          <AutoField id="gift-title" name="title" />
-          <AutoField id="gift-image" name="image" />
-          <AutoField id="gift-owner-id" name="ownerId" options={(currentUser.userFriends || []).map(user => ({ label: user.username, value: user._id }))} />
-          <AutoField
-            id="gift-priority"
-            name="priority"
-            options={[
-              { label: '5 étoiles - Doit avoir', value: 5 },
-              { label: '4 étoiles - Adorerais avoir', value: 4 },
-              { label: '3 étoiles - Aimerais avoir', value: 3 },
-              { label: "2 étoiles - J'y pense", value: 2 },
-            ]}
-          />
-          <LongTextField id="gift-detail" name="detail" rows="10" />
-        </div>
-      </fieldset>
+            <AutoField id="gift-title" name="title" />
+            <AutoField id="gift-image" name="image" />
+            <AutoField id="gift-owner-id" name="ownerId" options={(currentUser.userFriends || []).map(user => ({ label: user.username, value: user._id }))} />
+            <AutoField
+              id="gift-priority"
+              name="priority"
+              options={[
+                { label: '5 étoiles - Doit avoir', value: 5 },
+                { label: '4 étoiles - Adorerais avoir', value: 4 },
+                { label: '3 étoiles - Aimerais avoir', value: 3 },
+                { label: "2 étoiles - J'y pense", value: 2 },
+              ]}
+            />
+            <LongTextField id="gift-detail" name="detail" rows="10" />
+          </div>
+        </fieldset>
+      )
     )}
   </CurrentUser>
 );

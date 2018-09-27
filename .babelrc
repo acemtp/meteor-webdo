@@ -1,9 +1,11 @@
 {
   "presets": [
     "@babel/env",
-    "react"
+    "@babel/react"
   ],
   "plugins": [
-    "babel-root-slash-import"
+    "emotion",
+    "module:babel-root-slash-import",
+    "import-graphql"
   ]
 }
