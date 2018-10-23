@@ -141,12 +141,15 @@ export default class SmallGift extends Component {
   prio() {
     return Array.from(Array(this.props.gift.priority));
   }
+
   buyedClass() {
     return this.buyerId ? 'buyed' : '';
   }
+
   isOwner() {
     return this.props.gift.isOwner; // ownerId === Meteor.userId();
   }
+
   render() {
     return (
       <Link className={giftSmallClass} to={`/gift/${this.props.gift._id}`}>
@@ -164,7 +167,7 @@ export default class SmallGift extends Component {
             {this.props.buyer
               ? (<div className="buyed">par {this.props.buyer.username} </div>)
               : (this.locker
-                ? (<div className="lock">par {this.props} </div>)
+                ? (<div className="lock">par {this.props.locker.username} </div>)
                 : ('Disponible')
               )
             }
