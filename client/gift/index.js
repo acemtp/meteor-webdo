@@ -1,4 +1,4 @@
-import { GiftImage } from './image';
+import GiftImage from './image';
 import { Gift } from './show';
 import SmallGift from './small';
 import { GiftCreate, GiftEdit } from './form';

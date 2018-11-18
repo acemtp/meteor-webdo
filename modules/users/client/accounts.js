@@ -1,16 +1,16 @@
 
-import React, { Component } from 'react';
-import { T9n } from 'meteor/softwarerero:accounts-t9n';
+// import React, { Component } from 'react';
+import { T9n } from 'meteor-accounts-t9n';
+import fr from 'meteor-accounts-t9n/build/fr';
+
 // import {makeExecutableSchema} from 'graphql-tools';
 // import {loadSchema, getSchema} from 'graphql-loader';
 // import { initAccounts } from 'meteor/nicolaslopezj:apollo-accounts';
 // import typeDefs from './schema';
 // import resolvers from './resolvers';
 
+T9n.map('fr', fr);
 T9n.setLanguage('fr');
-// T9n.language = 'fr';
-//  T9n.missingPrefix = ">";
-//  T9n.missingPostfix = "<";
 
 // AutoForm.setDefaultTemplate('plain');
 

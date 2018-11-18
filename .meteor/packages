@@ -20,8 +20,6 @@ meteor-base@1.4.0
 meteorhacks:subs-manager
 momentjs:moment
 rzymek:moment-locale-fr
-std:accounts-ui
-softwarerero:accounts-t9n
 react-meteor-data
 seba:minifiers-autoprefixer
 orionsoft:graphql-compiler
@@ -32,3 +30,4 @@ aldeed:schema-deny
 swydo:ddp-apollo
 underscore@1.0.10
 nicolaslopezj:apollo-accounts
+epotek:accounts-ui

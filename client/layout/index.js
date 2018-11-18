@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Query } from 'react-apollo';
 
-import { Accounts } from 'meteor/std:accounts-ui';
+import { Accounts } from 'meteor/epotek:accounts-ui';
 
 import { User, UserUpdate } from '../user';
 import { query } from '../../modules/users/client/currentUser';
