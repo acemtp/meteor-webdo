@@ -6,7 +6,7 @@ import RemarkableReactRenderer from 'remarkable-react';
 import styled from 'styled-components';
 
 import { SmallGift } from '../gift';
-import { UserPicture } from './user-picture';
+import UserPicture from './user-picture';
 
 const md = new Remarkable();
 md.renderer = new RemarkableReactRenderer();
