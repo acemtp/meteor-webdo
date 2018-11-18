@@ -1,5 +1,4 @@
-// TODO:  use merged schema https://www.apollographql.com/docs/graphql-tools/schema-stitching.html#adding-resolvers
-import { Resolvers as Auth } from 'meteor/nicolaslopezj:apollo-accounts';
+// TODO: use merged schema https://www.apollographql.com/docs/graphql-tools/schema-stitching.html#adding-resolvers
 import { Meteor } from 'meteor/meteor';
 import { Gifts, profile, Comments } from '../collections';
 
@@ -107,7 +106,6 @@ const Gift = {
 };
 
 const Mutation = {
-  ...Auth(),
   updateUserProfile(root, { userProfile }, context) {
     console.log('updateUserProfile called', { root, userProfile, context});
     if (!context.userId) throw new Error('Unknown User (not logged in)');

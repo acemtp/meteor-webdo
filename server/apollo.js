@@ -1,8 +1,9 @@
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
-import {SchemaTypes as Auth} from 'meteor/nicolaslopezj:apollo-accounts';
 // for ddp-apollo
 import { setup } from 'meteor/swydo:ddp-apollo';
+import { loadSchema } from 'graphql-loader';
+import { initAccounts } from 'meteor/nicolaslopezj:apollo-accounts';
 
 import { makeExecutableSchema } from 'graphql-tools';
 import resolvers from './resolvers';
@@ -15,14 +16,16 @@ import Comment from './Comment.graphql';
 
 import GiftInput from '../modules/gifts/GiftInput.graphql';
 
+// Load all accounts related resolvers and type definitions into graphql-loader
+initAccounts({
+  loginWithFacebook: false,
+  loginWithGoogle: false,
+  loginWithLinkedIn: false,
+  loginWithPassword: true,
+});
 
 const typeDefs = [
-  `scalar Date`,
-  Auth({
-    CreateUserProfileInput: `
-      name: String
-    `,
-  }),
+  'scalar Date',
   Gift,
   GiftInput,
   Comment,
@@ -41,10 +44,14 @@ resolvers.Date = new GraphQLScalarType({
     return value.getTime(); // value sent to the client
   },
   parseLiteral(ast) {
-    if (ast.kind === Kind.INT) return parseInt(ast.value, 10); // ast value is always in string format
+    // ast value is always in string format
+    if (ast.kind === Kind.INT) return parseInt(ast.value, 10);
     return null;
   },
 });
+
+// Load all your resolvers and type definitions into graphql-loader
+loadSchema({ typeDefs, resolvers });
 
 const schema = makeExecutableSchema({
   typeDefs,
