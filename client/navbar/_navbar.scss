@@ -15,7 +15,8 @@ header.navigation {
   $navigation-active-link-color: transparentize(white, 0.5);
   $navigation-submenu-padding: 1em;
   $navigation-submenu-width: 12em;
-  $horizontal-bar-mode: $large-screen;
+  // $horizontal-bar-mode: $large-screen;
+  $horizontal-bar-mode: $lg-desk;
 
   background-color: $navigation-background;
   border-bottom: 1px solid darken($navigation-background, 10);
@@ -87,7 +88,7 @@ header.navigation {
       display: block;
     }
 
-    @include media ($horizontal-bar-mode) {
+    @include grid-media($lg-desk){
       margin: 0;
       padding: 0;
     }
@@ -104,7 +105,7 @@ header.navigation {
     text-align: right;
     z-index: 9999;
 
-    @include media ($horizontal-bar-mode) {
+    @include grid-media ($horizontal-bar-mode) {
       text-decoration: none;
       width: auto;
     }
@@ -118,7 +119,7 @@ header.navigation {
       display: inline-block;
       text-decoration: none;
 
-      @include media ($horizontal-bar-mode) {
+      @include grid-media ($horizontal-bar-mode) {
         padding-right: 1em;
       }
 

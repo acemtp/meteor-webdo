@@ -6,62 +6,62 @@
 
   & > .user-section {
 
-    @include media($lg-desk) {
+    @include grid-media($lg-desk) {
       &.user-picture {
-        @include span-columns(5);
+        @include grid-column(5);
       }
       &.user-description {
-        @include span-columns(10);
+        @include grid-column(10);
         padding: 1em;
         min-height: 23em;
 
         & > .user-like {
-          @include span-columns(5 of 10);
+          @include grid-column(5 of 10);
           margin-top: 2em
         }
       }
     }
-    @include media($desk) {
+    @include grid-media($desk) {
       &.user-picture {
-        @include span-columns(4);
+        @include grid-column(4);
       }
       &.user-description {
-        @include span-columns(8);
+        @include grid-column(8);
         padding: 1em;
         min-height: 23em;
 
         & > .user-like {
-          @include span-columns(4 of 8);
+          @include grid-column(4 of 8);
           margin-top: 2em
         }
       }
     }
-    @include media($tablet) {
+    @include grid-media($tablet) {
       &.user-picture {
-        @include span-columns(3);
+        @include grid-column(3);
       }
       &.user-description {
-        @include span-columns(6);
+        @include grid-column(6);
         padding: 1em;
         min-height: 23em;
 
         & > .user-like {
-          @include span-columns(3 of 6);
+          @include grid-column(3 of 6);
           margin-top: 2em
         }
       }
     }
-    @include media($mobile) {
+    @include grid-media($mobile) {
       &.user-picture {
-        @include span-columns(6);
+        @include grid-column(6);
       }
       &.user-description {
-        @include span-columns(6);
+        @include grid-column(6);
         padding: 1em;
         min-height: 23em;
 
         & > .user-like {
-          @include span-columns(3 of 6);
+          @include grid-column(3 of 6);
           margin-top: 2em
         }
       }
@@ -73,14 +73,14 @@
       overflow: hidden;
 
       img {
-        @include transition (all 0.2s ease-in-out);
+        transition: all 0.2s ease-in-out;
         width: 100%;
         // @include size(100%);
         opacity: 1;
       }
     }
     h1 {
-      @include transition (all 0.2s ease-in-out);
+      transition: all 0.2s ease-in-out;
       border-radius: $base-border-radius $base-border-radius 0 0;
       font-weight: bold;
       line-height: 1.6em;

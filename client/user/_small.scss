@@ -10,31 +10,31 @@ h1.title {
   font-weight: 600;
   max-width: 1088px;
 
-  @include media($tablet) {
+  @include grid-media($tablet) {
     font-size: 2.4em;
   }
 }
 
 .user-small {
 
-  @include media($mobile) {
-    @include span-columns(3);
-    @include omega(2n);
+  @include grid-media($mobile) {
+    @include grid-column(3);
+    @include nth-omega(2n);
   }
-  @include media($tablet) {
+  @include grid-media($tablet) {
     @include omega-reset(2n);
-    @include span-columns(3);
-    @include omega(3n);
+    @include grid-column(3);
+    @include nth-omega(3n);
   }
-  @include media($desk) {
+  @include grid-media($desk) {
     @include omega-reset(3n);
-    @include span-columns(3);
-    @include omega(4n);
+    @include grid-column(3);
+    @include nth-omega(4n);
   }
-  @include media($lg-desk) {
+  @include grid-media($lg-desk) {
     @include omega-reset(4n);
-    @include span-columns(3);
-    @include omega(5n);
+    @include grid-column(3);
+    @include nth-omega(5n);
   }
   @include card;
 
@@ -45,7 +45,7 @@ h1.title {
     background-color: $base-color;
 
     img {
-      @include transition (all 0.2s ease-in-out);
+      transition: all 0.2s ease-in-out;
       // border-top-left-radius: $base-border-radius;
       // border-top-right-radius: $base-border-radius;
       // width: 100%;
@@ -59,7 +59,7 @@ h1.title {
   }
 
   .user-small-title {
-    @include transition (all 0.2s ease-in-out);
+    transition: all 0.2s ease-in-out;
     border-radius: $base-border-radius $base-border-radius 0 0;
     font-weight: bold;
     line-height: 1.5em;

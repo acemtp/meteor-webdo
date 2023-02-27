@@ -4,28 +4,29 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-accounts-ui@1.1.9
+accounts-ui@1.4.2
 showdown@1.0.8
-accounts-password@1.3.6
-houston:admin
+# houston:admin
 mquandalle:jade
 iron:router
-http@1.2.12
+http@1.4.2
 chrismbeckett:toastr
-fourseven:scss
-ddp@1.2.5
+# fourseven:scss
+ddp@1.4.1
 momentjs:moment
 rzymek:moment-locale-fr
-wolves:bourbon
-ecmascript@0.8.0
-wolves:neat
-wolves:bitters
+# wolves:bourbon
+ecmascript@0.16.5
+# wolves:neat
+# wolves:bitters
 meyerweb-reset@1.0.7
 useraccounts:unstyled
 seba:minifiers-autoprefixer
 meteorhacks:subs-manager
-shell-server
-dynamic-import
+shell-server@0.5.0
+dynamic-import@0.7.2
 aldeed:collection2-core@2.0.0
 aldeed:schema-deny
 aldeed:autoform
+accounts-password@2.3.3
+fourseven:scss@4.15.0

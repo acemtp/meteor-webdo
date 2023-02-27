@@ -1,17 +1,20 @@
-@import "{wolves:bourbon}/bourbon";
+@import "{}/node_modules/bourbon/core/bourbon";
 // @import "{wolves:bitters}/base";
-@import "{wolves:bitters}/bitters/variables";
+@import "{}/node_modules/Bitters/core/base";
+@import "{}/node_modules/Bitters/core/variables";
 @import "grid-settings";
-@import "{wolves:bitters}/bitters/buttons";
-@import "{wolves:bitters}/bitters/forms";
-@import "{wolves:bitters}/bitters/lists";
-@import "{wolves:bitters}/bitters/tables";
-@import "{wolves:bitters}/bitters/typography";
+@import "{}/node_modules/Bitters/core/buttons";
+@import "{}/node_modules/Bitters/core/forms";
+@import "{}/node_modules/Bitters/core/lists";
+@import "{}/node_modules/Bitters/core/tables";
+@import "{}/node_modules/Bitters/core/typography";
 //
-@import "{wolves:neat}/neat";
+// @import "{wolves:neat}/neat";
+@import "{}/node_modules/bourbon-neat/core/neat";
+@import "{}/node_modules/neat-omega/core/neat-omega";
 
 $base-color: #009688;
-$base-border-color: darken($base-color, 10%) !default;
+$viewport-background-color: darken($base-color, 10%) !default;
 $base-border-radius: 3px !default;
 $base-line-height: 1.5em !default;
 $base-spacing: 1.5em !default;
@@ -22,6 +25,13 @@ $medium-screen: em(640);
 $base-font-color: $dark-gray !default;
 $sans-serif: 'PT Sans', sans-serif;
 $sans-serif-2: 'Titillium Web', sans-serif;
+
+@mixin outer-container() {
+  @include grid-container;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
+}
 
 @import "util";
 @import "omega-reset";
@@ -46,7 +56,7 @@ form {
 }
 
 body {
-  @include media($mobile) {
+  @include grid-media($mobile) {
     font-size: 13px;
   }
 }

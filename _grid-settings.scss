@@ -1,4 +1,4 @@
-@import "{wolves:neat}/neat-helpers";
+// @import "{wolves:neat}/neat-helpers";
 
 // Change the grid settings
 $column: 90px;
@@ -7,9 +7,40 @@ $grid-columns: 12;
 $max-width: em(1440);
 
 // Define your breakpoints
-$lg-desk: new-breakpoint(min-width 1281px 15);
-$desk: new-breakpoint(min-width 769px max-width 1280px 12);
-$tablet: new-breakpoint(min-width 480px max-width 768px 9);
-$mobile: new-breakpoint(min-width 200px max-width 480px 6);
+// OLD
+// $lg-desk: new-breakpoint(min-width 1281px 15);
+// $desk: new-breakpoint(min-width 769px max-width 1280px 12);
+// $tablet: new-breakpoint(min-width 480px max-width 768px 9);
+// $mobile: new-breakpoint(min-width 200px max-width 480px 6);
+
+$neat-grid: (
+ columns: 12,
+ gutter: 2em,
+);
+
+$lg-desk: (
+  columns: 12,
+  gutter: 2em,
+  media: 'screen and (min-width: 1281px)'
+);
+
+$desk: (
+  columns: 12,
+  gutter: 2em,
+  media: 'screen and (min-width: 769px) and (max-width: 1280px)'
+);
+
+$tablet: (
+  columns: 9,
+  gutter: 1.1em,
+  media: 'screen and (min-width: 480px) and (max-width: 768px)'
+);
+
+$mobile: (
+  columns: 6,
+  gutter: 1em,
+  //  media: 'screen and (min-width: 320px) and (max-width: 767px)',
+  media: 'screen and (min-width: 200px) and (max-width: 480px)'
+);
 
 $all-buttons: 'button, input[type="button"], input[type="reset"], input[type="submit"], .button'

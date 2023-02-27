@@ -10,31 +10,30 @@ h1.title {
   font-weight: 600;
   max-width: 1088px;
 
-  @include media($tablet) {
+  @include grid-media($tablet) {
     font-size: 2.4em;
   }
 }
 
 .gift-small {
-
-  @include media($mobile) {
-    @include span-columns(3);
-    @include omega(2n);
+  @include grid-media($mobile) {
+    @include grid-column(3);
+    @include nth-omega(2n);
   }
-  @include media($tablet) {
+  @include grid-media($tablet) {
     @include omega-reset(2n);
-    @include span-columns(3);
-    @include omega(3n);
+    @include grid-column(3);
+    @include nth-omega(3n);
   }
-  @include media($desk) {
+  @include grid-media($desk) {
     @include omega-reset(3n);
-    @include span-columns(3);
-    @include omega(4n);
+    @include grid-column(3);
+    @include nth-omega(4n);
   }
-  @include media($lg-desk) {
+  @include grid-media($lg-desk) {
     @include omega-reset(4n);
-    @include span-columns(3);
-    @include omega(5n);
+    @include grid-column(3);
+    @include nth-omega(5n);
   }
 
   @include card;
@@ -46,7 +45,7 @@ h1.title {
     background-color: $base-color;*/
 
     img {
-      @include transition (all 0.2s ease-in-out);
+      transition: all 0.2s ease-in-out;
       // width: 100%;
       @include size(100%);
       opacity: 1;
@@ -54,7 +53,7 @@ h1.title {
   }
 
   .gift-small-title {
-    @include transition (all 0.2s ease-in-out);
+    transition: all 0.2s ease-in-out;
     border-radius: $base-border-radius $base-border-radius 0 0;
     font-weight: bold;
     line-height: 1.4em;
@@ -89,9 +88,9 @@ h1.title {
       }
     }
 
-    .buyed { @include icon($buyed, '#000000');}
-    .lock { @include icon($lock, '#000000'); }
-    .lockOpen { @include icon($lockOpen, '#000000'); }
+    .buyed { @include icon($buyed, 'black');}
+    .lock { @include icon($lock, 'black'); }
+    .lockOpen { @include icon($lockOpen, 'black'); }
   }
 
   &:focus,
@@ -103,7 +102,7 @@ h1.title {
 .gift {
   @include outer-container;
 
-  $card-border-color: $base-border-color;
+  $card-border-color: $viewport-background-color;
   $card-border: 1px solid $card-border-color;
 
   h1 {
@@ -111,7 +110,7 @@ h1.title {
     font-weight: 600;
     max-width: 1088px;
 
-    @include media($tablet) {
+    @include grid-media($tablet) {
       font-size: 2.4em;
     }
   }
@@ -144,29 +143,29 @@ h1.title {
   .primary {
     color: white;
     background-color: $base-color;
-    border-color: $base-border-color;
+    border-color: $viewport-background-color;
     border-radius: $base-border-radius;
   }
 
   .all-comments {
     @include outer-container;
 
-    @include media($desk) {
+    @include grid-media($desk) {
       .comments {
-        @include span-columns(12);
+        @include grid-column(12);
       }
       .comments~.comments,
       .comments.private {
-        @include span-columns(6);      
+        @include grid-column(6);      
       }
     }
-    @include media($tablet) {
+    @include grid-media($tablet) {
       .comments {
-        @include span-columns(8);
+        @include grid-column(8);
       }
       .comments~.comments,
       .comments.private {
-        @include span-columns(4);      
+        @include grid-column(4);      
       }
 
     }
@@ -183,10 +182,10 @@ h1.title {
       @include card;
 
       &.gift-picture {
-        @include span-columns(4);
+        @include grid-column(4);
       }
       &.gift-description {
-        @include span-columns(8);
+        @include grid-column(8);
         padding: 1em;
         min-height: 23em;
       }
@@ -196,7 +195,7 @@ h1.title {
       overflow: hidden;
 
       img {
-        @include transition (all 0.2s ease-in-out);
+        transition: all 0.2s ease-in-out;
         width: 100%;
         opacity: 1;
       }
